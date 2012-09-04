@@ -1,0 +1,19 @@
+{
+  "author": " ",
+  "name": "angular-app",
+  "version": "0.0.1-SNAPSHOT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:angular-app/angular-app.git"
+  },
+  "engines": {
+    "node": ">= 0.6.11"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "grunt-recess": "~0.1.0",
+    "async": "0.1.x",
+    "testacular": "0.0.x"
+  }
+}
