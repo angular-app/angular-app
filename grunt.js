@@ -13,10 +13,10 @@ module.exports = function (grunt) {
         ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
     },
     lint:{
-      files:['grunt.js', 'src/**/*.js', 'test/**/*.js']
+      files:['grunt.js', 'src/**/*.js', 'test/unit/**/*.js']
     },
     test:{
-      files:['test/**/*.js']
+      files:['test/unit/**/*.js']
     },
     concat:{
       dist:{
@@ -57,15 +57,15 @@ module.exports = function (grunt) {
   grunt.registerTask('server', 'start testacular server', function () {
     //Mark the task as async but never call done, so the server stays up
     var done = this.async();
-    testacular.server.start('test/config/test-config.js');
+    testacular.server.start({configFile : 'test/config/test-config.js'});
   });
 
   grunt.registerTask('test', 'start testacular test', function () {
 
     var specDone = this.async();
-    var child = grunt.utils.spawn({cmd:'testacular-run.cmd'}, function (err, result, code) {
+    var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
+    var child = grunt.utils.spawn({cmd:testacularCmd, args:['run']}, function (err, result, code) {
       if (code) {
-        console.error(err);
         grunt.fail.fatal("Test failed...", code);
       } else {
         specDone();
