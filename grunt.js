@@ -15,9 +15,6 @@ module.exports = function (grunt) {
     lint:{
       files:['grunt.js', 'src/**/*.js', 'test/unit/**/*.js']
     },
-    test:{
-      files:['test/unit/**/*.js']
-    },
     concat:{
       dist:{
         src:['<banner:meta.banner>', 'src/**/*.js'],
@@ -31,8 +28,8 @@ module.exports = function (grunt) {
       }
     },
     watch:{
-      files:'<config:lint.files>',
-      tasks:'lint test'
+      files:['<config:lint.files>', 'src/**/*.html'],
+      tasks:'lint test concat min concatPartials index'
     },
     jshint:{
       options:{
@@ -51,16 +48,20 @@ module.exports = function (grunt) {
     uglify:{}
   });
 
+  grunt.registerTask('index', 'Process index.html', function(){
+     grunt.file.copy('src/index.html', 'dist/index.html', {process:grunt.template.process});
+  });
+
   // Default task.
-  grunt.registerTask('default', 'lint concat min');
+  grunt.registerTask('default', 'lint test concat  min concatPartials index');
 
   grunt.registerTask('server', 'start testacular server', function () {
     //Mark the task as async but never call done, so the server stays up
     var done = this.async();
-    testacular.server.start({configFile : 'test/config/test-config.js'});
+    testacular.server.start({configFile:'test/config/test-config.js'});
   });
 
-  grunt.registerTask('test', 'start testacular test', function () {
+  grunt.registerTask('test', 'run testacular tests', function () {
 
     var specDone = this.async();
     var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
@@ -76,4 +77,30 @@ module.exports = function (grunt) {
     child.stderr.pipe(process.stderr);
   });
 
+  grunt.registerTask('concatPartials', 'concat partials', function () {
+    //TODO: horrible implementation, to be fixed, but this Grunt task makes sense for the AngularJS community!
+    var content = '', partials = grunt.file.expandFiles('src/modules/*/partials/**/*.tpl.html');
+    for (var i=0; i<partials.length; i++){
+      var partialFile = partials[i];
+      var partialel = partialFile.split('/');
+      var partial = "<script type='text/ng-template' id='"+partialel[partialel.length-1]+"'>"+grunt.file.read(partialFile)+"</script>\n";
+      content += partial;
+    }
+    grunt.file.write('dist/partials.tpl.html', content);
+  });
+
+  grunt.registerTask('module', 'create new module', function () {
+    var moduleName = this.args[0];
+    grunt.log.debug("Creating new module: " + moduleName);
+    var srcPath = 'src/modules/' + moduleName + '/';
+    var testPath = 'test/modules/' + moduleName + '/';
+
+    //js
+    //main module file
+    grunt.file.write(srcPath + moduleName + '.js', "angular.module('" + moduleName + "',[]);\nangular.module('" + moduleName + "').controller('" + moduleName + "Controller', function($scope){\n});");
+    //tests
+    grunt.file.write(testPath + '/unit/' + moduleName + 'Spec.js', "//jasmine template here");
+    //partials
+    grunt.file.write(srcPath + 'partials/' + moduleName + '.tpl.html', '<div>' + moduleName + '</div>');
+  });
 };
