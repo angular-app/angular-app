@@ -64,7 +64,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', 'run testacular tests', function () {
 
     var testCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
-    var testArgs = process.env.TRAVIS ? ['start', 'test/test-config.js', '--single-run', '--no-auto-watch', '--reporter=dots', '--browsers=Firefox'] : ['run'];
+    var testArgs = process.env.TRAVIS ? ['start', 'test/config/test-config.js', '--single-run', '--no-auto-watch', '--reporter=dots', '--browsers=Firefox'] : ['run'];
 
     var done = this.async();
     var child = grunt.utils.spawn({cmd:testCmd, args:testArgs}, function (err, result, code) {
