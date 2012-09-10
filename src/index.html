@@ -1,9 +1,16 @@
-<html>
+<html ng-app="app">
 <head>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.js"></script>
-    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="angular-app.min.js"></script>
+
+<!-- partials start -->
+<%= grunt.file.read('dist/partials.tpl.html') %>
+<!-- partials end -->
+
 </head>
-<body ng-app="app" ng-controller="MainController">
-    Hello, {{hello}}!
+<body ng-controller="AppController">
+    Hello, {{user || 'Anonymous'}}! You are here: {{location.path()}}
+    <hr>
+    <div ng-view></div>
 </body>
 </html>
