@@ -63,13 +63,15 @@ module.exports = function (grunt) {
 
   grunt.registerTask('test', 'run testacular tests', function () {
 
-    var specDone = this.async();
-    var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
-    var child = grunt.utils.spawn({cmd:testacularCmd, args:['run']}, function (err, result, code) {
+    var testCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
+    var testArgs = process.env.TRAVIS ? ['start', 'test/test-config.js', '--single-run', '--no-auto-watch', '--reporter=dots', '--browsers=Firefox'] : ['run'];
+
+    var done = this.async();
+    var child = grunt.utils.spawn({cmd:testCmd, args:testArgs}, function (err, result, code) {
       if (code) {
         grunt.fail.fatal("Test failed...", code);
       } else {
-        specDone();
+        done();
       }
     });
 
