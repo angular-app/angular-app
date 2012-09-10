@@ -1,0 +1,7 @@
+- There is no npm module for AngularJS, so its version is hard-coded, libs checked-in (for tests) etc.
+
+Nice to have
+-----------------------------------------------------------------------
+- grunt task to:
+    - create new modules
+    - concat partials (globally or per-module?)
