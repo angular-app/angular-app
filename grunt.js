@@ -64,17 +64,20 @@ module.exports = function (grunt) {
   grunt.registerTask('test', 'run testacular tests', function () {
 
     var testCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
-    var testArgs = process.env.TRAVIS ? ['start', 'test/config/test-config.js', '--single-run', '--no-auto-watch', '--reporter=dots', '--browsers=Firefox'] : ['run'];
+    var testArgs = ['start', 'test/config/test-config.js', '--single-run', '--no-auto-watch', '--reporter=dots'];
+    if (process.env.TRAVIS) {
+      testArgs.push('--browsers=Firefox');
+    }
 
     var done = this.async();
     var child = grunt.utils.spawn({cmd:testCmd, args:testArgs}, function (err, result, code) {
       if (code) {
-        grunt.fail.fatal("Test failed...", code);
+        grunt.fail.fatal("Test failed...");
+        done(false);
       } else {
         done();
       }
     });
-
     child.stdout.pipe(process.stdout);
     child.stderr.pipe(process.stderr);
   });
