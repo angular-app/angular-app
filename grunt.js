@@ -2,8 +2,11 @@ var testacular = require('testacular');
 
 module.exports = function (grunt) {
 
+  grunt.loadNpmTasks('grunt-recess');
+
   // Project configuration.
   grunt.initConfig({
+    distdir: 'dist',
     pkg:'<json:package.json>',
     meta:{
       banner:'/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
@@ -18,13 +21,29 @@ module.exports = function (grunt) {
     concat:{
       dist:{
         src:['<banner:meta.banner>', 'src/**/*.js'],
-        dest:'dist/<%= pkg.name %>.js'
+        dest:'<%= distdir %>/<%= pkg.name %>.js'
       }
     },
     min:{
       dist:{
         src:['<banner:meta.banner>', '<config:concat.dist.dest>'],
-        dest:'dist/<%= pkg.name %>.min.js'
+        dest:'<%= distdir %>/<%= pkg.name %>.min.js'
+      }
+    },
+    recess: {
+      build: {
+        src: ['src/modules/*/less/*.less'],
+        dest: '<%= distdir %>/<%= pkg.name %>.css',
+        options: {
+          compile: true
+        }
+      },
+      min: {
+        src: '<config:recess.build.dest>',
+        dest: '<%= distdir %>/<%= pkg.name %>.min.css',
+        options: {
+          compress: true
+        }
       }
     },
     watch:{
@@ -53,7 +72,7 @@ module.exports = function (grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint test concat  min concatPartials index');
+  grunt.registerTask('default', 'lint test concat  min recess:build recess:min concatPartials index');
 
   grunt.registerTask('server', 'start testacular server', function () {
     //Mark the task as async but never call done, so the server stays up
