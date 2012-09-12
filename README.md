@@ -8,3 +8,10 @@
 
 * Start a testacular server first: `grunt server`
 * Build (will run tests): `grunt`
+* Results are published in the `dist` folder
+
+# Folders
+
+* `dist` contains build results
+* `src` contains application's sources
+* `test` contains test sources
