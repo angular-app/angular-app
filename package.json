@@ -12,7 +12,6 @@
   "dependencies": {
   },
   "devDependencies": {
-    "grunt": "0.3.x",
     "grunt-recess": "~0.1.0"
   }
 }
