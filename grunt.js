@@ -1,5 +1,3 @@
-var testacular = require('testacular');
-
 module.exports = function (grunt) {
 
   // Project configuration.
@@ -48,35 +46,41 @@ module.exports = function (grunt) {
     uglify:{}
   });
 
-  grunt.registerTask('index', 'Process index.html', function(){
-     grunt.file.copy('src/index.html', 'dist/index.html', {process:grunt.template.process});
-  });
-
   // Default task.
-  grunt.registerTask('default', 'lint test concat  min concatPartials index');
+  grunt.registerTask('default', 'lint test concat min concatPartials index');
 
-  grunt.registerTask('server', 'start testacular server', function () {
-    //Mark the task as async but never call done, so the server stays up
-    var done = this.async();
-    testacular.server.start({configFile:'test/config/test-config.js'});
+  // Testacular stuff
+  var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
+  var testConfigFile = 'test/config/test-config.js';
+  var runTestacular = function(cmd, options) {
+      var args = [cmd, testConfigFile].concat(options);
+      var done = grunt.task.current.async();
+      var child = grunt.utils.spawn({cmd:testacularCmd, args:args}, function (err, result, code) {
+        if (code) {
+          grunt.fail.fatal("Test failed...");
+        }
+        done(!code);
+    });
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stderr);
+  };
+
+  grunt.registerTask('test-watch', 'watch file changes and test', function() {
+    var options = ['--auto-watch', '--reporter=dots', '--no-single-run'];
+    runTestacular('start', options);
   });
 
   grunt.registerTask('test', 'run testacular tests', function () {
+    var options = ['--single-run', '--no-auto-watch', '--reporter=dots'];
+    if (process.env.TRAVIS) {
+      options.push('--browsers=Firefox');
+    }
+    runTestacular('start', options);
+  });
 
-    var testCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
-    var testArgs = process.env.TRAVIS ? ['start', 'test/config/test-config.js', '--single-run', '--no-auto-watch', '--reporter=dots', '--browsers=Firefox'] : ['run'];
-
-    var done = this.async();
-    var child = grunt.utils.spawn({cmd:testCmd, args:testArgs}, function (err, result, code) {
-      if (code) {
-        grunt.fail.fatal("Test failed...", code);
-      } else {
-        done();
-      }
-    });
-
-    child.stdout.pipe(process.stdout);
-    child.stderr.pipe(process.stderr);
+  // HTML stuff
+  grunt.registerTask('index', 'Process index.html', function(){
+     grunt.file.copy('src/index.html', 'dist/index.html', {process:grunt.template.process});
   });
 
   grunt.registerTask('concatPartials', 'concat partials', function () {
@@ -91,6 +95,7 @@ module.exports = function (grunt) {
     grunt.file.write('dist/partials.tpl.html', content);
   });
 
+  // Scaffolding !!
   grunt.registerTask('module', 'create new module', function () {
     var moduleName = this.args[0];
     grunt.log.debug("Creating new module: " + moduleName);
