@@ -6,6 +6,5 @@
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - npm install -g grunt@0.3.x testacular@0.2.x
-  - npm link
 
  script: grunt
