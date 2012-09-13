@@ -13,8 +13,6 @@
   },
   "devDependencies": {
     "grunt": "0.3.x",
-    "grunt-recess": "~0.1.0",
-    "async": "0.1.x",
-    "testacular": "0.2.0"
+    "grunt-recess": "~0.1.0"
   }
 }
