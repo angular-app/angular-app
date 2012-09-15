@@ -1,0 +1,19 @@
+<table class="table table-bordered table-condensed table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Login</th>
+        <th>Last name</th>
+        <th>First name</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="user in users" ng-click="itemView(user)">
+        <td>{{user.login}}</td>
+        <td>{{user.lastName}}</td>
+        <td>{{user.firstName}}</td>
+    </tr>
+    </tbody>
+</table>
+<div class="well">
+    <a href="#/admin/users/new" class="btn">New User</a>
+</div>

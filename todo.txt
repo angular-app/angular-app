@@ -1,7 +1,18 @@
-- There is no npm module for AngularJS, so its version is hard-coded, libs checked-in (for tests) etc.
+Build & dev tools
+==========================================
+- running development on minified files is cool (early integration) but then it is hard (impossible?) to debug...
+- would be great if we could have a dev mode where minification wouldn't be required
 
-Nice to have
------------------------------------------------------------------------
-- grunt task to:
-    - create new modules
-    - concat partials (globally or per-module?)
+Application
+==========================================
+- app-level
+
+- general problems to solve
+    - code duplication among CRUD controllers
+    - show spinner and wait for data/response before route changes
+    - add warning before delete
+    - filtering & sorting
+    - validation
+
+- admin projects
+    - finish with users in projects

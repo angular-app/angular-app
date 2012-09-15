@@ -2,6 +2,8 @@
 <html lang="en" ng-app="app">
 <head>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular-resource.js"></script>
+    <script type="text/javascript" src="<%= grunt.config.get('pkg.name') %>-lib.min.js"></script>
     <script type="text/javascript" src="<%= grunt.config.get('pkg.name') %>.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="<%= grunt.config.get('pkg.name') %>.min.css"/>
@@ -11,21 +13,9 @@
     <!-- partials:end -->
 </head>
 
-<body ng-controller="AppController">
+<body ng-controller="AppCtrl">
 
-<div class="navbar">
-    <div class="navbar-inner">
-        <a class="brand" href="#">Title</a>
-        <ul class="nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-        </ul>
-    </div>
-</div>
-<ul class="breadcrumb">
-    <li class="active">{{location.path()}}</li>
-</ul>
+<div ng-include="'app/header.tpl.html'"></div>
 
 <div ng-view></div>
 

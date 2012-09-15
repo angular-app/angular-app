@@ -1,4 +1,4 @@
 angular.module('signin', []);
-angular.module('signin').controller('SignInController', ['$scope', function($scope){
+angular.module('signin').controller('SignInCtrl', ['$scope', function($scope){
   $scope.user = {};
 }]);

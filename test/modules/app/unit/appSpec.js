@@ -9,7 +9,7 @@ describe('hello world scenario', function () {
   }));
 
   it('should say hello to a hello in scope', function () {
-    $controller('AppController', {$scope:scope});
+    $controller('AppCtrl', {$scope:scope});
     expect(scope.user).toBeUndefined();
   });
 });

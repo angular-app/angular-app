@@ -14,18 +14,26 @@ module.exports = function (grunt) {
         ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
     },
     lint:{
-      files:['grunt.js', 'src/**/*.js', 'test/unit/**/*.js']
+      files:['grunt.js', 'src/**/*.js', 'test/services/**/*.js', 'test/modules/*/unit/**/*.js']
     },
     concat:{
       dist:{
-        src:['<banner:meta.banner>', 'src/**/*.js'],
+        src:['<banner:meta.banner>', 'src/services/**/*.js', 'src/modules/**/*.js'],
         dest:'<%= distdir %>/<%= pkg.name %>.js'
+      },
+      lib:{
+        src:['src/lib/**/*.js'],
+        dest:'<%= distdir %>/<%= pkg.name %>-lib.js'
       }
     },
     min:{
       dist:{
         src:['<banner:meta.banner>', '<config:concat.dist.dest>'],
         dest:'<%= distdir %>/<%= pkg.name %>.min.js'
+      },
+      lib:{
+        src:['<banner:meta.banner>', '<config:concat.lib.dest>'],
+        dest:'<%= distdir %>/<%= pkg.name %>-lib.min.js'
       }
     },
     recess: {
@@ -107,8 +115,10 @@ module.exports = function (grunt) {
     var content = '', partials = grunt.file.expandFiles('src/modules/*/partials/**/*.tpl.html');
     for (var i=0; i<partials.length; i++){
       var partialFile = partials[i];
-      var partialel = partialFile.split('/');
-      var partial = "<script type='text/ng-template' id='"+partialel[partialel.length-1]+"'>"+grunt.file.read(partialFile)+"</script>\n";
+      var partialEls = partialFile.split('/');
+      var moduleName = partialEls[2];
+      var partialName = partialEls[partialEls.length-1];
+      var partial = "<script type='text/ng-template' id='"+moduleName+"/"+partialName+"'>"+grunt.file.read(partialFile)+"</script>\n";
       content += partial;
     }
     grunt.file.write('dist/partials.tpl.html', content);
@@ -120,13 +130,17 @@ module.exports = function (grunt) {
     grunt.log.debug("Creating new module: " + moduleName);
     var srcPath = 'src/modules/' + moduleName + '/';
     var testPath = 'test/modules/' + moduleName + '/';
+    var tplvars = {
+      module : moduleName,
+      ctrl : moduleName.slice(0,1).toUpperCase() + moduleName.slice(1) + 'Ctrl'
+    };
 
-    //js
+
     //main module file
-    grunt.file.write(srcPath + moduleName + '.js', "angular.module('" + moduleName + "',[]);\nangular.module('" + moduleName + "').controller('" + moduleName + "Controller', function($scope){\n});");
-    //tests
-    grunt.file.write(testPath + '/unit/' + moduleName + 'Spec.js', "//jasmine template here");
+    grunt.file.write(srcPath + moduleName + '.js', grunt.template.process(grunt.file.read('build/scaffolding/module.js'), tplvars));
     //partials
-    grunt.file.write(srcPath + 'partials/' + moduleName + '.tpl.html', '<div>' + moduleName + '</div>');
+    grunt.file.write(srcPath + 'partials/' + moduleName + '.tpl.html', grunt.template.process(grunt.file.read('build/scaffolding/partial.tpl.html'), tplvars));
+    //tests
+    grunt.file.write(testPath + '/unit/' + moduleName + 'Spec.js', grunt.template.process(grunt.file.read('build/scaffolding/test.js'), tplvars));
   });
 };

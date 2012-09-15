@@ -1,0 +1,15 @@
+<div class="well">
+    <form name="form" ng-submit="save()">
+        <fieldset>
+            <label>Login</label>
+            <input type="text" name="login" ng-model="item.login" required autofocus>
+            <label>Last name</label>
+            <input class="span6" type="text" name="lastName" ng-model="item.lastName" required>
+            <label>First name</label>
+            <input class="span6" type="text" name="firstName" ng-model="item.firstName" required>
+        </fieldset>
+        <button type="submit" class="btn btn-primary" ng-disabled="!canSave()">Save</button>
+        <button type="button" class="btn btn-warning" ng-click="revertChanges()" ng-disabled="!canRevert()">Revert changes</button>
+        <button type="button" class="btn btn-danger" ng-click="remove()" ng-show="item._id">Remove</button>
+    </form>
+</div>

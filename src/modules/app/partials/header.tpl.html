@@ -1,0 +1,17 @@
+<div class="navbar">
+    <div class="navbar-inner">
+        <a class="brand" href="#/dashboard">AScrum</a>
+        <ul class="nav">
+            <li ng-class="{active:isNavbarActive('admin')}"><a href="#/admin">Admin</a></li>
+        </ul>
+    </div>
+    <ul class="breadcrumb">
+        <li ng-repeat="breadcrumb in pathElements" class="active">
+            <span class="divider">/</span>
+            <ng-switch on="$last">
+                <span ng-switch-when="true">{{breadcrumb}}</span>
+                <span ng-switch-default><a href="#{{breadcrumbPath($index)}}">{{breadcrumb}}</a></span>
+            </ng-switch>
+        </li>
+    </ul>
+</div>
