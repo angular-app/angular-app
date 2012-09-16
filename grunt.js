@@ -13,48 +13,48 @@ module.exports = function (grunt) {
         //TODO: add a copyright notice
         ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
     },
+    src: {
+      js: ['src/**/*.js'],
+      html: ['src/index.html'],
+      less: ['src/modules/*/less/*.less'] // recess:build doesn't accept ** in its file patterns
+    },
+    test: {
+      js: ['test/**/*/js']
+    },
     lint:{
-      files:['grunt.js', 'src/**/*.js', 'test/services/**/*.js', 'test/modules/*/unit/**/*.js']
+      files:['grunt.js', '<config:src.js>', '<config:test.js>']
     },
     concat:{
       dist:{
-        src:['<banner:meta.banner>', 'src/services/**/*.js', 'src/modules/**/*.js'],
+        src:['<banner:meta.banner>', '<config:src.js>'],
         dest:'<%= distdir %>/<%= pkg.name %>.js'
-      },
-      lib:{
-        src:['src/lib/**/*.js'],
-        dest:'<%= distdir %>/<%= pkg.name %>-lib.js'
       }
     },
     min:{
       dist:{
-        src:['<banner:meta.banner>', '<config:concat.dist.dest>'],
-        dest:'<%= distdir %>/<%= pkg.name %>.min.js'
-      },
-      lib:{
-        src:['<banner:meta.banner>', '<config:concat.lib.dest>'],
-        dest:'<%= distdir %>/<%= pkg.name %>-lib.min.js'
+        src:['<banner:meta.banner>', '<config:src.js>'],
+        dest:'<%= distdir %>/<%= pkg.name %>.js'
       }
     },
     recess: {
       build: {
-        src: ['src/modules/*/less/*.less'],
+        src: ['<config:src.less>'],
         dest: '<%= distdir %>/<%= pkg.name %>.css',
         options: {
           compile: true
         }
       },
       min: {
-        src: '<config:recess.build.dest>',
-        dest: '<%= distdir %>/<%= pkg.name %>.min.css',
+        src: ['<config:src.less>'],
+        dest: '<config:recess.build.dest>',
         options: {
           compress: true
         }
       }
     },
     watch:{
-      files:['<config:lint.files>', 'src/**/*.html'],
-      tasks:'lint test concat min concatPartials index'
+      files:['<config:lint.files>', '<config.src.html>'],
+      tasks:'build'
     },
     jshint:{
       options:{
@@ -74,7 +74,9 @@ module.exports = function (grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint test concat  min recess:build recess:min concatPartials index');
+  grunt.registerTask('default', 'lint test build');
+  grunt.registerTask('build', 'concat recess:build concatPartials index');
+  grunt.registerTask('release', 'lint test min recess:min concatPartials index');
 
   // Testacular stuff
   var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';

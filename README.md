@@ -4,12 +4,22 @@
 * Install global npm modules: `npm install -g grunt testacular`
 * Install local dependencies: `npm install`
 
-# Building & testing
-The default grunt task checks the javascript, runs the unit tests and builds the distributable files.
+# Development Process
+The default grunt task checks the javascript, runs the unit tests and builds (non-minified) distributable files.
 
 * Build (will run tests): `grunt` (or `grunt.cmd` on Windows).
 * Open one or more browsers and point them to `http://localhost:8080`.  Once the browsers connect the tests will run and the build will complete.
 * If you leave the browsers open at this url then future runs of `grunt` will automatically run the tests against these browsers.
+
+# Building only
+You can run the development build on its own without tests to simply concat all the files to the dist folder
+
+* Run `grunt build`
+
+# Building release code
+You can build a release version of the app, with minified files.
+
+# Run `grunt release`
 
 # Continuous testing
 You can have grunt (testacular) continuously watch for file changes and automatically run all the tests on every change.
@@ -17,8 +27,8 @@ You can have grunt (testacular) continuously watch for file changes and automati
 * Run `grunt test-watch`
 * Open one or more browsers and point them to `http://localhost:8080`.
 * Each time a file changes the tests will be run against each browser.
-# Folders
 
+# Folders
 * `dist` contains build results
 * `src` contains application's sources
 * `test` contains test sources
