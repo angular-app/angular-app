@@ -1,7 +1,13 @@
-<div class="well">
-    <form name="signin">
-        login: <input name="login" ng-model="user.login"><br>
-        pass: <input name="pass" ng-model="user.pass"><br>
-        <a href="#/dashboard" class="btn">Sign in</a>
-    </form>
+<div class="row-fluid">
+    <div class="span4 offset4 well">
+        <form name="name">
+            <fieldset>
+                <label>Login</label>
+                <input class="span10" name="login" type="text" ng-model="user.login" required autofocus>
+                <label>Password</label>
+                <input class="span10" name="pass" type="password" ng-model="user.pass" required>
+            </fieldset>
+            <button class="btn btn-primary" ng-click="signIn()">Sign in</button>
+        </form>
+    </div>
 </div>

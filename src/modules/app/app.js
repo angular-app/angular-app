@@ -16,9 +16,9 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
 
   $routeProvider.when('/admin/users', {templateUrl:'admin/users-list.tpl.html', controller:'AdminUsersCtrl'});
   $routeProvider.when('/admin/users/new', {templateUrl:'admin/user-edit.tpl.html', controller:'AdminUserEditCtrl'});
-  $routeProvider.when('/admin/users/:userId', {templateUrl:'admin/user-edit.tpl.html', controller:'AdminUserEditCtrl'});
+  $routeProvider.when('/admin/users/:projectId', {templateUrl:'admin/user-edit.tpl.html', controller:'AdminUserEditCtrl'});
 
-  $routeProvider.otherwise({redirectTo:'/dashboard'});
+  $routeProvider.otherwise({redirectTo:'/signin'});
 }]);
 
 angular.module('app').controller('AppCtrl', ['$scope', '$location', function ($scope, $location) {
