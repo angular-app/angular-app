@@ -1,13 +1,14 @@
 <div class="row-fluid">
     <div class="span4 offset4 well">
+        <h4>Sign in</h4>
+        <hr>
         <form name="name">
-            <fieldset>
-                <label>Login</label>
-                <input class="span10" name="login" type="text" ng-model="user.login" required autofocus>
-                <label>Password</label>
-                <input class="span10" name="pass" type="password" ng-model="user.pass" required>
-            </fieldset>
-            <button class="btn btn-primary" ng-click="signIn()">Sign in</button>
+            <label>Login</label>
+            <input class="span10" name="login" type="text" ng-model="user.login" required autofocus>
+            <label>Password</label>
+            <input class="span10" name="pass" type="password" ng-model="user.pass" required>
         </form>
+        <hr>
+        <button class="btn btn-primary" ng-click="signIn()">Sign in</button>
     </div>
 </div>
