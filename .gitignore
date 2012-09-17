@@ -1,3 +1,4 @@
 node_modules
 dist
 *.tpl.html.js
+src/modules/templates.js
