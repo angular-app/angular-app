@@ -60,7 +60,7 @@ angular.module('mongolabResource', []).factory('$mongolabResource', ['API_KEY', 
     };
 
     Resource.prototype.$update = function (successcb, errorcb) {
-      var httpPromise = $http.put(url, angular.extend({}, this, {_id:undefined}), {params:defaultParams});
+      var httpPromise = $http.put(url + "/" + this.$id(), angular.extend({}, this, {_id:undefined}), {params:defaultParams});
       return thenFactoryMethod(httpPromise, successcb, errorcb);
     };
 
