@@ -21,14 +21,15 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
   $routeProvider.otherwise({redirectTo:'/signin'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', '$location', function ($scope, $location) {
+angular.module('app').controller('AppCtrl', ['$scope', '$location', 'Security', function ($scope, $location, Security) {
   $scope.location = $location;
+  $scope.security = Security;
 
   $scope.isNavbarActive = function (navBarPath) {
     return navBarPath === $scope.pathElements[0];
   };
 
-  $scope.$watch('location.path()', function (newValue, oldValue) {
+  $scope.$watch('location.path()', function (newValue) {
     var pathElements = newValue.split('/');
     pathElements.shift();
     $scope.pathElements = pathElements;

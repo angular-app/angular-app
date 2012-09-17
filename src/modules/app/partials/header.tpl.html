@@ -4,8 +4,12 @@
         <ul class="nav">
             <li ng-class="{active:isNavbarActive('admin')}"><a href="#/admin">Admin</a></li>
         </ul>
+        <ul class="nav pull-right">
+            <li class="divider-vertical"></li>
+            <li><a href="#">{{security.getUser().login}}</a></li>
+        </ul>
     </div>
-    <ul class="breadcrumb">
+    <ul class="breadcrumb" ng-show="security.isAuthenticated()">
         <li ng-repeat="breadcrumb in pathElements" class="active">
             <span class="divider">/</span>
             <ng-switch on="$last">

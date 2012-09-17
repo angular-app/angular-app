@@ -1,4 +1,4 @@
-angular.module('mongolabResource', ['ngResource']).factory('$mongolabResource', ['$resource', 'API_KEY', 'DB_NAME', function ($resource, API_KEY, DB_NAME) {
+angular.module('mongolabResource', ['ngResource']).factory('$mongolabResource', ['$resource', 'API_KEY', 'DB_NAME', 'jsonFilter', function ($resource, API_KEY, DB_NAME, jsonFilter) {
 
     function MmongolabResourceFactory(collectionName) {
 
@@ -8,6 +8,12 @@ angular.module('mongolabResource', ['ngResource']).factory('$mongolabResource', 
 
       resource.getById = function (id, cb, errorcb) {
         return resource.get({id:id}, cb, errorcb);
+      };
+
+      var query = resource.query;
+      resource.query = function (queryJson, cb, errorcb) {
+        var q = angular.isObject(queryJson) ? {q:jsonFilter(queryJson)} : {};
+        return query(q, cb, errorcb);
       };
 
       resource.prototype.update = function (cb, errorcb) {
