@@ -9,7 +9,7 @@
             <li><a href="#">{{security.getUser().login}}</a></li>
         </ul>
     </div>
-    <ul class="breadcrumb" ng-show="security.isAuthenticated()">
+    <ul class="breadcrumb">
         <li ng-repeat="breadcrumb in pathElements" class="active">
             <span class="divider">/</span>
             <ng-switch on="$last">
