@@ -1,43 +1,120 @@
-angular.module('mongolabResource', ['ngResource']).factory('$mongolabResource', ['$resource', 'API_KEY', 'DB_NAME', 'jsonFilter', function ($resource, API_KEY, DB_NAME, jsonFilter) {
+angular.module('mongolabResource', []).factory('$mongolabResource', ['$http', 'jsonFilter', 'API_KEY', 'DB_NAME', function ($http, jsonFilter, API_KEY, DB_NAME) {
 
-    function MmongolabResourceFactory(collectionName) {
+  function MmongolabResourceFactory(collectionName) {
 
-      var resource = $resource('https://api.mongolab.com/api/1/databases/' + DB_NAME + '/collections/' + collectionName + '/:id',
-        { apiKey:API_KEY, id:'@_id.$oid'}, { update:{ method:'PUT' } }
-      );
+    var url = 'https://api.mongolab.com/api/1/databases/' + DB_NAME + '/collections/' + collectionName;
+    var defaultParams = {apiKey:API_KEY};
 
-      resource.getById = function (id, cb, errorcb) {
-        return resource.get({id:id}, cb, errorcb);
-      };
+    var Resource = function (data) {
+      angular.extend(this, data);
+    };
 
-      var query = resource.query;
-      resource.query = function (queryJson, cb, errorcb) {
-        var q = angular.isObject(queryJson) ? {q:jsonFilter(queryJson)} : {};
-        return query(q, cb, errorcb);
-      };
+    Resource.all = function (cb, errorcb) {
+      return Resource.query({}, cb, errorcb);
+    };
 
-      resource.prototype.update = function (cb, errorcb) {
-        return resource.update({id:this._id.$oid}, angular.extend({}, this, {_id:undefined}), cb, errorcb);
-      };
+    Resource.query = function (queryJson, cb, errorcb) {
 
-      resource.prototype.saveOrUpdate = function (savecb, updatecb, errorSavecb, errorUpdatecb) {
-        if (this._id && this._id.$oid) {
-          return this.update(updatecb, errorUpdatecb);
-        } else {
-          return this.$save(savecb, errorSavecb);
+      var params = angular.isObject(queryJson) ? {q:jsonFilter(queryJson)} : {};
+      var httpPromise = $http.get(url, {params:angular.extend({}, defaultParams, params)});
+      var scb = cb || angular.noop;
+      var ecb = errorcb || angular.noop;
+
+      return httpPromise.then(function (response) {
+        var result = [];
+        for (var i = 0; i < response.data.length; i++) {
+          result.push(new Resource(response.data[i]));
         }
-      };
+        scb(result, response.status, response.headers, response.config);
+        return result;
 
-      resource.prototype.remove = function (cb, errorcb) {
-        return resource.remove({id:this._id.$oid}, cb, errorcb);
-      };
+      }, function (response) {
+        ecb(undefined, response.status, response.headers, response.config);
+        return undefined;
+      });
+    };
 
-      resource.prototype['delete'] = function (cb, errorcb) {
-        return this.remove(cb, errorcb);
-      };
+    Resource.getById = function (id, cb, errorcb) {
+      var httpPromise = $http.get(url + '/' + id, {params:defaultParams});
+      var scb = cb || angular.noop;
+      var ecb = errorcb || angular.noop;
 
-      return resource;
-    }
+      return httpPromise.then(function (response) {
+        var result = new Resource(response.data);
+        scb(result, response.status, response.headers, response.config);
+        return result;
+      }, function (response) {
+        ecb(undefined, response.status, response.headers, response.config);
+        return undefined;
+      });
+    };
 
-    return MmongolabResourceFactory;
+    //instance methods
+
+    Resource.prototype.$id = function() {
+      if (this._id && this._id.$oid) {
+        return this._id.$oid;
+      }
+    };
+
+    Resource.prototype.$save = function (cb, errorcb) {
+      var httpPromise = $http.post(url, this, {params:defaultParams});
+      var scb = cb || angular.noop;
+      var ecb = errorcb || angular.noop;
+
+      return httpPromise.then(function (response) {
+        var result = new Resource(response.data);
+        scb(result, response.status, response.headers, response.config);
+        return result;
+      }, function (response) {
+        ecb(undefined, response.status, response.headers, response.config);
+        return undefined;
+      });
+    };
+
+    Resource.prototype.$update = function (cb, errorcb) {
+      var httpPromise = $http.post(url + "/" + this.$id(), angular.extend({}, this, {_id:undefined}), {params:defaultParams});
+      var scb = cb || angular.noop;
+      var ecb = errorcb || angular.noop;
+
+      return httpPromise.then(function (response) {
+        var result = new Resource(response.data);
+        scb(result, response.status, response.headers, response.config);
+        return result;
+      }, function (response) {
+        ecb(undefined, response.status, response.headers, response.config);
+        return undefined;
+      });
+    };
+
+    Resource.prototype.$remove = function (cb, errorcb) {
+      var httpPromise = $http.delete(url + "/" + this.$id(), {params:defaultParams});
+      var scb = cb || angular.noop;
+      var ecb = errorcb || angular.noop;
+
+      return httpPromise.then(function (response) {
+        var result = new Resource(response.data);
+        scb(result, response.status, response.headers, response.config);
+        return result;
+      }, function (response) {
+        ecb(undefined, response.status, response.headers, response.config);
+        return undefined;
+      });
+    };
+
+    Resource.prototype.$saveOrUpdate = function (savecb, updatecb, errorSavecb, errorUpdatecb) {
+      if (this.$id()) {
+        return this.$update(updatecb, errorUpdatecb);
+      } else {
+        return this.$save(savecb, errorSavecb);
+      }
+    };
+
+    return Resource;
+  }
+  return MmongolabResourceFactory;
 }]);
+
+//TODO: tests
+//TODO: DRY
+//TODO: make the first param to query optional
