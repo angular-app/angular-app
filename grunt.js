@@ -53,7 +53,7 @@ module.exports = function (grunt) {
       }
     },
     watch:{
-      files:['<config:lint.files>', '<config.src.html>'],
+      files:['<config:src.js>', '<config:test.js>', '<config:src.less>', 'src/index.html'], //need to have a path to index.html, otherwise watch won't pick it up
       tasks:'build'
     },
     jshint:{
