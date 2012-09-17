@@ -11,9 +11,19 @@ angular.module('admin-projects').controller('AdminProjectsCtrl', ['$scope', '$lo
 
 angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '$location', 'users', 'project', function ($scope, $location, users, project) {
 
+  $scope.selTeamMember = undefined;
+
   $scope.users = users;
+  //prepare users lookup, just keep refferences for easier lookup
+  $scope.usersLookup = {};
+  angular.forEach(users, function(value, key){
+    $scope.usersLookup[value.$id()] = value;
+  });
+
   $scope.item = project;
+  $scope.item.teamMembers = $scope.item.teamMembers || [];
   $scope.itemCopy = angular.copy($scope.item);
+
 
   var editCompleted = function () {
     $location.path('/admin/projects');
@@ -41,5 +51,15 @@ angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '
     } else {
       editCompleted();
     }
+  };
+
+  $scope.addTeamMember = function () {
+    $scope.item.teamMembers.push($scope.selTeamMember);
+    $scope.selTeamMember = undefined;
+  };
+
+  $scope.removeTeamMember = function (teamMember) {
+    var idx = $scope.item.teamMembers.indexOf(teamMember);
+    $scope.item.teamMembers.splice(idx, 1);
   };
 }]);

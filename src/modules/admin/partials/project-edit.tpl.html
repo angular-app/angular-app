@@ -11,30 +11,33 @@
                 </textarea>
             </div>
             <div class="span6">
-                <label>Project members</label>
+                <label>Product Owner</label>
+                <select class="span12"  ng-model="item.productOwner.id" ng-options="user._id.$oid as user.getFullName() for user in users" required>
+                    <option value="">-- chose --</option>
+                </select>
+                <label>Scrum Master</label>
+                <select class="span12"  ng-model="item.scrumMaster.id" ng-options="user._id.$oid as user.getFullName() for user in users" required>
+                    <option value="">-- chose --</option>
+                </select>
+                <label>Team members</label>
                 <table class="table table-bordered table-condensed table-striped table-hover">
                     <thead>
                     <tr>
                         <th>User</th>
-                        <th>Role</th>
                         <th>&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="userWithRole in item.users">
-                        <td>{{userWithRole.id}}</td>
-                        <td>{{roles[userWithRole.role].name}}</td>
+                    <tr ng-repeat="userId in item.teamMembers">
+                        <td>{{usersLookup[userId].getFullName()}}</td>
                         <td>
-                            <button class="btn btn-small" ng-click="removeUserWithRole(userWithRole)">Remove</button>
+                            <button class="btn btn-small" ng-click="removeTeamMember(userId)">Remove</button>
                         </td>
                     </tr>
                     <tr>
-                        <td><select ng-model="projectUser.id"
-                                    ng-options="user._id.$oid as user.login for user in users"></select></td>
-                        <td><select ng-model="projectUser.role"
-                                    ng-options="code as role.name for (code, role) in roles"></select></td>
+                        <td><select class="span6" ng-model="selTeamMember" ng-options="user._id.$oid as user.getFullName() for user in users"></select></td>
                         <td>
-                            <button class="btn btn-small" ng-click="addUserWithRole()">Add</button>
+                            <button class="btn btn-small" ng-click="addTeamMember()">Add</button>
                         </td>
                     </tr>
                     </tbody>

@@ -73,7 +73,7 @@ angular.module('mongolabResource', []).factory('$mongolabResource', ['$http', 'j
     };
 
     Resource.prototype.$update = function (cb, errorcb) {
-      var httpPromise = $http.post(url + "/" + this.$id(), angular.extend({}, this, {_id:undefined}), {params:defaultParams});
+      var httpPromise = $http.put(url, angular.extend({}, this, {_id:undefined}), {params:defaultParams});
       var scb = cb || angular.noop;
       var ecb = errorcb || angular.noop;
 

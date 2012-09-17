@@ -1,16 +1,15 @@
 angular.module('services.users', ['mongolabResource']);
 
 angular.module('services.users').factory('Users', ['$mongolabResource', function ($mongolabResource) {
-  return $mongolabResource('users');
-}]);
 
-angular.module('services.users').factory('Roles', function () {
-  return {
-    po:{code:'po', name:'Product owner'},
-    sm:{code:'sm', name:'Scrum master'},
-    tm:{code:'tm', name:'Team member'}
+  var userResource = $mongolabResource('users');
+
+  userResource.prototype.getFullName = function () {
+    return this.lastName + " " + this.firstName + " (" + this.login + ")";
   };
-});
+
+  return userResource;
+}]);
 
 angular.module('services.users').factory('Security', ['Users', function (Users) {
 
