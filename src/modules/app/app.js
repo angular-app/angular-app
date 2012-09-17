@@ -24,7 +24,7 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
       controller:'AdminProjectEditCtrl',
       resolve:{
         project:function (Projects) {
-          return new Projects()
+          return new Projects();
         },
         users:function (Users) {
           return Users.all();

@@ -88,7 +88,7 @@ angular.module('mongolabResource', []).factory('$mongolabResource', ['$http', 'j
     };
 
     Resource.prototype.$remove = function (cb, errorcb) {
-      var httpPromise = $http.delete(url + "/" + this.$id(), {params:defaultParams});
+      var httpPromise = $http['delete'](url + "/" + this.$id(), {params:defaultParams});
       var scb = cb || angular.noop;
       var ecb = errorcb || angular.noop;
 

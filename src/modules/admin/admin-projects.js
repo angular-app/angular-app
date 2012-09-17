@@ -42,4 +42,4 @@ angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '
       editCompleted();
     }
   };
-}])
+}]);
