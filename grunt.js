@@ -16,6 +16,7 @@ module.exports = function (grunt) {
     src: {
       js: ['src/**/*.js'],
       html: ['src/index.html'],
+      tpl: ['src/**/*.tpl.html'],
       less: ['src/modules/*/less/*.less'] // recess:build doesn't accept ** in its file patterns
     },
     test: {
@@ -24,6 +25,7 @@ module.exports = function (grunt) {
     lint:{
       files:['grunt.js', '<config:src.js>', '<config:test.js>']
     },
+    html2js: { tpl: '<config:src.tpl>' },
     concat:{
       dist:{
         src:['<banner:meta.banner>', '<config:src.js>'],
@@ -74,8 +76,8 @@ module.exports = function (grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint test build');
-  grunt.registerTask('build', 'concat recess:build concatPartials index');
+  grunt.registerTask('default', 'build lint test');
+  grunt.registerTask('build', 'html2js concat recess:build concatPartials index');
   grunt.registerTask('release', 'lint test min recess:min concatPartials index');
 
   // Testacular stuff
@@ -144,5 +146,25 @@ module.exports = function (grunt) {
     grunt.file.write(srcPath + 'partials/' + moduleName + '.tpl.html', grunt.template.process(grunt.file.read('build/scaffolding/partial.tpl.html'), tplvars));
     //tests
     grunt.file.write(testPath + '/unit/' + moduleName + 'Spec.js', grunt.template.process(grunt.file.read('build/scaffolding/test.js'), tplvars));
+  });
+
+  // HTML-2-JS Templates
+  var TPL = 'angular.module("<%= file %>", []).run(function($templateCache) {\n' +
+      '  $templateCache.put("<%= file %>",\n    "<%= content %>");\n' +
+      '});\n';
+
+  var escapeContent = function(content) {
+    return content.replace(/"/g, '\\"').replace(/\r?\n/g, '" +\n    "');
+  };
+
+  grunt.registerMultiTask('html2js', 'Generate js version of html template.', function() {
+    var files = grunt._watch_changed_files || grunt.file.expand(this.data);
+
+    files.forEach(function(file) {
+      grunt.file.write(file + '.js', grunt.template.process(TPL, {
+        file: file,
+        content: escapeContent(grunt.file.read(file))
+      }));
+    });
   });
 };

@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
 <head>
-
-    <title>AScrum</title>
-    <link rel="stylesheet" type="text/css" href="<%= grunt.config.get('pkg.name') %>.css"/>
-
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.1/angular.js"></script>
     <script type="text/javascript" src="<%= grunt.config.get('pkg.name') %>.js"></script>
-
-    <!-- partials:start -->
-    <%= grunt.file.read('dist/partials.tpl.html') %>
-    <!-- partials:end -->
+    <link rel="stylesheet" type="text/css" href="<%= grunt.config.get('pkg.name') %>.css"/>
 </head>
 
 <body ng-controller="AppCtrl">
