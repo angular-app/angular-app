@@ -141,7 +141,7 @@ module.exports = function (grunt) {
 
   // HTML-2-JS Templates
   var path = require('path');
-  var TPL = 'angular.module("<%= file %>", []).run(function($templateCache) {\n  $templateCache.put("<%= file %>",\n    "<%= content %>");\n});\n';
+  var TPL = 'angular.module("<%= file %>", []).run(["$templateCache", function($templateCache) {\n  $templateCache.put("<%= file %>",\n    "<%= content %>");\n}]);\n';
   var templateModule = "angular.module('templates', [<%= templates %>]);";
   var escapeContent = function(content) {
     return content.replace(/"/g, '\\"').replace(/\r?\n/g, '" +\n    "');
