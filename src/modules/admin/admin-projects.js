@@ -1,34 +1,36 @@
 angular.module('admin-projects', ['services.projects', 'services.users']);
 
-angular.module('admin-projects').controller('AdminProjectsCtrl', ['$scope', '$location', 'Projects', function ($scope, $location, Projects) {
-  $scope.projects = Projects.query();
+angular.module('admin-projects').controller('AdminProjectsCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
+
+  $scope.projects = projects;
 
   $scope.itemView = function (item) {
     $location.path('/admin/projects/' + item._id.$oid);
   };
 }]);
 
-angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '$location', '$routeParams', 'Projects', 'Users', 'Roles', function ($scope, $location, $routeParams, Projects, Users, Roles) {
+angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '$location', 'users', 'project', function ($scope, $location, users, project) {
 
- $scope.users = Users.query();
- $scope.roles = Roles;
+  $scope.selTeamMember = undefined;
 
-  if ($routeParams.projectId) {
-    Projects.getById($routeParams.projectId, function (item) {
-      $scope.item = item;
-      $scope.itemCopy = angular.copy(item);
-    });
-  } else {
-    $scope.item = new Projects({users:[]});
-    $scope.itemCopy = angular.copy($scope.item);
-  }
+  $scope.users = users;
+  //prepare users lookup, just keep refferences for easier lookup
+  $scope.usersLookup = {};
+  angular.forEach(users, function(value, key){
+    $scope.usersLookup[value.$id()] = value;
+  });
+
+  $scope.item = project;
+  $scope.item.teamMembers = $scope.item.teamMembers || [];
+  $scope.itemCopy = angular.copy($scope.item);
+
 
   var editCompleted = function () {
     $location.path('/admin/projects');
   };
 
   $scope.save = function () {
-    $scope.item.saveOrUpdate(editCompleted, editCompleted);
+    $scope.item.$saveOrUpdate(editCompleted, editCompleted);
   };
 
   $scope.canSave = function () {
@@ -45,22 +47,19 @@ angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '
 
   $scope.remove = function () {
     if ($scope.item._id) {
-      $scope.item.remove(editCompleted);
+      $scope.item.$remove(editCompleted);
     } else {
       editCompleted();
     }
   };
 
-  $scope.addUserWithRole = function () {
-    if (!angular.isArray($scope.item.users)){
-      $scope.item.users = [];
-    }
-    $scope.item.users.push($scope.projectUser);
-    $scope.projectUser = {};
+  $scope.addTeamMember = function () {
+    $scope.item.teamMembers.push($scope.selTeamMember);
+    $scope.selTeamMember = undefined;
   };
 
-  $scope.removeUserWithRole = function (userWithRole) {
-    var index = $scope.item.users.indexOf(userWithRole);
-    $scope.item.users.splice(index,1);
+  $scope.removeTeamMember = function (teamMember) {
+    var idx = $scope.item.teamMembers.indexOf(teamMember);
+    $scope.item.teamMembers.splice(idx, 1);
   };
 }]);

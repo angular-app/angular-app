@@ -2,13 +2,17 @@
     <div class="span4 offset4 well">
         <h4>Sign in</h4>
         <hr>
-        <form name="name">
+        <div class="alert alert-error" ng-show="authError">
+            Auth error...
+        </div>
+        <form name="form">
             <label>Login</label>
-            <input class="span10" name="login" type="text" ng-model="user.login" required autofocus>
+            <input class="span12" name="login" type="text" ng-model="user.login" required autofocus>
             <label>Password</label>
-            <input class="span10" name="pass" type="password" ng-model="user.pass" required>
+            <input class="span12" name="pass" type="password" ng-model="user.pass" required>
         </form>
         <hr>
-        <button class="btn btn-primary" ng-click="signIn()">Sign in</button>
+        <button class="btn btn-primary" ng-click="signIn()" ng-disabled='form.$invalid'>Sign in</button>
+        <button class="btn" ng-click="clearForm()">Clear</button>
     </div>
 </div>
