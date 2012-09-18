@@ -14,8 +14,9 @@ module.exports = function (grunt) {
         ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
     },
     src: {
-      js: ['src/**/*.js'],
+      js: ['src/**/*.js', 'dist/tmp/**/*.js'],
       html: ['src/index.html'],
+      tpl: ['src/**/*.tpl.html'],
       less: ['src/modules/*/less/*.less'] // recess:build doesn't accept ** in its file patterns
     },
     test: {
@@ -23,6 +24,11 @@ module.exports = function (grunt) {
     },
     lint:{
       files:['grunt.js', '<config:src.js>', '<config:test.js>']
+    },
+    html2js: {
+      src: ['<config:src.tpl>'],
+      base: 'src/modules',
+      dest: 'dist/tmp'
     },
     concat:{
       dist:{
@@ -74,9 +80,9 @@ module.exports = function (grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint test build');
-  grunt.registerTask('build', 'concat recess:build concatPartials index');
-  grunt.registerTask('release', 'lint test min recess:min concatPartials index');
+  grunt.registerTask('default', 'build lint test');
+  grunt.registerTask('build', 'html2js concat recess:build index');
+  grunt.registerTask('release', 'html2js min lint test recess:min index');
 
   // Testacular stuff
   var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
@@ -112,20 +118,6 @@ module.exports = function (grunt) {
      grunt.file.copy('src/index.html', 'dist/index.html', {process:grunt.template.process});
   });
 
-  grunt.registerTask('concatPartials', 'concat partials', function () {
-    //TODO: horrible implementation, to be fixed, but this Grunt task makes sense for the AngularJS community!
-    var content = '', partials = grunt.file.expandFiles('src/modules/*/partials/**/*.tpl.html');
-    for (var i=0; i<partials.length; i++){
-      var partialFile = partials[i];
-      var partialEls = partialFile.split('/');
-      var moduleName = partialEls[2];
-      var partialName = partialEls[partialEls.length-1];
-      var partial = "<script type='text/ng-template' id='"+moduleName+"/"+partialName+"'>"+grunt.file.read(partialFile)+"</script>\n";
-      content += partial;
-    }
-    grunt.file.write('dist/partials.tpl.html', content);
-  });
-
   // Scaffolding !!
   grunt.registerTask('module', 'create new module', function () {
     var moduleName = this.args[0];
@@ -144,5 +136,40 @@ module.exports = function (grunt) {
     grunt.file.write(srcPath + 'partials/' + moduleName + '.tpl.html', grunt.template.process(grunt.file.read('build/scaffolding/partial.tpl.html'), tplvars));
     //tests
     grunt.file.write(testPath + '/unit/' + moduleName + 'Spec.js', grunt.template.process(grunt.file.read('build/scaffolding/test.js'), tplvars));
+  });
+
+
+
+  // HTML-2-JS Templates
+  var path = require('path');
+  var TPL = 'angular.module("<%= id %>", []).run(["$templateCache", function($templateCache) {\n  $templateCache.put("<%= id %>",\n    "<%= content %>");\n}]);\n';
+  var templateModule = "angular.module('templates', [<%= templates %>]);";
+  var escapeContent = function(content) {
+    return content.replace(/"/g, '\\"').replace(/\r?\n/g, '" +\n    "');
+  };
+  var normalizePath = function(p) {
+    if ( path.sep !== '/' ) {
+      p = p.replace(/\\/g, '/');
+    }
+    return p;
+  };
+
+  grunt.registerTask('html2js', 'Generate js version of html template.', function() {
+    this.requiresConfig('html2js.src');
+    var files = grunt.file.expandFiles(grunt.config.process('html2js.src'));
+    var base = grunt.config.process('html2js.base') || '.';
+    var dest = grunt.config.process('html2js.dest') || '.';
+    var templates = [];
+    files.forEach(function(file) {
+      var id = normalizePath(path.relative(base, file));
+      templates.push("'" + id + "'");
+      grunt.file.write(path.resolve(dest, id + '.js'), grunt.template.process(TPL, {
+        id: id,
+        content: escapeContent(grunt.file.read(file))
+      }));
+    });
+    grunt.file.write(path.resolve(dest,'templates.js'), grunt.template.process(templateModule, {
+      templates: templates.join(', ')
+    }));
   });
 };

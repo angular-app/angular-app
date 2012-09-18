@@ -13,7 +13,8 @@ files = [
   'test/lib/angular/angular-mocks.js',
   'src/lib/**/*.js',
   'src/**/*.js',
-  'test/**/unit/**/*Spec.js'
+  'test/**/unit/**/*Spec.js',
+  'dist/tmp/**/*.js'
 ];
 
 // list of files to exclude

@@ -1,18 +1,18 @@
-angular.module('app', ['signin', 'dashboard', 'admin', 'services.util']);
+angular.module('app', ['signin', 'dashboard', 'admin', 'services.util', 'templates']);
 
 angular.module('app').constant('API_KEY', '4fb51e55e4b02e56a67b0b66');
 angular.module('app').constant('DB_NAME', 'ascrum');
 
 angular.module('app').config(['$routeProvider', function ($routeProvider) {
 
-  $routeProvider.when('/signin', {templateUrl:'signin/form.tpl.html', controller:'SignInCtrl'});
+  $routeProvider.when('/signin', {templateUrl:'signin/partials/form.tpl.html', controller:'SignInCtrl'});
 
-  $routeProvider.when('/dashboard', {templateUrl:'dashboard/dashboard.tpl.html', controller:'DashboardController'});
+  $routeProvider.when('/dashboard', {templateUrl:'dashboard/partials/dashboard.tpl.html', controller:'DashboardController'});
 
-  $routeProvider.when('/admin', {templateUrl:'admin/admin.tpl.html', controller:'AdminCtrl'});
+  $routeProvider.when('/admin', {templateUrl:'admin/partials/admin.tpl.html', controller:'AdminCtrl'});
 
   $routeProvider.when('/admin/projects', {
-    templateUrl:'admin/projects-list.tpl.html',
+    templateUrl:'admin/partials/projects-list.tpl.html',
     controller:'AdminProjectsCtrl',
     resolve:{
       projects:function (Projects) {
@@ -20,7 +20,7 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
       }}
   });
   $routeProvider.when('/admin/projects/new', {
-      templateUrl:'admin/project-edit.tpl.html',
+      templateUrl:'admin/partials/project-edit.tpl.html',
       controller:'AdminProjectEditCtrl',
       resolve:{
         project:function (Projects) {
@@ -32,7 +32,7 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
       }}
   );
   $routeProvider.when('/admin/projects/:projectId', {
-    templateUrl:'admin/project-edit.tpl.html',
+    templateUrl:'admin/partials/project-edit.tpl.html',
     controller:'AdminProjectEditCtrl',
     resolve:{
       project:function ($route, Projects) {
@@ -45,14 +45,14 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
   });
 
   $routeProvider.when('/admin/users', {
-    templateUrl:'admin/users-list.tpl.html',
+    templateUrl:'admin/partials/users-list.tpl.html',
     controller:'AdminUsersCtrl',
     resolve:{users:function (Users) {
       return Users.all();
     }}
   });
   $routeProvider.when('/admin/users/new', {
-    templateUrl:'admin/user-edit.tpl.html',
+    templateUrl:'admin/partials/user-edit.tpl.html',
     controller:'AdminUserEditCtrl',
     resolve:{
       user:function (Users) {
@@ -61,7 +61,7 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
     }
   });
   $routeProvider.when('/admin/users/:userId', {
-    templateUrl:'admin/user-edit.tpl.html',
+    templateUrl:'admin/partials/user-edit.tpl.html',
     controller:'AdminUserEditCtrl',
     resolve:{
       user:function ($route, Users) {
