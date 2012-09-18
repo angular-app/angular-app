@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
     },
     src: {
-      js: ['src/**/*.js'],
+      js: ['src/**/*.js', 'dist/tmp/**/*.js'],
       html: ['src/index.html'],
       tpl: ['src/**/*.tpl.html'],
       less: ['src/modules/*/less/*.less'] // recess:build doesn't accept ** in its file patterns
@@ -27,7 +27,8 @@ module.exports = function (grunt) {
     },
     html2js: {
       src: ['<config:src.tpl>'],
-      base: 'src/modules'
+      base: 'src/modules',
+      dest: 'dist/tmp'
     },
     concat:{
       dist:{
@@ -141,7 +142,7 @@ module.exports = function (grunt) {
 
   // HTML-2-JS Templates
   var path = require('path');
-  var TPL = 'angular.module("<%= file %>", []).run(["$templateCache", function($templateCache) {\n  $templateCache.put("<%= file %>",\n    "<%= content %>");\n}]);\n';
+  var TPL = 'angular.module("<%= id %>", []).run(["$templateCache", function($templateCache) {\n  $templateCache.put("<%= id %>",\n    "<%= content %>");\n}]);\n';
   var templateModule = "angular.module('templates', [<%= templates %>]);";
   var escapeContent = function(content) {
     return content.replace(/"/g, '\\"').replace(/\r?\n/g, '" +\n    "');
@@ -154,18 +155,20 @@ module.exports = function (grunt) {
   };
 
   grunt.registerTask('html2js', 'Generate js version of html template.', function() {
+    this.requiresConfig('html2js.src');
     var files = grunt.file.expandFiles(grunt.config.process('html2js.src'));
     var base = grunt.config.process('html2js.base') || '.';
+    var dest = grunt.config.process('html2js.dest') || '.';
     var templates = [];
     files.forEach(function(file) {
-      var name = normalizePath(path.relative(base, file));
-      templates.push("'" + name + "'");
-      grunt.file.write(file + '.js', grunt.template.process(TPL, {
-        file: name,
+      var id = normalizePath(path.relative(base, file));
+      templates.push("'" + id + "'");
+      grunt.file.write(path.resolve(dest, id + '.js'), grunt.template.process(TPL, {
+        id: id,
         content: escapeContent(grunt.file.read(file))
       }));
     });
-    grunt.file.write(path.join(base,'templates.js'), grunt.template.process(templateModule, {
+    grunt.file.write(path.resolve(dest,'templates.js'), grunt.template.process(templateModule, {
       templates: templates.join(', ')
     }));
   });
