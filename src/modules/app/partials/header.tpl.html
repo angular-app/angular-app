@@ -9,13 +9,18 @@
             <li><a href="#">{{security.getUser().login}}</a></li>
         </ul>
     </div>
-    <ul class="breadcrumb">
-        <li ng-repeat="breadcrumb in pathElements" class="active">
-            <span class="divider">/</span>
-            <ng-switch on="$last">
-                <span ng-switch-when="true">{{breadcrumb}}</span>
-                <span ng-switch-default><a href="#{{breadcrumbPath($index)}}">{{breadcrumb}}</a></span>
-            </ng-switch>
-        </li>
-    </ul>
+    <div>
+        <ul class="breadcrumb">
+            <li ng-repeat="breadcrumb in pathElements" class="active">
+                <span class="divider">/</span>
+                <ng-switch on="$last">
+                    <span ng-switch-when="true">{{breadcrumb}}</span>
+                    <span ng-switch-default><a href="#{{breadcrumbPath($index)}}">{{breadcrumb}}</a></span>
+                </ng-switch>
+            </li>
+        </ul>
+    </div>
+    <div class="progress progress-striped active" ng-show="hasPendingRequests()">
+        <div class="bar" style="width: 100%;"></div>
+    </div>
 </div>
