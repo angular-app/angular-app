@@ -1,31 +1,24 @@
 angular.module('admin-users', ['services.users']);
 
-angular.module('admin-users').controller('AdminUsersCtrl', ['$scope', '$location', 'Users', function ($scope, $location, Users) {
-  $scope.users = Users.query();
+angular.module('admin-users').controller('AdminUsersCtrl', ['$scope', '$location', 'users', function ($scope, $location, users) {
+  $scope.users = users;
 
   $scope.itemView = function (item) {
-    $location.path('/admin/users/' + item._id.$oid);
+    $location.path('/admin/users/' + item.$id());
   };
 }]);
 
-angular.module('admin-users').controller('AdminUserEditCtrl', ['$scope', '$location', '$routeParams', 'Users', function ($scope, $location, $routeParams, Users) {
+angular.module('admin-users').controller('AdminUserEditCtrl', ['$scope', '$location', 'user', function ($scope, $location, user) {
 
-  if ($routeParams.userId) {
-    Users.getById($routeParams.userId, function (item) {
-      $scope.item = item;
-      $scope.itemCopy = angular.copy(item);
-    });
-  } else {
-    $scope.item = new Users();
-    $scope.itemCopy = angular.copy($scope.item);
-  }
+  $scope.item = user;
+  $scope.itemCopy = angular.copy($scope.item);
 
   var editCompleted = function () {
     $location.path('/admin/users');
   };
 
   $scope.save = function () {
-    $scope.item.saveOrUpdate(editCompleted, editCompleted);
+    $scope.item.$saveOrUpdate(editCompleted, editCompleted);
   };
 
   $scope.canSave = function () {
@@ -42,7 +35,7 @@ angular.module('admin-users').controller('AdminUserEditCtrl', ['$scope', '$locat
 
   $scope.remove = function () {
     if ($scope.item._id) {
-      $scope.item.remove(editCompleted);
+      $scope.item.$remove(editCompleted);
     } else {
       editCompleted();
     }
