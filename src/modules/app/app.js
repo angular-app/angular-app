@@ -15,58 +15,62 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
     templateUrl:'admin/partials/projects-list.tpl.html',
     controller:'AdminProjectsCtrl',
     resolve:{
-      projects:function (Projects) {
+      projects:['Projects',function (Projects) {
         return Projects.all();
-      }}
+      }]
+    }
   });
   $routeProvider.when('/admin/projects/new', {
       templateUrl:'admin/partials/project-edit.tpl.html',
       controller:'AdminProjectEditCtrl',
       resolve:{
-        project:function (Projects) {
+        project:['Projects',function (Projects) {
           return new Projects();
-        },
-        users:function (Users) {
+        }],
+        users:['Users',function (Users) {
           return Users.all();
-        }
-      }}
+        }]
+      }
+    }
   );
   $routeProvider.when('/admin/projects/:projectId', {
     templateUrl:'admin/partials/project-edit.tpl.html',
     controller:'AdminProjectEditCtrl',
     resolve:{
-      project:function ($route, Projects) {
+      project:['$route', 'Projects', function ($route, Projects) {
         return Projects.getById($route.current.params.projectId);
-      },
-      users:function (Users) {
+      }],
+      users:['Users', function (Users) {
         return Users.all();
-      }
+      }]
     }
   });
 
   $routeProvider.when('/admin/users', {
     templateUrl:'admin/partials/users-list.tpl.html',
     controller:'AdminUsersCtrl',
-    resolve:{users:function (Users) {
-      return Users.all();
-    }}
+    resolve:{
+      users:['Users', function (Users) {
+        return Users.all();
+      }]
+    }
   });
   $routeProvider.when('/admin/users/new', {
     templateUrl:'admin/partials/user-edit.tpl.html',
     controller:'AdminUserEditCtrl',
     resolve:{
-      user:function (Users) {
+      user:['Users', function (Users) {
         return new Users();
-      }
+      }]
     }
   });
   $routeProvider.when('/admin/users/:userId', {
     templateUrl:'admin/partials/user-edit.tpl.html',
     controller:'AdminUserEditCtrl',
     resolve:{
-      user:function ($route, Users) {
+      user:['$route', 'Users', function ($route, Users) {
         return Users.getById($route.current.params.userId);
-      }
+      }]
     }
   });
 
