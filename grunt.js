@@ -81,7 +81,7 @@ module.exports = function (grunt) {
   // Default task.
   grunt.registerTask('default', 'build lint test');
   grunt.registerTask('build', 'html2js concat recess:build index');
-  grunt.registerTask('release', 'lint test min recess:min index');
+  grunt.registerTask('release', 'html2js min lint test recess:min index');
 
   // Testacular stuff
   var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
