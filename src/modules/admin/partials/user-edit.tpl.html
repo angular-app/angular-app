@@ -10,6 +10,8 @@
         <input class="span6" type="text" name="lastName" ng-model="item.lastName" required>
         <label>E-mail</label>
         <input class="span6" type="email" name="email" ng-model="item.email" required>
+        <label>Admin</label>
+        <input type="checkbox" ng-model="item.admin">
     </form>
     <hr>
     <button type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="!canSave()">Save</button>

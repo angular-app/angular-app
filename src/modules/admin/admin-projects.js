@@ -1,15 +1,19 @@
-angular.module('admin-projects', ['services.projects', 'services.users']);
+angular.module('admin-projects', ['services.projects', 'services.users', 'services.util']);
 
 angular.module('admin-projects').controller('AdminProjectsCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
 
   $scope.projects = projects;
 
   $scope.itemView = function (item) {
-    $location.path('/admin/projects/' + item._id.$oid);
+    $location.path('/admin/projects/' + item.$id());
   };
 }]);
 
-angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '$location', 'users', 'project', function ($scope, $location, users, project) {
+angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '$location', 'CRUDScopeMixIn', 'users', 'project', function ($scope, $location, CRUDScopeMixIn, users, project) {
+
+  var editCompleted = function () {
+    $location.path('/admin/projects');
+  };
 
   $scope.selTeamMember = undefined;
 
@@ -20,38 +24,11 @@ angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '
     $scope.usersLookup[value.$id()] = value;
   });
 
-  $scope.item = project;
-  $scope.item.teamMembers = $scope.item.teamMembers || [];
-  $scope.itemCopy = angular.copy($scope.item);
-
-
-  var editCompleted = function () {
+  angular.extend($scope, new CRUDScopeMixIn('item', project, function () {
     $location.path('/admin/projects');
-  };
+  }));
 
-  $scope.save = function () {
-    $scope.item.$saveOrUpdate(editCompleted, editCompleted);
-  };
-
-  $scope.canSave = function () {
-    return $scope.form.$valid && !angular.equals($scope.item, $scope.itemCopy);
-  };
-
-  $scope.revertChanges = function () {
-    $scope.item = angular.copy($scope.itemCopy);
-  };
-
-  $scope.canRevert = function () {
-    return !angular.equals($scope.item, $scope.itemCopy);
-  };
-
-  $scope.remove = function () {
-    if ($scope.item._id) {
-      $scope.item.$remove(editCompleted);
-    } else {
-      editCompleted();
-    }
-  };
+  $scope.item.teamMembers = $scope.item.teamMembers || [];
 
   $scope.addTeamMember = function () {
     $scope.item.teamMembers.push($scope.selTeamMember);

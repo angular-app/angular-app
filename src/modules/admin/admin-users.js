@@ -8,36 +8,10 @@ angular.module('admin-users').controller('AdminUsersCtrl', ['$scope', '$location
   };
 }]);
 
-angular.module('admin-users').controller('AdminUserEditCtrl', ['$scope', '$location', 'user', function ($scope, $location, user) {
+angular.module('admin-users').controller('AdminUserEditCtrl', ['$scope', '$location', 'CRUDScopeMixIn', 'user', function ($scope, $location, CRUDScopeMixIn, user) {
 
-  $scope.item = user;
-  $scope.itemCopy = angular.copy($scope.item);
-
-  var editCompleted = function () {
+  angular.extend($scope, new CRUDScopeMixIn('item', user, function () {
     $location.path('/admin/users');
-  };
+  }));
 
-  $scope.save = function () {
-    $scope.item.$saveOrUpdate(editCompleted, editCompleted);
-  };
-
-  $scope.canSave = function () {
-    return $scope.form.$valid && !angular.equals($scope.item, $scope.itemCopy);
-  };
-
-  $scope.revertChanges = function () {
-    $scope.item = angular.copy($scope.itemCopy);
-  };
-
-  $scope.canRevert = function () {
-    return !angular.equals($scope.item, $scope.itemCopy);
-  };
-
-  $scope.remove = function () {
-    if ($scope.item._id) {
-      $scope.item.$remove(editCompleted);
-    } else {
-      editCompleted();
-    }
-  };
 }]);
