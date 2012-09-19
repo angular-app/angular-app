@@ -20,7 +20,7 @@ module.exports = function (grunt) {
       less: ['src/modules/*/less/*.less'] // recess:build doesn't accept ** in its file patterns
     },
     test: {
-      js: ['test/**/*/js']
+      js: ['test/modules/**/*.js']
     },
     lint:{
       files:['grunt.js', '<config:src.js>', '<config:test.js>']
@@ -76,7 +76,7 @@ module.exports = function (grunt) {
     },
     watch:{
       files:['<config:src.js>', '<config:test.js>', '<config:src.less>', '<config:src.tpl>', '<config:src.html>'], //need to have a path to index.html, otherwise watch won't pick it up
-      tasks:'build'
+      tasks:'default'
     },
     jshint:{
       options:{
@@ -110,7 +110,7 @@ module.exports = function (grunt) {
         if (code) {
           grunt.fail.fatal("Test failed...");
         }
-        done(!code);
+        done();
   });
     child.stdout.pipe(process.stdout);
     child.stderr.pipe(process.stderr);
