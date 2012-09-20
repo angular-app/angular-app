@@ -36,7 +36,7 @@ module.exports = function (grunt) {
         dest:'<%= distdir %>/<%= pkg.name %>.js'
       },
       angular: {
-        src:['lib/angular/*.js'],
+        src:['lib/angular/angular.js'],
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
@@ -50,7 +50,7 @@ module.exports = function (grunt) {
         dest:'<%= distdir %>/<%= pkg.name %>.js'
       },
       angular: {
-        src:['lib/angular/*.js'],
+        src:['<config:concat.angular.src>'],
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
@@ -102,7 +102,7 @@ module.exports = function (grunt) {
 
   // Testacular stuff
   var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
-  var testConfigFile = 'test/config/test-config.js';
+  var testConfigFile = 'test-config.js';
   var runTestacular = function(cmd, options) {
       var args = [cmd, testConfigFile].concat(options);
       var done = grunt.task.current.async();

@@ -3,15 +3,15 @@
 // Most of the options can be overriden by cli arguments (see testacular --help)
 
 // base path, that will be used to resolve files and exclude
-basePath = '../..';
+basePath = '';
 
 // list of files / patterns to load in the browser
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  'lib/**/*.js',
-  'test/lib/angular/angular-mocks.js',
-  'src/lib/**/*.js',
+  'lib/angular/angular.js',
+  'lib/angular/angular-mocks.js',
+  'lib/mongolab/mongolab-resource.js',
   'src/**/*.js',
   'test/**/unit/**/*Spec.js',
   'dist/tmp/**/*.js'

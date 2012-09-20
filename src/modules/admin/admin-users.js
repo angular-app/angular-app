@@ -1,4 +1,4 @@
-angular.module('admin-users', ['services.users']);
+angular.module('admin-users', ['services.crud']);
 
 angular.module('admin-users').controller('AdminUsersCtrl', ['$scope', '$location', 'users', function ($scope, $location, users) {
   $scope.users = users;

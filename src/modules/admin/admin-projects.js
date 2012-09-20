@@ -1,4 +1,4 @@
-angular.module('admin-projects', ['services.projects', 'services.users', 'services.util']);
+angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud']);
 
 angular.module('admin-projects').controller('AdminProjectsCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
 
@@ -10,10 +10,6 @@ angular.module('admin-projects').controller('AdminProjectsCtrl', ['$scope', '$lo
 }]);
 
 angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '$location', 'CRUDScopeMixIn', 'users', 'project', function ($scope, $location, CRUDScopeMixIn, users, project) {
-
-  var editCompleted = function () {
-    $location.path('/admin/projects');
-  };
 
   $scope.selTeamMember = undefined;
 
