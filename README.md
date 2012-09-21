@@ -29,8 +29,23 @@ You can have grunt (testacular) continuously watch for file changes and automati
 * Each time a file changes the tests will be run against each browser.
 
 # Folders
+
 * `build` contains build tasks for Grunt
 * `lib` contains external dependencies (both for the application and tests)
 * `dist` contains build results
 * `src` contains application's sources
 * `test` contains test sources
+
+# Running from the local server
+
+* Install local dependencies for the server:
+** `cd server`
+** `npm install`
+* Run the server with `node server.js`
+* Browse to the application at http://localhost:3000
+
+# Proxying the db through the local server
+
+* Change the module dependency in `src/services/services.db.js` to `backendResource` rather than `mongolabResource`
+* Run the server (see above)
+* Browse to the application at http://localhost:3000
