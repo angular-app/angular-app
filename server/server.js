@@ -29,10 +29,14 @@ app.all('/db/:collection', function(req, res) {
   };
   console.log('DB request: ', options);
   https.get(options, function(dbRes) {
-    dbRes.setEncoding('utf8'); // We need to tell express that the chunks will be strings
     var json = '';
-    dbRes.on('data', function(chunk) { console.log(chunk); json = json + chunk; });
-    dbRes.on('end', function(){ res.json(json); });
+    dbRes.setEncoding('utf8'); // We need to tell express that the chunks will be strings
+    dbRes.on('data', function(chunk) { console.log(chunk); json += chunk; });
+    dbRes.on('end', function(){
+      res.charset = this.charset || 'utf-8';
+      res.set('Content-Type', 'application/json');
+      res.send(json);
+    });
   });
 });
 
