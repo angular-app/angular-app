@@ -4,14 +4,14 @@
     <form name="form">
         <label>E-mail</label>
         <input class="span6" type="email" name="email" ng-model="item.email" required unique-email>
-        <label>First name</label>
-        <input class="span6" type="text" name="firstName" ng-model="item.firstName" required>
         <label>Last name</label>
         <input class="span6" type="text" name="lastName" ng-model="item.lastName" required>
+        <label>First name</label>
+        <input class="span6" type="text" name="firstName" ng-model="item.firstName" required>
         <label>Password</label>
         <input class="span6" type="password" name="lastName" ng-model="item.password" required>
         <label>Password (repeat)</label>
-        <input class="span6" type="password" name="lastName" ng-model="password" required>
+        <input class="span6" type="password" name="lastName" ng-model="password" required validate-equals="item.password">
         <label>Admin</label>
         <input type="checkbox" ng-model="item.admin">
     </form>
