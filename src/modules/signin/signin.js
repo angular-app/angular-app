@@ -1,4 +1,7 @@
-angular.module('signin', ['services.users']);
+angular.module('signin', ['services.users'], ['$routeProvider', function($routeProvider){
+  $routeProvider.when('/signin', {templateUrl:'signin/partials/form.tpl.html', controller:'SignInCtrl'});
+}]);
+
 angular.module('signin').controller('SignInCtrl', ['$scope', '$location', 'Security', function ($scope, $location, Security) {
 
   $scope.user = {};

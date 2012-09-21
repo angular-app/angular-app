@@ -1,4 +1,39 @@
-angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud']);
+angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud'], ['$routeProvider', function($routeProvider){
+  $routeProvider.when('/admin/projects', {
+    templateUrl:'admin/partials/projects-list.tpl.html',
+    controller:'AdminProjectsCtrl',
+    resolve:{
+      projects:['Projects',function (Projects) {
+        return Projects.all();
+      }]
+    }
+  });
+  $routeProvider.when('/admin/projects/new', {
+      templateUrl:'admin/partials/project-edit.tpl.html',
+      controller:'AdminProjectEditCtrl',
+      resolve:{
+        project:['Projects',function (Projects) {
+          return new Projects();
+        }],
+        users:['Users',function (Users) {
+          return Users.all();
+        }]
+      }
+    }
+  );
+  $routeProvider.when('/admin/projects/:projectId', {
+    templateUrl:'admin/partials/project-edit.tpl.html',
+    controller:'AdminProjectEditCtrl',
+    resolve:{
+      project:['$route', 'Projects', function ($route, Projects) {
+        return Projects.getById($route.current.params.projectId);
+      }],
+      users:['Users', function (Users) {
+        return Users.all();
+      }]
+    }
+  });
+}]);
 
 angular.module('admin-projects').controller('AdminProjectsCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
 

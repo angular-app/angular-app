@@ -1,3 +1,3 @@
-angular.module('admin', ['admin-projects', 'admin-users']);
-angular.module('admin').controller('AdminCtrl', ['$scope', function ($scope) {
+angular.module('admin', ['admin-projects', 'admin-users'], ['$routeProvider', function($routeProvider){
+  $routeProvider.when('/admin', {templateUrl:'admin/partials/admin.tpl.html'});
 }]);

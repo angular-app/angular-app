@@ -1,4 +1,32 @@
-angular.module('admin-users', ['services.crud']);
+angular.module('admin-users', ['services.crud'], ['$routeProvider', function($routeProvider){
+  $routeProvider.when('/admin/users', {
+    templateUrl:'admin/partials/users-list.tpl.html',
+    controller:'AdminUsersCtrl',
+    resolve:{
+      users:['Users', function (Users) {
+        return Users.all();
+      }]
+    }
+  });
+  $routeProvider.when('/admin/users/new', {
+    templateUrl:'admin/partials/user-edit.tpl.html',
+    controller:'AdminUserEditCtrl',
+    resolve:{
+      user:['Users', function (Users) {
+        return new Users();
+      }]
+    }
+  });
+  $routeProvider.when('/admin/users/:userId', {
+    templateUrl:'admin/partials/user-edit.tpl.html',
+    controller:'AdminUserEditCtrl',
+    resolve:{
+      user:['$route', 'Users', function ($route, Users) {
+        return Users.getById($route.current.params.userId);
+      }]
+    }
+  });
+}]);
 
 angular.module('admin-users').controller('AdminUsersCtrl', ['$scope', '$location', 'users', function ($scope, $location, users) {
   $scope.users = users;
