@@ -20,7 +20,7 @@ angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '
     $scope.usersLookup[value.$id()] = value;
   });
 
-  angular.extend($scope, new CRUDScopeMixIn('item', project, function () {
+  angular.extend($scope, new CRUDScopeMixIn('item', project, 'form', function () {
     $location.path('/admin/projects');
   }));
 

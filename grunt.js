@@ -50,11 +50,11 @@ module.exports = function (grunt) {
         dest:'<%= distdir %>/<%= pkg.name %>.js'
       },
       angular: {
-        src:['<config:concat.angular.src>'],
+        src:['<config:concat.angular.dest>'],
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
-        src:['lib/mongolab/*.js'],
+        src:['<config:concat.mongo.dest>'],
         dest: '<%= distdir %>/mongolab.js'
       }
     },
@@ -75,7 +75,7 @@ module.exports = function (grunt) {
       }
     },
     watch:{
-      files:['<config:src.js>', '<config:test.js>', '<config:src.less>', '<config:src.tpl>', '<config:src.html>'], //need to have a path to index.html, otherwise watch won't pick it up
+      files:['<config:src.js>', '<config:test.js>', '<config:src.less>', '<config:src.tpl>', '<config:src.html>'],
       tasks:'default'
     },
     jshint:{

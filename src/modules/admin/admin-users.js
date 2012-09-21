@@ -10,7 +10,7 @@ angular.module('admin-users').controller('AdminUsersCtrl', ['$scope', '$location
 
 angular.module('admin-users').controller('AdminUserEditCtrl', ['$scope', '$location', 'CRUDScopeMixIn', 'user', function ($scope, $location, CRUDScopeMixIn, user) {
 
-  angular.extend($scope, new CRUDScopeMixIn('item', user, function () {
+  angular.extend($scope, new CRUDScopeMixIn('item', user, 'form', function () {
     $location.path('/admin/users');
   }));
 

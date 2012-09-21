@@ -2,7 +2,7 @@ angular.module('services.crud', []);
 angular.module('services.crud').factory('CRUDScopeMixIn', function () {
 
   //probably should be named differently as there is no "read/list" involved
-  var CRUDScopeMixIn = function (itemName, item, editFinishedFn) {
+  var CRUDScopeMixIn = function (itemName, item, formName, editFinishedFn) {
 
     //a copy as an instance memeber here, just not to expose it to a template, might change in the future
     var copy = angular.copy(item);
@@ -14,8 +14,7 @@ angular.module('services.crud').factory('CRUDScopeMixIn', function () {
     };
 
     this.canSave = function () {
-      //what about the form here? Do we want to just pass it in? I think we have to...
-      return this.form.$valid && !angular.equals(this[itemName], copy);
+      return this[formName].$valid && !angular.equals(this[itemName], copy);
     };
 
     this.revertChanges = function () {
@@ -29,7 +28,7 @@ angular.module('services.crud').factory('CRUDScopeMixIn', function () {
     this.remove = function () {
       if (this[itemName].$id()) {
         //TODO: error handling
-        this[itemName].$remove(editFinishedFn);
+        this[itemName].$remove(editFinishedFn, editFinishedFn);
       } else {
         editFinishedFn();
       }
