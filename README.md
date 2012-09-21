@@ -39,8 +39,8 @@ You can have grunt (testacular) continuously watch for file changes and automati
 # Running from the local server
 
 * Install local dependencies for the server:
-** `cd server`
-** `npm install`
+    * `cd server`
+    * `npm install`
 * Run the server with `node server.js`
 * Browse to the application at http://localhost:3000
 
