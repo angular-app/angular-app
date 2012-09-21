@@ -3,7 +3,7 @@ angular.module('services.users').factory('Users', ['$mongolabResource', function
 
   var userResource = $mongolabResource('users');
   userResource.prototype.getFullName = function () {
-    return this.lastName + " " + this.firstName + " (" + this.login + ")";
+    return this.lastName + " " + this.firstName + " (" + this.email + ")";
   };
 
   return userResource;
@@ -11,11 +11,10 @@ angular.module('services.users').factory('Users', ['$mongolabResource', function
 angular.module('services.users').factory('Security', ['Users', function (Users) {
 
   var securityService = {};
-  securityService.authenticate = function (login, password, successcb, errorcb) {
+  securityService.authenticate = function (email, password, successcb, errorcb) {
     securityService.signOut();
-    Users.query({login:login}, function (result) {
+    Users.query({email:email}, function (result) {
       if (angular.isArray(result) && result.length === 1) {
-        console.log(result[0]);
         securityService.user = result[0];
         successcb(this.user);
       } else {
