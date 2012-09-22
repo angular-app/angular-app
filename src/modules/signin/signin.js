@@ -1,4 +1,7 @@
-angular.module('signin', ['services.users']);
+angular.module('signin', ['services.users'], ['$routeProvider', function($routeProvider){
+  $routeProvider.when('/signin', {templateUrl:'signin/partials/form.tpl.html', controller:'SignInCtrl'});
+}]);
+
 angular.module('signin').controller('SignInCtrl', ['$scope', '$location', 'Security', function ($scope, $location, Security) {
 
   $scope.user = {};
@@ -6,7 +9,7 @@ angular.module('signin').controller('SignInCtrl', ['$scope', '$location', 'Secur
 
   $scope.signIn = function () {
     $scope.authError = false;
-    Security.authenticate($scope.user.login, $scope.user.password, function (user) {
+    Security.authenticate($scope.user.email, $scope.user.password, function (user) {
       $location.path('/dashboard');
     }, function () {
       $scope.authError = true;
