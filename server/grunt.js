@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     lint: {
-      files: ['grunt.js', 'server.js', 'test/**/*.js']
+      files: ['grunt.js', 'server.js', 'lib/*.js', 'test/**/*.js']
     },
     test: {
       files: ['test/**/*.js']
@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         boss: true,
         eqnull: true
       },
-      globals: { require: false, __dirname: false, console: false }
+      globals: { require: false, __dirname: false, console: false, module: false, exports: false }
     }
   });
 

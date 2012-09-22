@@ -14,7 +14,7 @@ app.use(express['static'](publicFolder));
 ////////////////////////////////////////////////////////
 // This route deals with connections to the database
 // The urls should be of the form:  http://localhost:3000/db/myCollection?q=myQuery
-app.all('/db/:collection', function(req, res) {
+app.use('/db/:collection', function(req, res) {
   var query = {
     apiKey: '4fb51e55e4b02e56a67b0b66',
     q: req.query.q
