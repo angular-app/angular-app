@@ -16,63 +16,75 @@ describe('CRUD scope mix-in', function () {
     });
   });
 
-  describe('copy and revert changes', function () {
-
-    var item, scopeMixIn;
-    beforeEach(function () {
-      item = {key:'value'};
-      scopeMixIn = new CrudScopeMixInConstructor('item', item, 'form', angular.noop);
-    });
-
-    it('should correctly detect when revert is possible', function () {
-      expect(scopeMixIn.canRevert()).toBeFalsy();
-      scopeMixIn.item.key = 'changed';
-      expect(scopeMixIn.canRevert()).toBeTruthy();
-    });
-
-    it('should make it possible to revert changes', function () {
-      scopeMixIn.item.key = 'changed';
-      expect(scopeMixIn.item).toEqual({key:'changed'});
-
-      scopeMixIn.revertChanges();
-      expect(scopeMixIn.item).toEqual({key:'value'});
-    });
-
-    it('should not revert anything if there were no changes', function () {
-      scopeMixIn.revertChanges();
-      expect(scopeMixIn.item).toEqual({key:'value'});
-    });
-  });
-
-  describe('save and update', function () {
+  describe('scope manipulation', function () {
 
     var item, scope;
+    var successcb = jasmine.createSpy();
+    var errorcb = jasmine.createSpy();
+
     beforeEach(inject(function ($rootScope) {
       item = {key:'value'};
       scope = $rootScope;
-      angular.extend(scope, new CrudScopeMixInConstructor('item', item, 'form', angular.noop));
+      angular.extend(scope, new CrudScopeMixInConstructor('item', item, 'form', successcb, errorcb));
     }));
-    it('should not be possible to save if there were no changes', function () {
-      scope.form = { $valid : true};
-      expect(scope.canSave()).toBeFalsy();
+
+    describe('copy and revert changes', function () {
+      it('should correctly detect when revert is possible', function () {
+        expect(scope.canRevert()).toBeFalsy();
+        scope.item.key = 'changed';
+        expect(scope.canRevert()).toBeTruthy();
+      });
+      it('should make it possible to revert changes', function () {
+        scope.item.key = 'changed';
+        expect(scope.item).toEqual({key:'changed'});
+        scope.revertChanges();
+        expect(scope.item).toEqual({key:'value'});
+      });
+      it('should not revert anything if there were no changes', function () {
+        scope.revertChanges();
+        expect(scope.item).toEqual({key:'value'});
+      });
     });
-    it('should not be possible to save if a form is invalid', function () {
-      scope.form = { $valid : false};
-      scope.item = {key : 'changed'};
-      expect(scope.canSave()).toBeFalsy();
+
+    describe('save and update', function () {
+      it('should not be possible to save if there were no changes', function () {
+        scope.form = { $valid : true};
+        expect(scope.canSave()).toBeFalsy();
+      });
+      it('should not be possible to save if a form is invalid', function () {
+        scope.form = { $valid : false};
+        scope.item = {key : 'changed'};
+        expect(scope.canSave()).toBeFalsy();
+      });
+      it('should be possible to save only if there were changes and a form is valid', function () {
+        scope.form = { $valid : true};
+        scope.item = {key : 'changed'};
+        expect(scope.canSave()).toBeTruthy();
+      });
+      it('should invoke the $saveOrUpdate method on an item with callback arguments on save', function () {
+        item.$saveOrUpdate = jasmine.createSpy();
+        scope.save();
+        expect(item.$saveOrUpdate).toHaveBeenCalledWith(successcb, errorcb);
+      });
     });
-    it('should be possible to save only if there were changes and a form is valid', function () {
-      scope.form = { $valid : true};
-      scope.item = {key : 'changed'};
-      expect(scope.canSave()).toBeTruthy();
-    });
-    it('should invoke the $saveOrUpdate method on an item with callback arguments on save', function () {
-      //TODO: need to learn how to use spays and make sure that those are invoked with different functions for the ok / error
+
+    describe('remove', function () {
+      it('should simply call success callback if $id not defined', function () {
+        item.$id = function () {
+          return undefined;
+        };
+        scope.remove();
+        expect(successcb).toHaveBeenCalled();
+      });
+
+      it('should call $remove method if $id defined', function () {
+        item.$id = function () {
+          return 'id';
+        };
+        item.$remove = jasmine.createSpy();
+        scope.remove();
+        expect(item.$remove).toHaveBeenCalledWith(successcb, errorcb);
+      });
     });
   });
-
-  describe('remove', function () {
-
-  });
-
 });

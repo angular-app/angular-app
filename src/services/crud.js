@@ -1,16 +1,14 @@
 angular.module('services.crud', []);
 angular.module('services.crud').factory('CRUDScopeMixIn', function () {
 
-  //probably should be named differently as there is no "read/list" involved
-  var CRUDScopeMixIn = function (itemName, item, formName, editFinishedFn) {
+  var CRUDScopeMixIn = function (itemName, item, formName, successcb, errorcb) {
 
     //a copy as an instance memeber here, just not to expose it to a template, might change in the future
     var copy = angular.copy(item);
     this[itemName] = item;
 
     this.save = function () {
-      //TODO: error handling
-      this[itemName].$saveOrUpdate(editFinishedFn, editFinishedFn);
+      this[itemName].$saveOrUpdate(successcb, errorcb);
     };
 
     this.canSave = function () {
@@ -27,10 +25,9 @@ angular.module('services.crud').factory('CRUDScopeMixIn', function () {
 
     this.remove = function () {
       if (this[itemName].$id()) {
-        //TODO: error handling
-        this[itemName].$remove(editFinishedFn, editFinishedFn);
+        this[itemName].$remove(successcb, errorcb);
       } else {
-        editFinishedFn();
+        successcb();
       }
     };
   };
