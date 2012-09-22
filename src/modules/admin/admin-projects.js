@@ -57,6 +57,8 @@ angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '
 
   angular.extend($scope, new CRUDScopeMixIn('item', project, 'form', function () {
     $location.path('/admin/projects');
+  }, function () {
+    $scope.updateError = true;
   }));
 
   $scope.item.teamMembers = $scope.item.teamMembers || [];

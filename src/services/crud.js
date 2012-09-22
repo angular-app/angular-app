@@ -8,7 +8,7 @@ angular.module('services.crud').factory('CRUDScopeMixIn', function () {
     this[itemName] = item;
 
     this.save = function () {
-      this[itemName].$saveOrUpdate(successcb, errorcb);
+      this[itemName].$saveOrUpdate(successcb, successcb, errorcb, errorcb);
     };
 
     this.canSave = function () {

@@ -64,7 +64,7 @@ describe('CRUD scope mix-in', function () {
       it('should invoke the $saveOrUpdate method on an item with callback arguments on save', function () {
         item.$saveOrUpdate = jasmine.createSpy();
         scope.save();
-        expect(item.$saveOrUpdate).toHaveBeenCalledWith(successcb, errorcb);
+        expect(item.$saveOrUpdate).toHaveBeenCalledWith(successcb, successcb, errorcb, errorcb);
       });
     });
 

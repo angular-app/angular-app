@@ -38,8 +38,12 @@ angular.module('admin-users').controller('AdminUsersCtrl', ['$scope', '$location
 
 angular.module('admin-users').controller('AdminUserEditCtrl', ['$scope', '$location', 'CRUDScopeMixIn', 'user', function ($scope, $location, CRUDScopeMixIn, user) {
 
+  $scope.password = user.password;
   angular.extend($scope, new CRUDScopeMixIn('item', user, 'form', function () {
+    console.log('cb');
     $location.path('/admin/users');
+  }, function() {
+    $scope.updateError = true;
   }));
 }]);
 
