@@ -87,14 +87,13 @@ angular.module('admin-users').directive('validateEquals', function() {
 
       scope.$watch(attrs.validateEquals, function(otherModelValue) {
         ctrl.$setValidity('equal', ctrl.$viewValue === otherModelValue);
-        //TODO: something is missing here since editing other field to a valid value doesn't work properly
       });
 
-      ctrl.$parsers.unshift(function(viewValue) {
+      ctrl.$parsers.push(function(viewValue) {
         return validateEqual(viewValue, scope.$eval(attrs.validateEquals));
       });
 
-      ctrl.$formatters.unshift(function(modelValue) {
+      ctrl.$formatters.push(function(modelValue) {
         return validateEqual(modelValue, scope.$eval(attrs.validateEquals));
       });
     }
