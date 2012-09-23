@@ -63,13 +63,35 @@ angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '
 
   $scope.item.teamMembers = $scope.item.teamMembers || [];
 
+  $scope.productOwnerCandidates = function () {
+    return $scope.users.filter(function(user){
+      return $scope.usersLookup[user.$id()] && $scope.item.canActAsProductOwner(user.$id());
+    });
+  };
+
+  $scope.scrumMasterCandidates = function() {
+    return $scope.users.filter(function(user){
+      return $scope.usersLookup[user.$id()] && $scope.item.canActAsScrumMaster(user.$id());
+    });
+  };
+
+  $scope.teamMemberCandidates = function() {
+    return $scope.users.filter(function(user){
+      return $scope.usersLookup[user.$id()] && $scope.item.canActAsDevTeamMember(user.$id()) && !$scope.item.isDevTeamMember(user.$id());
+    });
+  };
+
   $scope.addTeamMember = function () {
-    $scope.item.teamMembers.push($scope.selTeamMember);
-    $scope.selTeamMember = undefined;
+    if ($scope.selTeamMember){
+      $scope.item.teamMembers.push($scope.selTeamMember);
+      $scope.selTeamMember = undefined;
+    }
   };
 
   $scope.removeTeamMember = function (teamMember) {
     var idx = $scope.item.teamMembers.indexOf(teamMember);
-    $scope.item.teamMembers.splice(idx, 1);
+    if (idx >= 0) {
+      $scope.item.teamMembers.splice(idx, 1);
+    }
   };
 }]);

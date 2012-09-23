@@ -15,11 +15,11 @@
             </div>
             <div class="span6">
                 <label>Product Owner</label>
-                <select class="span12"  ng-model="item.productOwner.id" ng-options="user._id.$oid as user.getFullName() for user in users" required>
+                <select class="span12"  ng-model="item.productOwner" ng-options="user._id.$oid as user.getFullName() for user in productOwnerCandidates()" required>
                     <option value="">-- chose --</option>
                 </select>
                 <label>Scrum Master</label>
-                <select class="span12"  ng-model="item.scrumMaster.id" ng-options="user._id.$oid as user.getFullName() for user in users" required>
+                <select class="span12"  ng-model="item.scrumMaster" ng-options="user._id.$oid as user.getFullName() for user in scrumMasterCandidates()" required>
                     <option value="">-- chose --</option>
                 </select>
                 <label>Development Team</label>
@@ -38,9 +38,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><select class="span6" ng-model="selTeamMember" ng-options="user._id.$oid as user.getFullName() for user in users"></select></td>
+                        <td><select class="span6" ng-model="selTeamMember" ng-options="user._id.$oid as user.getFullName() for user in teamMemberCandidates()"></select></td>
                         <td>
-                            <button class="btn btn-small" ng-click="addTeamMember()">Add</button>
+                            <button class="btn btn-small" ng-click="addTeamMember()" ng-disabled="!selTeamMember">Add</button>
                         </td>
                     </tr>
                     </tbody>
