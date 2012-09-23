@@ -19,7 +19,7 @@ You can run the development build on its own without tests to simply concatenate
 # Building release code
 You can build a release version of the app, with minified files.
 
-# Run `grunt release`
+* Run `grunt release`
 
 # Continuous testing
 You can have grunt (testacular) continuously watch for file changes and automatically run all the tests on every change.
