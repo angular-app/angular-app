@@ -2,7 +2,7 @@ var url = require('url');
 var qs = require('querystring');
 
 module.exports = function(basePath, apiKey, https) {
-  console.log('Proxy creating', basePath, apiKey);
+  console.log('Proxying MongoLab at', basePath, 'with', apiKey);
 
   basePath = url.parse(basePath);
 
@@ -19,19 +19,20 @@ module.exports = function(basePath, apiKey, https) {
     for(var key in reqUrl.query) {
       newUrl.query[key] = reqUrl.query[key];
     }
-    // https request expects this field !
+    // https request expects path over pathname!
     newUrl.path = newUrl.pathname + '?' + qs.stringify(newUrl.query);
+
     return newUrl;
   };
 
   var proxy = function(req, res, next) {
     try {
-      console.log('Request', req.originalUrl);
       var options = mapUrl(req.originalUrl);
       options.headers = req.headers;
+      // We need to fix up the hostname
       options.headers.host = options.hostname;
+      // Use the same method
       options.method = req.method;
-      console.log('Mapped Request', options);
       
       // Create the request to the db
       var dbReq = https.request(options, function(dbRes) {
@@ -40,7 +41,6 @@ module.exports = function(basePath, apiKey, https) {
         dbRes.setEncoding('utf8');
         dbRes.on('data', function(chunk) {
           // Pass back any data from the response.
-          console.log(chunk);
           data = data + chunk;
         });
         dbRes.on('end', function() {
@@ -49,15 +49,13 @@ module.exports = function(basePath, apiKey, https) {
           res.trailers = dbRes.trailers;
           res.send(data);
           res.end();
-          console.log('End');
         });
       });
-      console.log('HREF: ', dbReq);
       // Send any data the is passed from the original request
       dbReq.end(req.data);
     } catch (error) {
-      console.log(error);
-      res.send(error);
+      console.log('ERROR: ', error);
+      res.json(error);
       res.end();
     }
   };
