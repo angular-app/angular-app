@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var https = require('https');
-var querystring = require('querystring');
+var mongoProxy = require('./lib/mongo-proxy');
 
 var LISTEN_PORT = 3000;
 var publicFolder = path.resolve(__dirname, '../dist');
@@ -13,32 +13,7 @@ app.use(express['static'](publicFolder));
 
 ////////////////////////////////////////////////////////
 // This route deals with connections to the database
-// The urls should be of the form:  http://localhost:3000/db/myCollection?q=myQuery
-app.use('/db/:collection', function(req, res) {
-  var query = {
-    apiKey: '4fb51e55e4b02e56a67b0b66',
-    q: req.query.q
-  };
-  var options = {
-    host: 'api.mongolab.com',
-    port: 443,
-    path: '/api/1/databases/ascrum/collections/' + req.params.collection + '?' + querystring.stringify(query),
-    headers: {
-        'Content-Type': 'application/json'
-    }
-  };
-  console.log('DB request: ', options);
-  https.get(options, function(dbRes) {
-    var json = '';
-    dbRes.setEncoding('utf8'); // We need to tell express that the chunks will be strings
-    dbRes.on('data', function(chunk) { console.log(chunk); json += chunk; });
-    dbRes.on('end', function(){
-      res.charset = this.charset || 'utf-8';
-      res.set('Content-Type', 'application/json');
-      res.send(json);
-    });
-  });
-});
+app.use('/databases', mongoProxy('https://api.mongolab.com/api/1', '4fb51e55e4b02e56a67b0b66', https));
 
 ////////////////////////////////////////////////////////
 // This route deals enables HTML5Mode by forwarding missing files to the index.html
