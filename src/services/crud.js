@@ -30,6 +30,10 @@ angular.module('services.crud').factory('CRUDScopeMixIn', function () {
         successcb();
       }
     };
+
+    this.canRemove = function() {
+      return item.$id();
+    };
   };
   return CRUDScopeMixIn;
 

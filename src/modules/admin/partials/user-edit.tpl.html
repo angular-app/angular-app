@@ -19,7 +19,5 @@
         <input type="checkbox" ng-model="item.admin">
     </form>
     <hr>
-    <button type="submit" class="btn btn-primary" ng-click="save()" ng-disabled="!canSave()">Save</button>
-    <button type="button" class="btn btn-warning" ng-click="revertChanges()" ng-disabled="!canRevert()">Revert changes</button>
-    <button type="button" class="btn btn-danger" ng-click="remove()" ng-show="item._id">Remove</button>
+    <crud-buttons></crud-buttons>
 </div>
