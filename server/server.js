@@ -13,7 +13,7 @@ app.use(express['static'](publicFolder));
 
 ////////////////////////////////////////////////////////
 // This route deals with connections to the database
-app.use('/databases', mongoProxy('https://api.mongolab.com/api/1', '4fb51e55e4b02e56a67b0b66', https));
+app.use('/databases', mongoProxy('https://api.mongolab.com/api/1/databases', '4fb51e55e4b02e56a67b0b66', https));
 
 ////////////////////////////////////////////////////////
 // This route deals enables HTML5Mode by forwarding missing files to the index.html
