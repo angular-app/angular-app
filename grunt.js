@@ -54,7 +54,7 @@ module.exports = function (grunt) {
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
-        src:['<config:concat.mongo.dest>'],
+        src:['lib/mongolab/*.js'],
         dest: '<%= distdir %>/mongolab.js'
       }
     },
