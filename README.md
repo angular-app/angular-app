@@ -46,6 +46,7 @@ You can have grunt (testacular) continuously watch for file changes and automati
 
 # Proxying the db through the local server
 
-* Change the module dependency in `src/services/services.db.js` to `backendResource` rather than `mongolabResource`
+* Change the MONGO_CONFIG.baseUrl value in the app module (src/modules/app/app.js) from `baseUrl: 'https://api.mongolab.com/api/1/databases/',` to `baseUrl: 'http://localhost:3000/databases/',`
 * Run the server (see above)
 * Browse to the application at http://localhost:3000
+* Now all database calls get proxied through the backend server.  This will allow us to implement access control.
