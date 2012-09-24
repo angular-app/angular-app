@@ -1,5 +1,5 @@
-angular.module('services.users', ['services.db']);
-angular.module('services.users').factory('Users', ['mongoResource', function (mongoResource) {
+angular.module('services.users', ['mongolabResource']);
+angular.module('services.users').factory('Users', ['mongolabResource', function (mongoResource) {
 
   var userResource = mongoResource('users');
   userResource.prototype.getFullName = function () {
@@ -40,8 +40,8 @@ angular.module('services.users').factory('Security', ['Users', function (Users) 
   return securityService;
 }]);
 
-angular.module('services.projects', ['services.db']);
-angular.module('services.projects').factory('Projects', ['mongoResource', function (mongoResource) {
+angular.module('services.projects', ['mongolabResource']);
+angular.module('services.projects').factory('Projects', ['mongolabResource', function (mongoResource) {
   var Projects = mongoResource('projects');
 
   Projects.prototype.isProductOwner = function (userId) {

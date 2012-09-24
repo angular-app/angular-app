@@ -38,6 +38,10 @@ module.exports = function (grunt) {
       angular: {
         src:['lib/angular/angular.js'],
         dest: '<%= distdir %>/angular.js'
+      },
+      mongo: {
+        src:['lib/mongolab/*.js'],
+        dest: '<%= distdir %>/mongolab.js'
       }
     },
     min: {
@@ -48,6 +52,10 @@ module.exports = function (grunt) {
       angular: {
         src:['<config:concat.angular.dest>'],
         dest: '<%= distdir %>/angular.js'
+      },
+      mongo: {
+        src:['lib/mongolab/*.js'],
+        dest: '<%= distdir %>/mongolab.js'
       }
     },
     recess: {
