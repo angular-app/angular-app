@@ -30,7 +30,43 @@ angular.module('services.crud').factory('CRUDScopeMixIn', function () {
         successcb();
       }
     };
+
+    this.canRemove = function() {
+      return item.$id();
+    };
   };
   return CRUDScopeMixIn;
+});
 
+angular.module('services.crud').provider('routeCRUD', function () {
+
+  var routeResolveFactory = function (dependencies, resolveFunctions) {
+    var resolve = {};
+    angular.forEach(resolveFunctions, function(fn, resolveDepName){
+      var resolveDepsAndFn = angular.copy(dependencies);
+      resolveDepsAndFn.push(fn);
+      resolve[resolveDepName] = resolveDepsAndFn;
+    });
+    return resolve;
+  };
+
+  var routeDefFactory = function (resourceName, partialPrefix, resourceOperationType, dependencies, resolveFactoryFns) {
+    return {
+      templateUrl:partialPrefix+'/partials/'+resourceName.toLowerCase()+'-'+resourceOperationType.toLowerCase()+'.tpl.html',
+      controller:resourceName+resourceOperationType +'Ctrl',
+      resolve:routeResolveFactory(dependencies, resolveFactoryFns)
+    };
+  };
+
+  this.defineRoutes = function($routeProvider, urlPrefix, partialPrefix, resourceName, dependencies, dataRetrievalDef) {
+    //there is a bug in AngularJS where we can't specify dependencies for a provider in an array format thus we need to pass the $routeProvider in
+    $routeProvider.when(urlPrefix, routeDefFactory(resourceName, partialPrefix, 'List', dependencies, dataRetrievalDef.listItems));
+    $routeProvider.when(urlPrefix+'/new', routeDefFactory(resourceName, partialPrefix, 'Edit', dependencies, dataRetrievalDef.newItem));
+    $routeProvider.when(urlPrefix+'/:itemId', routeDefFactory(resourceName, partialPrefix, 'Edit', dependencies, dataRetrievalDef.editItem));
+  };
+
+  this.$get = function () {
+    //we are not interested in instances
+    return {};
+  };
 });

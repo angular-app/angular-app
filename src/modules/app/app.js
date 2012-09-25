@@ -1,4 +1,4 @@
-angular.module('app', ['signin', 'dashboard', 'admin', 'services.util', 'templates']);
+angular.module('app', ['signin', 'dashboard', 'projects', 'productbacklog', 'admin', 'services.util', 'directives.crud', 'templates']);
 
 angular.module('app').constant('API_KEY', '4fb51e55e4b02e56a67b0b66');
 angular.module('app').constant('DB_NAME', 'ascrum');
