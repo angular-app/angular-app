@@ -1,41 +1,23 @@
-angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud'], ['$routeProvider', function($routeProvider){
-  $routeProvider.when('/admin/projects', {
-    templateUrl:'admin/partials/projects-list.tpl.html',
-    controller:'AdminProjectsCtrl',
-    resolve:{
-      projects:['Projects',function (Projects) {
-        return Projects.all();
-      }]
-    }
-  });
-  $routeProvider.when('/admin/projects/new', {
-      templateUrl:'admin/partials/project-edit.tpl.html',
-      controller:'AdminProjectEditCtrl',
-      resolve:{
-        project:['Projects',function (Projects) {
-          return new Projects();
-        }],
-        users:['Users',function (Users) {
-          return Users.all();
-        }]
-      }
-    }
-  );
-  $routeProvider.when('/admin/projects/:projectId', {
-    templateUrl:'admin/partials/project-edit.tpl.html',
-    controller:'AdminProjectEditCtrl',
-    resolve:{
-      project:['$route', 'Projects', function ($route, Projects) {
-        return Projects.getById($route.current.params.projectId);
-      }],
-      users:['Users', function (Users) {
-        return Users.all();
-      }]
-    }
+angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud'], ['$routeProvider', 'routeCRUDProvider', function ($routeProvider, routeCRUDProvider) {
+
+  var getAllUsers = function(Projects, Users, $route){
+    return Users.all();
+  };
+
+  routeCRUDProvider.defineRoutes($routeProvider, '/admin/projects', 'admin', 'Projects', ['Projects', 'Users', '$route'], {
+    listItems:{'projects': function(Projects){
+      return Projects.all();
+    }},
+    newItem:{'project':function (Projects) {
+      return new Projects();
+    }, users: getAllUsers},
+    editItem:{'project':function (Projects, Users, $route) {
+      return Projects.getById($route.current.params.itemId);
+    }, users: getAllUsers}
   });
 }]);
 
-angular.module('admin-projects').controller('AdminProjectsCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
+angular.module('admin-projects').controller('ProjectsListCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
 
   $scope.projects = projects;
 
@@ -44,7 +26,7 @@ angular.module('admin-projects').controller('AdminProjectsCtrl', ['$scope', '$lo
   };
 }]);
 
-angular.module('admin-projects').controller('AdminProjectEditCtrl', ['$scope', '$location', 'CRUDScopeMixIn', 'users', 'project', function ($scope, $location, CRUDScopeMixIn, users, project) {
+angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$location', 'CRUDScopeMixIn', 'users', 'project', function ($scope, $location, CRUDScopeMixIn, users, project) {
 
   $scope.selTeamMember = undefined;
 
