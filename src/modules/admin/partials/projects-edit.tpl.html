@@ -50,13 +50,6 @@
     </div>
     <div class="row-fluid">
         <hr>
-        <div class="span12">
-            <button type="submit" class="btn btn-primary" ng-disabled="!canSave()" ng-click="save()">Save</button>
-            <button type="button" class="btn btn-warning" ng-click="revertChanges()" ng-disabled="!canRevert()">
-                Revert
-                changes
-            </button>
-            <button type="button" class="btn btn-danger" ng-click="remove()" ng-show="item._id">Remove</button>
-        </div>
+        <crud-buttons class="span12"></crud-buttons>
     </div>
 </div>

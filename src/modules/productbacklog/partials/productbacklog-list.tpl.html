@@ -1,0 +1,20 @@
+<table class="table table-bordered table-condensed table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="backlogItem in backlog" ng-click="showBacklogItem(backlogItem.$id())">
+        <td>{{backlogItem.name}}</td>
+        <td>{{backlogItem.desc}}</td>
+    </tr>
+    <tr ng-show="!backlog.length">
+        <td colspan="2">No items in the backlog</td>
+    </tr>
+    </tbody>
+</table>
+<div class="well">
+    <button class="btn" ng-click="newBacklogItem()">New item</button>
+</div>
