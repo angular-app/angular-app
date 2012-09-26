@@ -1,7 +1,8 @@
-var mongoProxyFactory = require('../lib/mongo-proxy');
+var rewire = require('rewire');
+var mongoProxyFactory = rewire('../lib/mongo-proxy');
 var url = require('url');
 
-var proxy, mockHttps;
+var proxy;
 
 var testMapUrl = function(test, request, expected, message) {
   var actual = proxy.mapUrl(request);
@@ -19,22 +20,17 @@ var testMapUrl = function(test, request, expected, message) {
   test.done();
 };
 
+// Mock up the https service
+mongoProxyFactory.__set__('https', {
+  request: function(options, callback) {
+    return { end: function() {} };
+  }
+});
+
+// Create a proxy to test
+proxy = mongoProxyFactory('https://api.mongolab.com/api/1/databases','4fb51e55e4b02e56a67b0b66');
+
 module.exports = {
-  setUp: function(callback) {
-
-    // Mock up the https service
-    mockHttps = {
-      request: function(options, callback) {
-        return { end: function() {} };
-      }
-    };
-
-    // Create a proxy to test
-    proxy = mongoProxyFactory('https://api.mongolab.com/api/1/databases','4fb51e55e4b02e56a67b0b66', mockHttps);
-
-    callback();
-  },
-
   factory: {
     testFactory: function(test) {
       test.ok(!!proxy, 'The created proxy is defined.');

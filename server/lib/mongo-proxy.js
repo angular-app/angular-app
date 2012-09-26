@@ -1,7 +1,8 @@
 var url = require('url');
 var qs = require('querystring');
+var https = require('https');
 
-module.exports = function(basePath, apiKey, https) {
+module.exports = function(basePath, apiKey) {
   console.log('Proxying MongoLab at', basePath, 'with', apiKey);
 
   basePath = url.parse(basePath);
@@ -56,7 +57,7 @@ module.exports = function(basePath, apiKey, https) {
         });
       });
       // Send any data the is passed from the original request
-      dbReq.end(req.data);
+      dbReq.end(JSON.stringify(req.body));
     } catch (error) {
       console.log('ERROR: ', error.stack);
       res.json(error);
