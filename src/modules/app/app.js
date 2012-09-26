@@ -1,4 +1,4 @@
-angular.module('app', ['signin', 'dashboard', 'admin', 'services.util', 'templates']);
+angular.module('app', ['signin', 'dashboard', 'projects', 'productbacklog', 'admin', 'services.util', 'directives.crud', 'templates']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
 //  baseUrl: 'https://api.mongolab.com/api/1/databases/',

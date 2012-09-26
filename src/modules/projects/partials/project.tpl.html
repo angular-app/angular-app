@@ -1,0 +1,9 @@
+<div class="well">
+    <h4>{{project.name}}</h4>
+     <hr>
+    {{project.desc}}
+</div>
+<div class="well">
+    <button class="btn" ng-click="manageBacklog(project.$id())">Manage backlog</button>
+    <button class="btn" ng-click="manageSprints(project.$id())">Manage sprints</button>
+</div>

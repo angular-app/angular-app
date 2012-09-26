@@ -39,29 +39,3 @@ angular.module('services.users').factory('Security', ['Users', function (Users) 
 
   return securityService;
 }]);
-
-angular.module('services.projects', ['mongolabResource']);
-angular.module('services.projects').factory('Projects', ['mongolabResource', function (mongoResource) {
-  var Projects = mongoResource('projects');
-
-  Projects.prototype.isProductOwner = function (userId) {
-    return this.productOwner === userId;
-  };
-  Projects.prototype.canActAsProductOwner = function (userId) {
-    return !this.isScrumMaster(userId) && !this.isDevTeamMember(userId);
-  };
-  Projects.prototype.isScrumMaster = function (userId) {
-    return this.scrumMaster === userId;
-  };
-  Projects.prototype.canActAsScrumMaster = function (userId) {
-    return !this.isProductOwner(userId);
-  };
-  Projects.prototype.isDevTeamMember = function (userId) {
-    return this.teamMembers.indexOf(userId) >= 0;
-  };
-  Projects.prototype.canActAsDevTeamMember = function (userId) {
-    return !this.isProductOwner(userId);
-  };
-
-  return Projects;
-}]);
