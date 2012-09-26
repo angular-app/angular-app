@@ -8,5 +8,8 @@
     "passport": "~0.1.12",
     "passport-local": "@0.1.6",
     "restler": "~2.0.1"
+  },
+  "devDependencies": {
+    "rewire": "~1.0.3"
   }
 }

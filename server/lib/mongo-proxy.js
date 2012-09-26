@@ -1,7 +1,8 @@
 var url = require('url');
 var qs = require('querystring');
+var https = require('https');
 
-module.exports = function(basePath, apiKey, https) {
+module.exports = function(basePath, apiKey) {
   console.log('Proxying MongoLab at', basePath, 'with', apiKey);
 
   basePath = url.parse(basePath);

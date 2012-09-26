@@ -11,7 +11,7 @@ module.exports = function(grunt) {
     },
     watch: {
       files: '<config:lint.files>',
-      tasks: 'lint test'
+      tasks: 'default timestamp'
     },
     jshint: {
       options: {
@@ -33,4 +33,7 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', 'lint test');
 
+  grunt.registerTask('timestamp', function() {
+    grunt.log.subhead(Date());
+  });
 };

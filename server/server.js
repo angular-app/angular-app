@@ -1,5 +1,4 @@
 var express = require('express');
-var https = require('https');
 var mongoProxy = require('./lib/mongo-proxy');
 var config = require('./config.js');
 
@@ -23,7 +22,7 @@ app.use(passport.session());                    // Use Passport's session authen
 passport.use(new MongoStrategy());              // Add a Mongo strategy for handling the authentication
 
 // Proxy database calls to the MongoDB
-app.use('/databases', mongoProxy(config.dbUrl, config.apiKey, https));
+app.use('/databases', mongoProxy(config.dbUrl, config.apiKey));
 
 // Login in to the app (using the mongo strategy)
 app.post('/login', passport.authenticate('mongo'));
