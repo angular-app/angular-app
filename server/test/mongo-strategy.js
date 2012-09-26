@@ -1,7 +1,6 @@
 var rewire = require("rewire");
 var MongoDBStrategy = rewire('../lib/mongo-strategy');
 
-var db;
 var config = {
   dbUrl: 'https://api.mongolab.com/api/1/databases',
   dbName: 'ascrum',
@@ -12,7 +11,8 @@ var config = {
     lastName: 'Bloggs',
     firstName: 'Jo',
     login: 'jo',
-    email: 'jo@bloggs.com'
+    email: 'jo@bloggs.com',
+    password: 'XX'
   }
 };
 
@@ -41,7 +41,7 @@ module.exports = {
   testGet: function(test) {
     mockupRestInterface(test, baseUrl + config.testId, { query: { apiKey: config.apiKey }}, 'success', config.testUser);
 
-    db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
+    var db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
     db.get(config.testId, function(err, result) {
       test.ok(!err);
       test.ok(result);
@@ -49,15 +49,26 @@ module.exports = {
       test.done();
     });
   },
-  testQuery: function(test) {
+
+  testFindByEmail: function(test) {
     mockupRestInterface(test, baseUrl, { query: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', [config.testUser]);
 
-    db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
-
+    var db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
     db.findByEmail('jo@bloggs.com', function(err, result) {
       test.ok(!err);
-      test.ok(result[0]);
-      test.equal(result[0].email, 'jo@bloggs.com');
+      console.log('USER', result.email);
+      test.ok(result !== null);
+      test.equal(result.email, 'jo@bloggs.com');
+      test.done();
+    });
+  },
+  
+  testVerifyUser: function(test) {
+    mockupRestInterface(test, baseUrl, { query: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', [config.testUser]);
+    var db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
+    db.verifyUser('jo@bloggs.com', 'XX', function(err, user) {
+      test.ok(!err);
+      test.ok(user);
       test.done();
     });
   }

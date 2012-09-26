@@ -19,7 +19,7 @@ app.use(express.cookieParser('angular-app'));   // Hash cookies with this secret
 app.use(express.cookieSession());               // Store the session in the (secret) cookie
 app.use(passport.initialize());                 // Initialize PassportJS
 app.use(passport.session());                    // Use Passport's session authentication strategy - this stores the logged in user in the session and will now run on any request
-passport.use(new MongoStrategy());              // Add a Mongo strategy for handling the authentication
+passport.use(new MongoStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users'));              // Add a Mongo strategy for handling the authentication
 
 // Proxy database calls to the MongoDB
 app.use('/databases', mongoProxy(config.dbUrl, config.apiKey));

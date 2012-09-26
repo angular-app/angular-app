@@ -57,7 +57,7 @@ module.exports = function(basePath, apiKey) {
         });
       });
       // Send any data the is passed from the original request
-      dbReq.end(req.data);
+      dbReq.end(JSON.stringify(req.body));
     } catch (error) {
       console.log('ERROR: ', error.stack);
       res.json(error);
