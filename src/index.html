@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
 <head>
-    <script type="text/javascript" src="angular.js"></script>
-    <script type="text/javascript" src="mongolab.js"></script>
-    <script type="text/javascript" src="<%= grunt.config.get('pkg.name') %>.js"></script>
-    <link rel="stylesheet" type="text/css" href="<%= grunt.config.get('pkg.name') %>.css"/>
+    <script type="text/javascript" src="/static/angular.js"></script>
+    <script type="text/javascript" src="/static/mongolab.js"></script>
+    <script type="text/javascript" src="/static/<%= grunt.config.get('pkg.name') %>.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/<%= grunt.config.get('pkg.name') %>.css"/>
 </head>
 
 <body ng-controller="AppCtrl">
-<div ng-include="'app/partials/header.tpl.html'"></div>
+<div ng-include="'header.tpl.html'"></div>
 
 <div ng-view></div>
 

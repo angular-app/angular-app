@@ -1,6 +1,6 @@
 angular.module('admin-users', ['services.crud'], ['$routeProvider', 'routeCRUDProvider', function ($routeProvider, routeCRUDProvider) {
 
-  routeCRUDProvider.defineRoutes($routeProvider, '/admin/users', 'admin', 'Users', ['Users', '$route'], {
+  routeCRUDProvider.defineRoutes($routeProvider, '/admin/users', 'admin/users', 'Users', ['Users', '$route'], {
     listItems:{'users': function(Users, $route){
       return Users.all();
     }},

@@ -1,6 +1,6 @@
 angular.module('dashboard',['services.projects'], ['$routeProvider', function($routeProvider){
   $routeProvider.when('/dashboard', {
-    templateUrl:'dashboard/partials/dashboard.tpl.html',
+    templateUrl:'dashboard/dashboard.tpl.html',
     controller:'DashboardCtrl',
     resolve:{
       projects:['Projects', function (Projects) {

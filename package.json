@@ -1,27 +1,28 @@
 {
-    "author":"Pawel Kozlowski & Peter Bacon Darwin",
-    "name":"angular-app",
-    "homepage":"https://github.com/angular-app/angular-app",
-    "version":"0.0.1-SNAPSHOT",
-    "repository":{
-        "type":"git",
-        "url":"git@github.com:angular-app/angular-app.git"
-    },
-    "bugs":{
-        "url":"https://github.com/angular-app/angular-app/issues"
-    },
-    "licenses":[
-        {
-            "type":"MIT",
-            "url":"https://raw.github.com/angular-app/angular-app/master/LICENSE"
-        }
-    ],
-    "engines":{
-        "node":">= 0.8.4"
-    },
-    "dependencies":{
-    },
-    "devDependencies":{
-        "grunt-recess":"~0.1.0"
+  "author": "Pawel Kozlowski & Peter Bacon Darwin",
+  "name": "angular-app",
+  "homepage": "https://github.com/angular-app/angular-app",
+  "version": "0.0.1-SNAPSHOT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:angular-app/angular-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/angular-app/angular-app/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/angular-app/angular-app/master/LICENSE"
     }
+  ],
+  "engines": {
+    "node": ">= 0.8.4"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt-recess": "~0.1.0",
+    "grunt-contrib-clean": "~0.3.0",
+    "grunt-contrib-copy": "~0.3.0"
+  }
 }
