@@ -21,7 +21,7 @@ module.exports = function (grunt) {
       less: ['src/modules/*/less/*.less'] // recess:build doesn't accept ** in its file patterns
     },
     test: {
-      js: ['test/modules/**/*.js']
+      js: ['test/unit/**/*.js']
     },
     lint:{
       files:['grunt.js', '<config:src.js>', '<config:test.js>']
