@@ -21,10 +21,10 @@ angular.module('admin-users').controller('UsersListCtrl', ['$scope', '$location'
   };
 }]);
 
-angular.module('admin-users').controller('UsersEditCtrl', ['$scope', '$location', 'crudScopeMixIn', 'user', function ($scope, $location, crudScopeMixIn, user) {
+angular.module('admin-users').controller('UsersEditCtrl', ['$scope', '$location', 'crudMethods', 'user', function ($scope, $location, crudMethods, user) {
 
   $scope.password = user.password;
-  angular.extend($scope, crudScopeMixIn('item', user, 'form', function () {
+  angular.extend($scope, crudMethods('item', user, 'form', function () {
     console.log('cb');
     $location.path('/admin/users');
   }, function() {

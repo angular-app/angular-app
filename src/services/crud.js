@@ -1,7 +1,7 @@
 angular.module('services.crud', []);
-angular.module('services.crud').factory('crudScopeMixIn', function () {
+angular.module('services.crud').factory('crudMethods', function () {
 
-  var crudScopeMixInFn = function (itemName, item, formName, successcb, errorcb) {
+  return function (itemName, item, formName, successcb, errorcb) {
 
     var mixin = {};
 
@@ -38,7 +38,6 @@ angular.module('services.crud').factory('crudScopeMixIn', function () {
 
     return mixin;
   };
-  return crudScopeMixInFn;
 });
 
 angular.module('services.crud').provider('routeCRUD', function () {
