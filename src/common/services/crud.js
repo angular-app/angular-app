@@ -52,7 +52,7 @@ angular.module('services.crud').provider('routeCRUD', function () {
 
   var routeDefFactory = function (resourceName, partialPrefix, resourceOperationType, dependencies, resolveFactoryFns) {
     return {
-      templateUrl:partialPrefix+'/partials/'+resourceName.toLowerCase()+'-'+resourceOperationType.toLowerCase()+'.tpl.html',
+      templateUrl:partialPrefix+'/'+resourceName.toLowerCase()+'-'+resourceOperationType.toLowerCase()+'.tpl.html',
       controller:resourceName+resourceOperationType +'Ctrl',
       resolve:routeResolveFactory(dependencies, resolveFactoryFns)
     };

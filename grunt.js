@@ -1,6 +1,8 @@
 module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-recess');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadTasks('build');
 
   // Project configuration.
@@ -17,18 +19,24 @@ module.exports = function (grunt) {
     src: {
       js: ['src/**/*.js', 'dist/tmp/**/*.js'],
       html: ['src/index.html'],
-      tpl: ['src/**/*.tpl.html'],
-      less: ['src/modules/*/less/*.less'] // recess:build doesn't accept ** in its file patterns
+      tpl: ['src/app/**/*.tpl.html'],
+      less: ['src/less/stylesheet.less'] // recess:build doesn't accept ** in its file patterns
+    },
+    clean: ['<config:distdir>'],
+    copy: {
+      assets: {
+        files: {'<%= distdir %>/': 'assets/**'}
+      }
     },
     test: {
-      js: ['test/modules/**/*.js']
+      js: ['test/**/*.js']
     },
     lint:{
       files:['grunt.js', '<config:src.js>', '<config:test.js>']
     },
     html2js: {
       src: ['<config:src.tpl>'],
-      base: 'src/modules',
+      base: 'src/app',
       dest: 'dist/tmp'
     },
     concat:{
@@ -98,8 +106,8 @@ module.exports = function (grunt) {
 
   // Default task.
   grunt.registerTask('default', 'build lint test');
-  grunt.registerTask('build', 'html2js concat recess:build index');
-  grunt.registerTask('release', 'html2js min lint test recess:min index');
+  grunt.registerTask('build', 'clean html2js concat recess:build index copy');
+  grunt.registerTask('release', 'clean html2js min lint test recess:min index copy');
 
   // HTML stuff
   grunt.registerTask('index', 'Process index.html', function(){

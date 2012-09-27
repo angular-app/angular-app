@@ -4,7 +4,7 @@ angular.module('admin-projects', ['services.projects', 'services.users', 'servic
     return Users.all();
   };
 
-  routeCRUDProvider.defineRoutes($routeProvider, '/admin/projects', 'admin', 'Projects', ['Projects', 'Users', '$route'], {
+  routeCRUDProvider.defineRoutes($routeProvider, '/admin/projects', 'admin/projects', 'Projects', ['Projects', 'Users', '$route'], {
     listItems:{'projects': function(Projects){
       return Projects.all();
     }},

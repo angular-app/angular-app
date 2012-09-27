@@ -1,6 +1,6 @@
 angular.module('projects', ['services.projects'], ['$routeProvider', function ($routeProvider) {
   $routeProvider.when('/projects/:projectId', {
-    templateUrl:'projects/partials/project.tpl.html',
+    templateUrl:'projects/project.tpl.html',
     controller:'ProjectController',
     resolve:{
       project:['$route', 'Projects', function ($route, Projects) {
