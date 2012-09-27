@@ -36,9 +36,9 @@ angular.module('productbacklog').controller('ProductBacklogListCtrl', ['$scope',
   };
 }]);
 
-angular.module('productbacklog').controller('ProductBacklogEditCtrl', ['$scope', '$location', 'CRUDScopeMixIn', 'projectId', 'backlogItem', function($scope, $location, CRUDScopeMixIn, projectId, backlogItem){
+angular.module('productbacklog').controller('ProductBacklogEditCtrl', ['$scope', '$location', 'crudMethods', 'projectId', 'backlogItem', function($scope, $location, crudMethods, projectId, backlogItem){
 
-  angular.extend($scope, new CRUDScopeMixIn('item', backlogItem, 'form', function () {
+  angular.extend($scope, crudMethods('item', backlogItem, 'form', function () {
     $location.path('/productbacklog/'+projectId);
   }, function () {
     $scope.updateError = true;

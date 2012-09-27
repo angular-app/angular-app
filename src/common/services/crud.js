@@ -1,29 +1,30 @@
 angular.module('services.crud', []);
-angular.module('services.crud').factory('CRUDScopeMixIn', function () {
+angular.module('services.crud').factory('crudMethods', function () {
 
-  var CRUDScopeMixIn = function (itemName, item, formName, successcb, errorcb) {
+  return function (itemName, item, formName, successcb, errorcb) {
 
-    //a copy as an instance memeber here, just not to expose it to a template, might change in the future
-    var copy = angular.copy(item);
-    this[itemName] = item;
+    var mixin = {};
 
-    this.save = function () {
+    mixin[itemName] = item;
+    mixin[itemName+'Copy'] = angular.copy(item);
+
+    mixin.save = function () {
       this[itemName].$saveOrUpdate(successcb, successcb, errorcb, errorcb);
     };
 
-    this.canSave = function () {
-      return this[formName].$valid && !angular.equals(this[itemName], copy);
+    mixin.canSave = function () {
+      return this[formName].$valid && !angular.equals(this[itemName], this[itemName+'Copy']);
     };
 
-    this.revertChanges = function () {
-      this[itemName] = angular.copy(copy);
+    mixin.revertChanges = function () {
+      this[itemName] = angular.copy(this[itemName+'Copy']);
     };
 
-    this.canRevert = function () {
-      return !angular.equals(this[itemName], copy);
+    mixin.canRevert = function () {
+      return !angular.equals(this[itemName], this[itemName+'Copy']);
     };
 
-    this.remove = function () {
+    mixin.remove = function () {
       if (this[itemName].$id()) {
         this[itemName].$remove(successcb, errorcb);
       } else {
@@ -31,11 +32,12 @@ angular.module('services.crud').factory('CRUDScopeMixIn', function () {
       }
     };
 
-    this.canRemove = function() {
+    mixin.canRemove = function() {
       return item.$id();
     };
+
+    return mixin;
   };
-  return CRUDScopeMixIn;
 });
 
 angular.module('services.crud').provider('routeCRUD', function () {

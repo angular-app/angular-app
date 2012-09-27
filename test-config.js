@@ -13,7 +13,7 @@ files = [
   'lib/angular/angular-mocks.js',
   'lib/mongolab/mongolab-resource.js',
   'src/**/*.js',
-  'test/**/unit/**/*Spec.js',
+  'test/unit/**/*Spec.js',
   'dist/tmp/**/*.js'
 ];
 
