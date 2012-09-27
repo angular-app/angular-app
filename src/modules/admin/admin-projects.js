@@ -26,7 +26,7 @@ angular.module('admin-projects').controller('ProjectsListCtrl', ['$scope', '$loc
   };
 }]);
 
-angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$location', 'CRUDScopeMixIn', 'users', 'project', function ($scope, $location, CRUDScopeMixIn, users, project) {
+angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$location', 'crudScopeMixIn', 'users', 'project', function ($scope, $location, crudScopeMixIn, users, project) {
 
   $scope.selTeamMember = undefined;
 
@@ -37,7 +37,7 @@ angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$loc
     $scope.usersLookup[value.$id()] = value;
   });
 
-  angular.extend($scope, new CRUDScopeMixIn('item', project, 'form', function () {
+  angular.extend($scope, crudScopeMixIn('item', project, 'form', function () {
     $location.path('/admin/projects');
   }, function () {
     $scope.updateError = true;

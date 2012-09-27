@@ -1,17 +1,17 @@
 describe('CRUD scope mix-in', function () {
 
-  var $rootScope, CrudScopeMixInConstructor;
+  var $rootScope, crudScopeMixIn;
 
   beforeEach(module('services.crud'));
-  beforeEach(inject(function (_$rootScope_, CRUDScopeMixIn) {
+  beforeEach(inject(function (_$rootScope_, _crudScopeMixIn_) {
     $rootScope = _$rootScope_;
-    CrudScopeMixInConstructor = CRUDScopeMixIn;
+    crudScopeMixIn = _crudScopeMixIn_;
   }));
 
   describe('scope init', function () {
     it('should initialize a scope with an item', function () {
       var item = {key:'value'};
-      var scopeMixIn = new CrudScopeMixInConstructor('item', item, 'form', angular.noop);
+      var scopeMixIn = crudScopeMixIn('item', item, 'form', angular.noop);
       expect(scopeMixIn.item).toEqual(item);
     });
   });
@@ -25,7 +25,7 @@ describe('CRUD scope mix-in', function () {
     beforeEach(inject(function ($rootScope) {
       item = {key:'value'};
       scope = $rootScope;
-      angular.extend(scope, new CrudScopeMixInConstructor('item', item, 'form', successcb, errorcb));
+      angular.extend(scope, crudScopeMixIn('item', item, 'form', successcb, errorcb));
     }));
 
     describe('copy and revert changes', function () {
