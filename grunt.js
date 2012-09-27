@@ -29,10 +29,10 @@ module.exports = function (grunt) {
       }
     },
     test: {
-      js: ['test/**/*.js']
+      unit: ['test/unit/**/*.js']
     },
     lint:{
-      files:['grunt.js', '<config:src.js>', '<config:test.js>']
+      files:['grunt.js', '<config:src.js>', '<config:test.unit>']
     },
     html2js: {
       src: ['<config:src.tpl>'],
@@ -105,7 +105,7 @@ module.exports = function (grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'build lint test');
+  grunt.registerTask('default', 'build lint test:unit');
   grunt.registerTask('build', 'clean html2js concat recess:build index copy');
   grunt.registerTask('release', 'clean html2js min lint test recess:min index copy');
 
