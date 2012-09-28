@@ -1,10 +1,3 @@
-// Sample Testacular configuration file, that contain pretty much all the available options
-// It's used for running client tests on Travis (http://travis-ci.org/#!/vojtajina/testacular)
-// Most of the options can be overriden by cli arguments (see testacular --help)
-
-// base path, that will be used to resolve files and exclude
-basePath = '';
-
 // list of files / patterns to load in the browser
 files = [
   JASMINE,
@@ -17,12 +10,9 @@ files = [
   'dist/tmp/**/*.js'
 ];
 
-// list of files to exclude
-exclude = [];
-
 // use dots reporter, as travis terminal does not support escaping sequences
 // possible values: 'dots' || 'progress'
-reporter = 'progress';
+reporters = 'progress';
 
 // these are default values, just to show available options
 

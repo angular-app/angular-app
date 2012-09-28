@@ -2,7 +2,7 @@ module.exports = function(grunt) {
 
   // Testacular stuff
   var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
-  var testConfigFile = 'test-config.js';
+  var testConfigFile = 'test-config-e2e.js';
   var runTestacular = function(cmd, options) {
       var args = [cmd, testConfigFile].concat(options);
       var done = grunt.task.current.async();
