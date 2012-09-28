@@ -36,4 +36,9 @@ module.exports = function(grunt) {
   grunt.registerTask('timestamp', function() {
     grunt.log.subhead(Date());
   });
+
+  grunt.registerTask('supervise', function() {
+    this.async();
+    require('supervisor').run(['server.js']);
+  });
 };
