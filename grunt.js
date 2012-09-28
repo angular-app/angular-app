@@ -84,7 +84,7 @@ module.exports = function (grunt) {
       }
     },
     watch:{
-      files:['<config:src.js>', '<config:test.js>', '<config:src.less>', '<config:src.tpl>', '<config:src.html>'],
+      files:['<config:src.js>', '<config:test.unit>', '<config:src.less>', '<config:src.tpl>', '<config:src.html>'],
       tasks:'default'
     },
     jshint:{
