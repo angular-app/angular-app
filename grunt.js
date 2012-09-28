@@ -22,7 +22,7 @@ module.exports = function (grunt) {
       tpl: ['src/app/**/*.tpl.html'],
       less: ['src/less/stylesheet.less'] // recess:build doesn't accept ** in its file patterns
     },
-    clean: ['<config:distdir>'],
+    clean: ['<%= distdir %>/*'],
     copy: {
       assets: {
         files: {'<%= distdir %>/': 'assets/**'}
