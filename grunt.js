@@ -107,7 +107,7 @@ module.exports = function (grunt) {
   // Default task.
   grunt.registerTask('default', 'build lint test:unit');
   grunt.registerTask('build', 'clean html2js concat recess:build index copy');
-  grunt.registerTask('release', 'clean html2js min lint test recess:min index copy');
+  grunt.registerTask('release', 'clean html2js min lint test recess:min index copy e2e');
 
   // HTML stuff
   grunt.registerTask('index', 'Process index.html', function(){
