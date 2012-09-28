@@ -2,9 +2,8 @@ module.exports = function(grunt) {
 
   // Testacular stuff
   var testacularCmd = process.platform === 'win32' ? 'testacular.cmd' : 'testacular';
-  var testConfigFile = 'test-config-e2e.js';
-  var runTestacular = function(cmd, options) {
-      var args = [cmd, testConfigFile].concat(options);
+  var runTestacular = function(testConfigFile, options) {
+      var args = ['start', testConfigFile, '--reporter=dots'].concat(options);
       var done = grunt.task.current.async();
       var child = grunt.utils.spawn({
         cmd: testacularCmd,
@@ -21,15 +20,23 @@ module.exports = function(grunt) {
     };
 
   grunt.registerTask('test-watch', 'watch file changes and test', function() {
-    var options = ['--auto-watch', '--reporter=dots', '--no-single-run'];
-    runTestacular('start', options);
+    var options = ['--auto-watch', '--no-single-run'];
+    runTestacular('test-config-unit.js', options);
   });
 
   grunt.registerTask('test', 'run testacular tests', function() {
-    var options = ['--single-run', '--no-auto-watch', '--reporter=dots'];
+    var options = ['--single-run', '--no-auto-watch'];
     if (process.env.TRAVIS) {
       options.push('--browsers=Firefox');
     }
-    runTestacular('start', options);
+    runTestacular('test-config-unit.js', options);
+  });
+
+  grunt.registerTask('e2e', 'run testacular e2e tests', function() {
+    var options = ['--single-run', '--no-auto-watch'];
+    if (process.env.TRAVIS) {
+      options.push('--browsers=Firefox');
+    }
+    runTestacular('test-config-e2e.js', options);
   });
 };
