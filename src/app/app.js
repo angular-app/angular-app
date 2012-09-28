@@ -3,8 +3,7 @@ angular.module('app', ['signin', 'dashboard', 'projects', 'admin', 'services.uti
 angular.module('app').constant('MONGOLAB_CONFIG', {
 //  baseUrl: 'https://api.mongolab.com/api/1/databases/',
   baseUrl: 'http://localhost:3000/databases/',
-  dbName: 'ascrum',
-  apiKey: '4fb51e55e4b02e56a67b0b66'
+  dbName: 'ascrum'
 });
 
 angular.module('app').config(['$routeProvider', function ($routeProvider) {

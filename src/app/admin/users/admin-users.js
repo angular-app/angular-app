@@ -25,7 +25,6 @@ angular.module('admin-users').controller('UsersEditCtrl', ['$scope', '$location'
 
   $scope.password = user.password;
   angular.extend($scope, crudMethods('item', user, 'form', function () {
-    console.log('cb');
     $location.path('/admin/users');
   }, function() {
     $scope.updateError = true;
@@ -75,6 +74,7 @@ angular.module('admin-users').directive('validateEquals', function() {
       }
 
       scope.$watch(attrs.validateEquals, function(otherModelValue) {
+        console.log('xx');
         ctrl.$setValidity('equal', ctrl.$viewValue === otherModelValue);
       });
 
