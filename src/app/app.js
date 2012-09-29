@@ -1,4 +1,4 @@
-angular.module('app', ['signin', 'dashboard', 'projects', 'productbacklog', 'admin', 'services.util', 'directives.crud', 'templates']);
+angular.module('app', ['signin', 'dashboard', 'projects', 'admin', 'services.util', 'directives.crud', 'templates']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
 //  baseUrl: 'https://api.mongolab.com/api/1/databases/',
@@ -11,7 +11,7 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
   $routeProvider.otherwise({redirectTo:'/signin'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', '$location', 'Security', 'HTTPRequestTracker', function ($scope, $location, Security, HTTPRequestTracker) {
+angular.module('app').controller('AppCtrl', ['$scope', '$location', '$route', 'Security', 'HTTPRequestTracker', function ($scope, $location, $route, Security, HTTPRequestTracker) {
   $scope.location = $location;
   $scope.security = Security;
 

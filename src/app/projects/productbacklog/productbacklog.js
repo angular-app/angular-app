@@ -17,10 +17,16 @@ angular.module('productbacklog').config(['$routeProvider', 'routeCRUDProvider', 
     return ProductBacklog.getById($route.current.params.itemId);
   };
 
-  routeCRUDProvider.defineRoutes($routeProvider, '/productbacklog/:projectId', 'productbacklog', 'ProductBacklog', [], {
+  routeCRUDProvider.defineRoutes($routeProvider, '/projects/:projectId/productbacklog', 'projects/productbacklog', 'ProductBacklog', [], {
     listItems:{'backlog':getBacklog, 'projectId':getProjectId},
     newItem:{'backlogItem':newBacklogItem, 'projectId':getProjectId},
     editItem:{'backlogItem':getBacklogItem, 'projectId':getProjectId}
+  }, {
+    editItem:{
+      itemId:function (locals) {
+        return locals.backlogItem.name;
+      }
+    }
   });
 }]);
 
@@ -28,18 +34,18 @@ angular.module('productbacklog').controller('ProductBacklogListCtrl', ['$scope',
   $scope.backlog = backlog;
 
   $scope.newBacklogItem = function () {
-    $location.path('/productbacklog/'+projectId+'/new');
+    $location.path('/projects/'+projectId+'/productbacklog/new');
   };
 
   $scope.showBacklogItem = function (backlogItemId) {
-    $location.path('/productbacklog/'+projectId+'/'+backlogItemId);
+    $location.path('/projects/'+projectId+'/productbacklog/'+backlogItemId);
   };
 }]);
 
 angular.module('productbacklog').controller('ProductBacklogEditCtrl', ['$scope', '$location', 'crudMethods', 'projectId', 'backlogItem', function($scope, $location, crudMethods, projectId, backlogItem){
 
   angular.extend($scope, crudMethods('item', backlogItem, 'form', function () {
-    $location.path('/productbacklog/'+projectId);
+    $location.path('/projects/'+projectId+'/productbacklog');
   }, function () {
     $scope.updateError = true;
   }));

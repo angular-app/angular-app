@@ -1,0 +1,18 @@
+<div class="well">
+    <h4>Sprint</h4>
+    <hr>
+    <form name="form">
+        <label>Name</label>
+        <input type="text" name="name" ng-model="sprint.name" class="span10" required autofocus>
+        <label>Start date</label>
+        <input type="text" name="name" ng-model="sprint.start" class="span5" required>
+        <label>End date</label>
+        <input type="text" name="name" ng-model="sprint.end" class="span5" required>
+    </form>
+    <hr>
+    <div>
+        <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="save()">Save</button>
+        <button type="button" class="btn btn-warning" ng-click="revertChanges()" ng-disabled="!canRevert()">Revert changes</button>
+        <button type="button" class="btn btn-danger" ng-click="remove()" ng-show="canRemove()">Remove</button>
+    </div>
+</div>

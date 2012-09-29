@@ -1,0 +1,22 @@
+<table class="table table-bordered table-condensed table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Start date</th>
+        <th>End date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="sprint in sprints" ng-click="edit(sprint.$id())">
+        <td>{{sprint.name}}</td>
+        <td>{{sprint.start}}</td>
+        <td>{{sprint.end}}</td>
+    </tr>
+    <tr ng-show="!sprints.length">
+        <td colspan="3">No sprints defined</td>
+    </tr>
+    </tbody>
+</table>
+<div class="well">
+    <button class="btn" ng-click="new()">New sprint</button>
+</div>
