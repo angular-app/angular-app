@@ -74,7 +74,6 @@ angular.module('admin-users').directive('validateEquals', function() {
       }
 
       scope.$watch(attrs.validateEquals, function(otherModelValue) {
-        console.log('xx');
         ctrl.$setValidity('equal', ctrl.$viewValue === otherModelValue);
       });
 
