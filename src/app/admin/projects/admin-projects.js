@@ -5,15 +5,21 @@ angular.module('admin-projects', ['services.projects', 'services.users', 'servic
   };
 
   routeCRUDProvider.defineRoutes($routeProvider, '/admin/projects', 'admin/projects', 'Projects', ['Users'], {
-    listItems:{'projects': function(Projects){
+    listItems:{'projects':function (Projects) {
       return Projects.all();
     }},
     newItem:{'project':function (Projects) {
       return new Projects();
-    }, users: getAllUsers},
+    }, users:getAllUsers},
     editItem:{'project':function (Projects, Users, $route) {
       return Projects.getById($route.current.params.itemId);
-    }, users: getAllUsers}
+    }, users:getAllUsers}
+  }, {
+    editItem:{
+      itemId:function (locals) {
+        return locals.project.name;
+      }
+    }
   });
 }]);
 

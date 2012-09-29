@@ -34,14 +34,22 @@ angular.module('app').controller('AppCtrl', ['$scope', '$location', 'Security', 
   });
 
   $scope.$on('$routeChangeSuccess', function(event, current){
-    console.log(current);
 
     var pathElements = $location.path().split('/'), result = [], path = '';
     pathElements.shift();
 
+    var pathParamsLookup = {};
+    angular.forEach(current.pathParams, function (value, key) {
+      pathParamsLookup[value] = key;
+    });
+
     angular.forEach(pathElements, function (pathElement, key) {
+      var name, bcrumbResolvers = current.breadcrumbs || {};
+      if (pathParamsLookup[pathElement] && angular.isFunction(bcrumbResolvers[pathParamsLookup[pathElement]])) {
+        name = bcrumbResolvers[pathParamsLookup[pathElement]](current.locals);
+      }
       path += '/'+pathElement;
-      result.push({name: pathElement, path: path});
+      result.push({name: name || pathElement, path: path});
     });
 
     $scope.pathElements = result;

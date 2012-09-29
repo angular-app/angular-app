@@ -10,6 +10,12 @@ angular.module('admin-users', ['services.crud'], ['$routeProvider', 'routeCRUDPr
     editItem:{'user':function (Users, $route) {
       return Users.getById($route.current.params.itemId);
     }}
+  }, {
+    editItem:{
+      itemId : function(locals){
+        return locals.user.email;
+      }
+    }
   });
 }]);
 

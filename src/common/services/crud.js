@@ -53,19 +53,21 @@ angular.module('services.crud').provider('routeCRUD', function () {
     return resolve;
   };
 
-  var routeDefFactory = function (resourceName, partialPrefix, resourceOperationType, additionalDeps, resolveFactoryFns) {
+  var routeDefFactory = function (resourceName, partialPrefix, resourceOperationType, additionalDeps, resolveFactoryFns, breadcrumbs) {
     return {
       templateUrl:partialPrefix+'/'+resourceName.toLowerCase()+'-'+resourceOperationType.toLowerCase()+'.tpl.html',
       controller:resourceName+resourceOperationType +'Ctrl',
-      resolve:routeResolveFactory([resourceName].concat(additionalDeps), resolveFactoryFns)
+      resolve:routeResolveFactory([resourceName].concat(additionalDeps), resolveFactoryFns),
+      //breadcrumb support on a route level allows us to demonstrate that we can have custom properties on a route level
+      breadcrumbs: breadcrumbs || {}
     };
   };
 
-  this.defineRoutes = function($routeProvider, urlPrefix, partialPrefix, resourceName, additionalDeps, dataRetrievalDef) {
+  this.defineRoutes = function($routeProvider, urlPrefix, partialPrefix, resourceName, additionalDeps, dataRetrievalDef, breadcrumbs) {
     //there is a bug in AngularJS where we can't specify dependencies for a provider in an array format thus we need to pass the $routeProvider in
-    $routeProvider.when(urlPrefix, routeDefFactory(resourceName, partialPrefix, 'List', additionalDeps, dataRetrievalDef.listItems));
-    $routeProvider.when(urlPrefix+'/new', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.newItem));
-    $routeProvider.when(urlPrefix+'/:itemId', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.editItem));
+    $routeProvider.when(urlPrefix, routeDefFactory(resourceName, partialPrefix, 'List', additionalDeps, dataRetrievalDef.listItems, (breadcrumbs || {}).listItems));
+    $routeProvider.when(urlPrefix+'/new', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.newItem, (breadcrumbs || {}).newItem));
+    $routeProvider.when(urlPrefix+'/:itemId', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.editItem, (breadcrumbs || {}).editItem));
   };
 
   this.$get = function () {
