@@ -1,6 +1,6 @@
 angular.module('admin-users', ['services.crud'], ['$routeProvider', 'routeCRUDProvider', function ($routeProvider, routeCRUDProvider) {
 
-  routeCRUDProvider.defineRoutes($routeProvider, '/admin/users', 'admin/users', 'Users', ['Users', '$route'], {
+  routeCRUDProvider.defineRoutes($routeProvider, '/admin/users', 'admin/users', 'Users', [], {
     listItems:{'users': function(Users, $route){
       return Users.all();
     }},
@@ -10,6 +10,12 @@ angular.module('admin-users', ['services.crud'], ['$routeProvider', 'routeCRUDPr
     editItem:{'user':function (Users, $route) {
       return Users.getById($route.current.params.itemId);
     }}
+  }, {
+    editItem:{
+      itemId : function(locals){
+        return locals.user.email;
+      }
+    }
   });
 }]);
 

@@ -14,19 +14,10 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
 angular.module('app').controller('AppCtrl', ['$scope', '$location', 'Security', 'HTTPRequestTracker', function ($scope, $location, Security, HTTPRequestTracker) {
   $scope.location = $location;
   $scope.security = Security;
+  $scope.pathElements = [];
 
   $scope.isNavbarActive = function (navBarPath) {
     return navBarPath === $scope.pathElements[0];
-  };
-
-  $scope.$watch('location.path()', function (newValue) {
-    var pathElements = newValue.split('/');
-    pathElements.shift();
-    $scope.pathElements = pathElements;
-  });
-
-  $scope.breadcrumbPath = function (index) {
-    return '/' + ($scope.pathElements.slice(0, index + 1)).join('/');
   };
 
   $scope.hasPendingRequests = function () {
@@ -40,5 +31,27 @@ angular.module('app').controller('AppCtrl', ['$scope', '$location', 'Security', 
 
   $scope.$on('$routeChangeStart', function(event, next, current){
     $scope.routeChangeError = undefined;
+  });
+
+  $scope.$on('$routeChangeSuccess', function(event, current){
+
+    var pathElements = $location.path().split('/'), result = [], path = '';
+    pathElements.shift();
+
+    var pathParamsLookup = {};
+    angular.forEach(current.pathParams, function (value, key) {
+      pathParamsLookup[value] = key;
+    });
+
+    angular.forEach(pathElements, function (pathElement, key) {
+      var name, bcrumbResolvers = current.breadcrumbs || {};
+      if (pathParamsLookup[pathElement] && angular.isFunction(bcrumbResolvers[pathParamsLookup[pathElement]])) {
+        name = bcrumbResolvers[pathParamsLookup[pathElement]](current.locals);
+      }
+      path += '/'+pathElement;
+      result.push({name: name || pathElement, path: path});
+    });
+
+    $scope.pathElements = result;
   });
 }]);
