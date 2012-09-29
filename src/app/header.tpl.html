@@ -8,6 +8,8 @@
         <ul class="nav pull-right">
             <li class="divider-vertical"></li>
             <li><a href="#">{{security.getUser().login}}</a></li>
+            <li class="divider-vertical"></li>
+            <li><a href="#"><img src="static/img/spinner.gif" ng-show="hasPendingRequests()"></a></li>
         </ul>
     </div>
     <div>
@@ -23,8 +25,5 @@
     </div>
     <div class="alert alert-error" ng-show="routeChangeError">
         {{routeChangeError}}
-    </div>
-    <div class="progress progress-striped active" ng-show="hasPendingRequests()">
-        <div class="bar" style="width: 100%;"></div>
     </div>
 </div>
