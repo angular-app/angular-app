@@ -17,7 +17,7 @@ angular.module('productbacklog').config(['$routeProvider', 'routeCRUDProvider', 
     return ProductBacklog.getById($route.current.params.itemId);
   };
 
-  routeCRUDProvider.defineRoutes($routeProvider, '/productbacklog/:projectId', 'productbacklog', 'ProductBacklog', ['ProductBacklog', '$route'], {
+  routeCRUDProvider.defineRoutes($routeProvider, '/productbacklog/:projectId', 'productbacklog', 'ProductBacklog', [], {
     listItems:{'backlog':getBacklog, 'projectId':getProjectId},
     newItem:{'backlogItem':newBacklogItem, 'projectId':getProjectId},
     editItem:{'backlogItem':getBacklogItem, 'projectId':getProjectId}
