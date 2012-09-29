@@ -21,6 +21,9 @@
             </li>
         </ul>
     </div>
+    <div class="alert alert-error" ng-show="routeChangeError">
+        {{routeChangeError}}
+    </div>
     <div class="progress progress-striped active" ng-show="hasPendingRequests()">
         <div class="bar" style="width: 100%;"></div>
     </div>

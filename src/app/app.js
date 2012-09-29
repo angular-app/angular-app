@@ -32,4 +32,13 @@ angular.module('app').controller('AppCtrl', ['$scope', '$location', 'Security', 
   $scope.hasPendingRequests = function () {
     return HTTPRequestTracker.hasPendingRequests();
   };
+
+  $scope.$on('$routeChangeError', function(event, current, previous, rejection){
+    //TODO: this is too MongoLab specific, itroduce error resolution service
+    $scope.routeChangeError = 'Route change error: '+rejection.code;
+  });
+
+  $scope.$on('$routeChangeStart', function(event, next, current){
+    $scope.routeChangeError = undefined;
+  });
 }]);
