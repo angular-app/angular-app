@@ -1,18 +1,16 @@
-angular.module('signin', ['services.users'], ['$routeProvider', function($routeProvider){
-  $routeProvider.when('/signin', {templateUrl:'signin/form.tpl.html', controller:'SignInCtrl'});
-}]);
-
-angular.module('signin').controller('SignInCtrl', ['$scope', '$location', 'Security', function ($scope, $location, Security) {
+angular.module('signin', ['services.authentication','services.users']).controller('SignInCtrl', ['$scope', '$http', 'AuthenticationService', function ($scope, $http, AuthenticationService) {
 
   $scope.user = {};
   $scope.authError = false;
+  $scope.needsLogin = false;
+
+  $scope.$watch(function() { return AuthenticationService.isLoginRequired(); }, function(newValue,oldValue) { $scope.needsLogin = newValue; });
 
   $scope.signIn = function () {
-    $scope.authError = false;
-    Security.authenticate($scope.user.email, $scope.user.password, function (user) {
-      $location.path('/dashboard');
-    }, function () {
-      $scope.authError = true;
+    console.log($scope.user);
+    $http.post('/login', $scope.user).success(function() {
+      console.log('logged in');
+      AuthenticationService.loginConfirmed();
     });
   };
 
