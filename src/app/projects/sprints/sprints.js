@@ -1,32 +1,30 @@
 angular.module('sprints', ['services.sprints', 'services.crud']);
 angular.module('sprints').config(['$routeProvider', 'routeCRUDProvider', function($routeProvider, routeCRUDProvider){
 
-  var getProjectId = function(Sprints, $route) {
+  var getProjectId = function(Sprints, ProductBacklog, $route) {
     return $route.current.params.projectId;
   };
 
-  var getSprints = function (Sprints, $route) {
+  var getSprints = function (Sprints, ProductBacklog, $route) {
     return Sprints.forProject($route.current.params.projectId);
   };
 
-  var newSprint = function (Sprints, $route) {
+  var newSprint = function (Sprints, ProductBacklog, $route) {
     return new Sprints({projectId:$route.current.params.projectId});
   };
 
-  var getSprint = function (Sprints, $route) {
+  var getSprint = function (Sprints, ProductBacklog, $route) {
     return Sprints.getById($route.current.params.itemId);
   };
 
-  routeCRUDProvider.defineRoutes($routeProvider, '/projects/:projectId/sprints', 'projects/sprints', 'Sprints', [], {
-    listItems:{'sprints':getSprints, 'projectId':getProjectId},
-    newItem:{'sprint':newSprint, 'projectId':getProjectId},
-    editItem:{'sprint':getSprint, 'projectId':getProjectId}
-  }, {
-    editItem:{
-      itemId : function(locals){
-        return locals.sprint.name;
-      }
-    }
+  var getBacklog = function (Sprints, ProductBacklog, $route) {
+    return ProductBacklog.forProject($route.current.params.projectId);
+  };
+
+  routeCRUDProvider.defineRoutes($routeProvider, '/projects/:projectId/sprints', 'projects/sprints', 'Sprints', ['ProductBacklog'], {
+    listItems:{sprints:getSprints, projectId:getProjectId},
+    newItem:{sprint:newSprint, projectId:getProjectId, productBacklog:getBacklog},
+    editItem:{sprint:getSprint, projectId:getProjectId, productBacklog:getBacklog}
   });
 }]);
 
@@ -42,8 +40,9 @@ angular.module('sprints').controller('SprintsListCtrl', ['$scope', '$location', 
   };
 }]);
 
-angular.module('sprints').controller('SprintsEditCtrl', ['$scope', '$location', 'crudMethods', 'projectId', 'sprint', function($scope, $location, crudMethods, projectId, sprint){
+angular.module('sprints').controller('SprintsEditCtrl', ['$scope', '$location', 'crudMethods', 'projectId', 'sprint', 'productBacklog', function($scope, $location, crudMethods, projectId, sprint, productBacklog){
 
+  $scope.productBacklog = productBacklog;
   angular.extend($scope, crudMethods('sprint', sprint, 'form', function () {
     $location.path('/projects/'+projectId+'/sprints');
   }, function () {

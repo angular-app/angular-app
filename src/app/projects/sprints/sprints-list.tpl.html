@@ -4,6 +4,7 @@
         <th>Name</th>
         <th>Start date</th>
         <th>End date</th>
+        <th>Status</th>
     </tr>
     </thead>
     <tbody>
@@ -11,9 +12,10 @@
         <td>{{sprint.name}}</td>
         <td>{{sprint.start}}</td>
         <td>{{sprint.end}}</td>
+        <td>ACTIVE</td>
     </tr>
     <tr ng-show="!sprints.length">
-        <td colspan="3">No sprints defined</td>
+        <td colspan="4">No sprints defined</td>
     </tr>
     </tbody>
 </table>

@@ -2,8 +2,14 @@
     <div class="navbar-inner">
         <a class="brand" href="#/dashboard">AScrum</a>
         <ul class="nav">
-            <li ng-class="{active:isNavbarActive('myprojects')}"><a href="#/projects">My projects</a></li>
-            <li ng-class="{active:isNavbarActive('admin')}"><a href="#/admin">Admin</a></li>
+            <li ng-class="{active:isNavbarActive('projects')}"><a href="#/projects">My projects</a></li>
+            <li class="dropdown" ng-class="{active:isNavbarActive('admin'), open:isAdminOpen}">
+                <a id="adminmenu" role="button" class="dropdown-toggle" ng-click="isAdminOpen=!isAdminOpen">Admin<b class="caret"></b></a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="adminmenu">
+                    <li><a tabindex="-1" href="#/admin/projects" ng-click="isAdminOpen=false">Projects</a></li>
+                    <li><a tabindex="-1" href="#/admin/users" ng-click="isAdminOpen=false">Users</a></li>
+                </ul>
+            </li>
         </ul>
         <ul class="nav pull-right">
             <li class="divider-vertical"></li>

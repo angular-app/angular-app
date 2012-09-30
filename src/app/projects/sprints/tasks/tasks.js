@@ -25,17 +25,11 @@ angular.module('tasks').config(['$routeProvider', 'routeCRUDProvider', function(
     listItems:{sprints:getTasks, projectId:getProjectId, sprintId:getSprintId},
     newItem:{sprint:newTask, projectId:getProjectId, sprintId:getSprintId},
     editItem:{sprint:getTask, projectId:getProjectId, sprintId:getSprintId}
-  }, {
-    editItem:{
-      itemId : function(locals){
-        return locals.task.name;
-      }
-    }
   });
 }]);
 
-angular.module('tasks').controller('SprintsListCtrl', ['$scope', '$location', 'projectId', 'sprintId', 'tasks',function($scope, $location, projectId, sprintId, tasks){
-  $scope.sprints = sprints;
+angular.module('tasks').controller('TasksListCtrl', ['$scope', '$location', 'projectId', 'sprintId', 'tasks',function($scope, $location, projectId, sprintId, tasks){
+  $scope.tasks = tasks;
 
   $scope['new'] = function(){
     $location.path('/projects/'+projectId+'/sprints/new');
@@ -46,10 +40,10 @@ angular.module('tasks').controller('SprintsListCtrl', ['$scope', '$location', 'p
   };
 }]);
 
-angular.module('tasks').controller('SprintsEditCtrl', ['$scope', '$location', 'crudMethods', 'projectId', 'sprintId', 'task', function($scope, $location, crudMethods, projectId, sprint, task){
+angular.module('tasks').controller('TaskEditCtrl', ['$scope', '$location', 'crudMethods', 'projectId', 'sprintId', 'task', function($scope, $location, crudMethods, projectId, sprintId, task){
 
-  angular.extend($scope, crudMethods('sprint', sprint, 'form', function () {
-    $location.path('/projects/'+projectId+'/sprints');
+  angular.extend($scope, crudMethods('task', task, 'form', function () {
+    $location.path('/projects/'+projectId+'/sprints/'+sprintId);
   }, function () {
     $scope.updateError = true;
   }));

@@ -2,13 +2,66 @@
     <h4>Sprint</h4>
     <hr>
     <form name="form">
-        <label>Name</label>
-        <input type="text" name="name" ng-model="sprint.name" class="span10" required autofocus>
-        <label>Start date</label>
-        <input type="text" name="name" ng-model="sprint.start" class="span5" required>
-        <label>End date</label>
-        <input type="text" name="name" ng-model="sprint.end" class="span5" required>
+        <div class="row-fluid">
+            <div class="span6">
+                <label>Name</label>
+                <input type="text" name="name" ng-model="sprint.name" class="span10" required autofocus>
+                <label>Capacity</label>
+                <input type="number" name="description" ng-model="sprint.capacity" class="span5">
+            </div>
+            <div class="span6">
+                <label>Start date</label>
+                <input type="text" name="name" ng-model="sprint.start" class="span5" required>
+                <label>End date</label>
+                <input type="text" name="name" ng-model="sprint.end" class="span5" required>
+            </div>
+        </div>
     </form>
+    <hr>
+    <h4>Sprint backlog</h4>
+    <hr>
+    <div class="row-fluid">
+        <div class="span6">
+            <label>Currently in the sprint's backlog</label>
+            <table class="table table-bordered table-condensed table-striped table-hover">
+                <thead>
+                <tr>
+                    <th class="span6">Name</th>
+                    <th>Estimation</th>
+                    <th>Tools</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="sprintBacklogItem in sprint.sprintBacklog">
+                    <td>{{sprintBacklogItem.name}}</td>
+                    <td>{{sprintBacklogItem.estimation}}</td>
+                    <td>
+                        <button class="btn btn-mini btn-danger">Remove</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="span6">
+            <label>Product backlog (showing top 20 only)</label>
+            <table class="table table-bordered table-condensed table-striped table-hover">
+                <thead>
+                <tr>
+                    <th class="span6">Name</th>
+                    <th>Estimation</th>
+                    <th>Tools</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="productBacklogItem in productBacklog">
+                    <td>{{productBacklogItem.name}}</td>
+                    <td>{{productBacklogItem.estimation}}</td>
+                    <td><button class="btn btn-mini btn-primary">Add to sprint</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <hr>
     <div>
         <button type="button" class="btn btn-primary" ng-disabled="!canSave()" ng-click="save()">Save</button>
