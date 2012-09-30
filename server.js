@@ -2,7 +2,6 @@ var express = require('express');
 var mongoProxy = require('./lib/mongo-proxy');
 var config = require('./config.js');
 var passport = require('passport');
-var MongoStrategy = require('./lib/mongo-strategy');
 var security = require('./lib/security');
 
 var app = express();
@@ -23,15 +22,7 @@ app.use(express.cookieSession());                           // Store the session
 app.use(passport.initialize());                             // Initialize PassportJS
 app.use(passport.session());                                // Use Passport's session authentication strategy - this stores the logged in user in the session and will now run on any request
 
-// Add a Mongo strategy for handling the authentication
-var mongoAuthStrategy = new MongoStrategy(config.mongo.dbUrl, config.mongo.apiKey, config.mongo.dbName, config.mongo.usersCollection);
-passport.use(mongoAuthStrategy);
-
-// Login in to the app (using the mongo strategy)
-app.post('/login', passport.authenticate(mongoAuthStrategy.name));
-
-// Logout the current user
-app.post('/logout', function(req, res){ req.logOut(); });
+app.use(function(req, res, next) { console.log('Current User:', req.user.firstName, req.user.lastName); next(); });
 
 // Proxy database calls to the MongoDB
 app.use('/databases', security.authRequired);
