@@ -85,7 +85,7 @@ module.exports = function (grunt) {
     },
     watch:{
       files:['<config:src.js>', '<config:test.unit>', '<config:src.less>', '<config:src.tpl>', '<config:src.html>'],
-      tasks:'default'
+      tasks:'default timestamp'
     },
     jshint:{
       options:{
@@ -112,6 +112,11 @@ module.exports = function (grunt) {
   // HTML stuff
   grunt.registerTask('index', 'Process index.html', function(){
      grunt.file.copy('src/index.html', 'dist/index.html', {process:grunt.template.process});
+  });
+
+  // Print a timestamp (useful for when watching)
+  grunt.registerTask('timestamp', function() {
+    grunt.log.subhead(Date());
   });
 
 };
