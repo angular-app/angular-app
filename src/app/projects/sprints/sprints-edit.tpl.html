@@ -36,10 +36,17 @@
                     <td>{{sprintBacklogItem.name}}</td>
                     <td>{{sprintBacklogItem.estimation}}</td>
                     <td>
-                        <button class="btn btn-mini btn-danger">Remove</button>
+                        <button class="btn btn-mini btn-danger" ng-click="removeSprintBacklogItem(sprintBacklogItem)">Remove</button>
                     </td>
                 </tr>
                 </tbody>
+                <tfoot>
+                <tr>
+                    <td>Estimation in total</td>
+                    <td>{{estimationInTotal()}}</td>
+                    <td>-</td>
+                </tr>
+                </tfoot>
             </table>
         </div>
         <div class="span6">
@@ -53,10 +60,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="productBacklogItem in productBacklog">
+                <tr ng-repeat="productBacklogItem in productBacklog | filter:notSelected">
                     <td>{{productBacklogItem.name}}</td>
                     <td>{{productBacklogItem.estimation}}</td>
-                    <td><button class="btn btn-mini btn-primary">Add to sprint</button></td>
+                    <td><button class="btn btn-mini btn-primary" ng-click="addBacklogItem(productBacklogItem)">Add to sprint</button></td>
                 </tr>
                 </tbody>
             </table>

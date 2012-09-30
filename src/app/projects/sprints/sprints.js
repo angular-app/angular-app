@@ -48,4 +48,37 @@ angular.module('sprints').controller('SprintsEditCtrl', ['$scope', '$location', 
   }, function () {
     $scope.updateError = true;
   }));
+  $scope.sprint.sprintBacklog = $scope.sprint.sprintBacklog || [];
+
+  $scope.addBacklogItem = function (backlogItem) {
+    $scope.sprint.sprintBacklog.push({
+      backlogItemId:backlogItem.$id(),
+      name:backlogItem.name,
+      estimation:backlogItem.estimation,
+      tasks:[]
+    });
+  };
+
+  $scope.removeSprintBacklogItem = function (sprintBacklogItem) {
+    $scope.sprint.sprintBacklog.splice($scope.sprint.sprintBacklog.indexOf(sprintBacklogItem),1);
+  };
+
+  $scope.estimationInTotal = function () {
+    var totalEstimation = 0;
+    angular.forEach(sprint.sprintBacklog, function (sprintBacklogItem) {
+      totalEstimation += sprintBacklogItem.estimation;
+    });
+    return totalEstimation;
+  };
+
+  $scope.notSelected = function (productBacklogItem) {
+    for (var i = 0; i < $scope.sprint.sprintBacklog.length; i++) {
+      var sprintBacklogItem = $scope.sprint.sprintBacklog[i];
+      if (sprintBacklogItem.backlogItemId === productBacklogItem.$id()){
+        return false;
+      }
+    }
+    return true;
+  };
+
 }]);
