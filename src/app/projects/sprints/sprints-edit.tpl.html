@@ -7,7 +7,7 @@
                 <label>Name</label>
                 <input type="text" name="name" ng-model="sprint.name" class="span10" required autofocus>
                 <label>Capacity</label>
-                <input type="number" name="description" ng-model="sprint.capacity" class="span5">
+                <input type="number" name="description" ng-model="sprint.capacity" class="span5" required>
             </div>
             <div class="span6">
                 <label>Start date</label>
@@ -33,7 +33,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="sprintBacklogItem in sprint.sprintBacklog">
-                    <td>{{sprintBacklogItem.name}}</td>
+                    <td><a ng-click="viewProductBacklogItem(sprintBacklogItem.backlogItemId)">{{sprintBacklogItem.name}}</a></td>
                     <td>{{sprintBacklogItem.estimation}}</td>
                     <td>
                         <button class="btn btn-mini btn-danger" ng-click="removeSprintBacklogItem(sprintBacklogItem)">Remove</button>
@@ -61,7 +61,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="productBacklogItem in productBacklog | filter:notSelected">
-                    <td>{{productBacklogItem.name}}</td>
+                    <td><a ng-click="viewProductBacklogItem(productBacklogItem.$id())">{{productBacklogItem.name}}</a></td>
                     <td>{{productBacklogItem.estimation}}</td>
                     <td><button class="btn btn-mini btn-primary" ng-click="addBacklogItem(productBacklogItem)">Add to sprint</button></td>
                 </tr>

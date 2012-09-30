@@ -59,6 +59,10 @@ angular.module('sprints').controller('SprintsEditCtrl', ['$scope', '$location', 
     });
   };
 
+  $scope.viewProductBacklogItem = function (productBacklogItemId) {
+    $location.path('/projects/'+projectId+'/productbacklog/'+productBacklogItemId);
+  };
+
   $scope.removeSprintBacklogItem = function (sprintBacklogItem) {
     $scope.sprint.sprintBacklog.splice($scope.sprint.sprintBacklog.indexOf(sprintBacklogItem),1);
   };
