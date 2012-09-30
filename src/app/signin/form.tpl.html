@@ -1,4 +1,4 @@
-<div class="row-fluid" ng-controller="SignInCtrl" ng-show="needsLogin">
+<div class="row-fluid" ng-controller="SignInCtrl" ng-show="showLogin">
     <div class="span4 offset4 well">
         <h4>Sign in</h4>
         <hr>
@@ -12,7 +12,7 @@
             <input class="span12" name="pass" type="password" ng-model="user.password" required>
         </form>
         <hr>
-        <button class="btn btn-primary" ng-click="signIn()" ng-disabled='form.$invalid'>Sign in</button>
+        <button class="btn btn-primary" ng-click="login()" ng-disabled='form.$invalid'>Sign in</button>
         <button class="btn" ng-click="clearForm()">Clear</button>
     </div>
 </div>

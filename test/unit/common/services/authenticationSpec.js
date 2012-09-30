@@ -133,60 +133,74 @@ describe('services.authentication', function() {
       service = $injector.get('AuthenticationService');
     }));
 
-    it('should not require login before any responses have been received', function() {
-      expect(service.isLoginRequired()).toBe(false);
-      mockUpHttpResponse(401, 'Not Authorized');
-      expect(service.isLoginRequired()).toBe(false);
-      $httpBackend.flush();
+    describe('isLoginRequired', function() {
+      it('should not require login before any responses have been received', function() {
+        expect(service.isLoginRequired()).toBe(false);
+        mockUpHttpResponse(401, 'Not Authorized');
+        expect(service.isLoginRequired()).toBe(false);
+        $httpBackend.flush();
+      });
+
+      it('should not require login after non-401 responses have been received', function() {
+        mockUpHttpResponse(400, 'Bad Request');
+        $httpBackend.flush();
+        mockUpHttpResponse(200, 'Success');
+        $httpBackend.flush();
+        expect(service.isLoginRequired()).toBe(false);
+      });
+
+      it('should require login after a 401 response has been received', function() {
+        mockUpHttpResponse(401, 'Not Authorized');
+        $httpBackend.flush();
+        expect(service.isLoginRequired()).toBe(true);
+      });
+
+      it('should require login after multiple 401 responses have been received', function() {
+        mockUpHttpResponse(401, 'Not Authorized');
+        $httpBackend.flush();
+        mockUpHttpResponse(200, 'Success');
+        mockUpHttpResponse(400, 'Bad Request');
+        mockUpHttpResponse(401, 'Not Authorized');
+        $httpBackend.flush();
+        expect(service.isLoginRequired()).toBe(true);
+      });
     });
 
-    it('should not require login after non-401 responses have been received', function() {
-      mockUpHttpResponse(400, 'Bad Request');
-      $httpBackend.flush();
-      mockUpHttpResponse(200, 'Success');
-      $httpBackend.flush();
-      expect(service.isLoginRequired()).toBe(false);
-    });
+    describe('retryRequests', function() {
+      it('should not require login immediately after requests have been retried', function() {
+        mockUpHttpResponse(401, 'Not Authorized');
+        $httpBackend.flush();
+        expect(service.isLoginRequired()).toBe(true);
+        service.retryRequests();
+        expect(service.isLoginRequired()).toBe(false);
+        $httpBackend.flush();
+      });
 
-    it('should require login after a 401 response has been received', function() {
-      mockUpHttpResponse(401, 'Not Authorized');
-      $httpBackend.flush();
-      expect(service.isLoginRequired()).toBe(true);
-    });
+      it('should not require login after requests are no longer failing with 401 and requests have been retried', function() {
+        var mock = $httpBackend.when('GET', '/');
+    
+        // Send a GET and respond with 401 No Authorized
+        mock.respond(401, "Not Authorized");
+        $http.get('/').then(success, error);
+        $httpBackend.flush();
+        expect(service.isLoginRequired()).toBe(true);
 
-    it('should require login after multiple 401 responses have been received', function() {
-      mockUpHttpResponse(401, 'Not Authorized');
-      $httpBackend.flush();
-      mockUpHttpResponse(200, 'Success');
-      mockUpHttpResponse(400, 'Bad Request');
-      mockUpHttpResponse(401, 'Not Authorized');
-      $httpBackend.flush();
-      expect(service.isLoginRequired()).toBe(true);
-    });
-
-    it('should not require login immediately after login confirmed', function() {
-      mockUpHttpResponse(401, 'Not Authorized');
-      $httpBackend.flush();
-      expect(service.isLoginRequired()).toBe(true);
-      service.loginConfirmed();
-      expect(service.isLoginRequired()).toBe(false);
-      $httpBackend.flush();
-    });
-
-    it('should not require login after login confirmed and requests are no longer failing with 401', function() {
-      var mock = $httpBackend.when('GET', '/');
-  
-      // Send a GET and respond with 401 No Authorized
-      mock.respond(401, "Not Authorized");
-      $http.get('/').then(success, error);
-      $httpBackend.flush();
-      expect(service.isLoginRequired()).toBe(true);
-
-      // Now clear the 401, confirm log-in and flush the retry responses
-      mock.respond(200, "Success");
-      service.loginConfirmed();
-      $httpBackend.flush();
-      expect(service.isLoginRequired()).toBe(false, 'Queue should now be empty');
+        // Now clear the 401, confirm log-in and flush the retry responses
+        mock.respond(200, "Success");
+        service.retryRequests();
+        $httpBackend.flush();
+        expect(service.isLoginRequired()).toBe(false, 'Queue should now be empty');
+      });
+    }); 
+    
+    describe('login', function() {
+      it('calls retryRequests if the http request is succesful', function() {
+        spyOn(service, 'retryRequests');
+        $httpBackend.expect('POST', '/login');
+        $httpBackend.when('POST', '/login').respond(200, 'User Info');
+        service.login('email', 'password');
+        $httpBackend.flush();
+      });
     });
   });
 });

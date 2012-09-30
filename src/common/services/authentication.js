@@ -6,24 +6,39 @@ angular.module('services.authentication', []);
 // When the user has successfully logged in you call loginConfirmed to retry any queued requests.
 angular.module('services.authentication').factory('AuthenticationService', ['$http', 'AuthenticationRequestRetryQueue', function($http, queue) {
 
+  var currentUser = null;
+
   function retryRequest (next) {
     $http(next.request).then(function(response) {
       next.deferred.resolve(response);
     });
   }
 
-  return {
+  var service = {
     // Directives or controllers should watch this to see if a login form should be displayed
     isLoginRequired: function() {
       return queue.hasMore();
     },
-    // Once the user has logged in the directive or controller should call this to empty retry the requests
-    loginConfirmed: function() {
+    // Login to the back end - on success will trigger
+    login: function(email, password) {
+      var request = $http.post('/login', {email: email, password: password});
+      request.success(function(response) {
+        service.retryRequests();
+        currentUser = response;
+      });
+      return request;
+    },
+    // Retry the requests once the user has successfully logged in
+    retryRequests: function() {
       while(queue.hasMore()) {
         retryRequest(queue.getNext());
       }
+    },
+    getCurrentUser: function() {
+      return currentUser;
     }
   };
+  return service;
 }]);
 
 angular.module('services.authentication').factory('AuthenticationRequestRetryQueue', ['$q', function($q) {

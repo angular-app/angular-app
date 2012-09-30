@@ -1,17 +1,17 @@
-angular.module('signin', ['services.authentication','services.users']).controller('SignInCtrl', ['$scope', '$http', 'AuthenticationService', function ($scope, $http, AuthenticationService) {
+angular.module('signin', ['services.authentication','services.users']).controller('SignInCtrl', ['$scope', 'AuthenticationService', function ($scope, AuthenticationService) {
 
   $scope.user = {};
   $scope.authError = false;
-  $scope.needsLogin = false;
+  $scope.showLogin = false;
 
-  $scope.$watch(function() { return AuthenticationService.isLoginRequired(); }, function(newValue,oldValue) { $scope.needsLogin = newValue; });
+  $scope.$watch(function() {
+    return AuthenticationService.isLoginRequired();
+  }, function(newValue,oldValue) {
+    $scope.showLogin = newValue;
+  });
 
-  $scope.signIn = function () {
-    console.log($scope.user);
-    $http.post('/login', $scope.user).success(function() {
-      console.log('logged in');
-      AuthenticationService.loginConfirmed();
-    });
+  $scope.login = function () {
+    AuthenticationService.login($scope.user);
   };
 
   $scope.clearForm = function () {
