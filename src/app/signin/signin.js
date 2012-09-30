@@ -2,17 +2,7 @@ angular.module('signin', ['services.authentication','services.users']).controlle
 
   $scope.user = {};
   $scope.authError = false;
-  $scope.showLogin = false;
-
-  $scope.$watch(function() {
-    return AuthenticationService.isLoginRequired();
-  }, function(newValue,oldValue) {
-    $scope.showLogin = newValue;
-  });
-
-  $scope.login = function () {
-    AuthenticationService.login($scope.user);
-  };
+  $scope.authService = AuthenticationService;
 
   $scope.clearForm = function () {
     $scope.user = {};

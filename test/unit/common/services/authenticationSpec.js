@@ -191,14 +191,29 @@ describe('services.authentication', function() {
         $httpBackend.flush();
         expect(service.isLoginRequired()).toBe(false, 'Queue should now be empty');
       });
-    }); 
+    });
     
     describe('login', function() {
-      it('calls retryRequests if the http request is succesful', function() {
+      it('calls retryRequests and requestCurrentUser if the http request is succesful', function() {
         spyOn(service, 'retryRequests');
+        spyOn(service, 'requestCurrentUser');
         $httpBackend.expect('POST', '/login');
-        $httpBackend.when('POST', '/login').respond(200, 'User Info');
+        $httpBackend.when('POST', '/login').respond(200);
         service.login('email', 'password');
+        $httpBackend.flush();
+        expect(service.retryRequests).toHaveBeenCalled();
+        expect(service.requestCurrentUser).toHaveBeenCalled();
+      });
+    });
+
+    describe('requestCurrentUser', function() {
+      it('makes a GET request to current-user url', function() {
+        var userInfo = { email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'};
+        $httpBackend.expect('GET', '/current-user');
+        $httpBackend.when('GET', '/current-user').respond(userInfo);
+        service.requestCurrentUser().success(function(response) {
+          expect(response).toBe(userInfo);
+        });
         $httpBackend.flush();
       });
     });
