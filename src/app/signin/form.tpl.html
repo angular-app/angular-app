@@ -1,5 +1,9 @@
-<div class="row-fluid" ng-controller="SignInCtrl" ng-show="authService.isLoginRequired()">
-    <div class="span4 offset4 well">
+<div class="row-fluid" ng-controller="SignInCtrl" >
+    <div class="span4 offset4 well" ng-show="authService.currentUser">
+        You are logged in as: {{authService.currentUser.firstName}} {{authService.currentUser.lastName}}
+        <button ng-click="authService.logout()">Logout</button>
+    </div>
+    <div class="span4 offset4 well" ng-show="authService.isLoginRequired()">
         <h4>Sign in</h4>
         <hr>
         <div class="alert alert-error" ng-show="authError">
@@ -15,7 +19,4 @@
         <button class="btn btn-primary" ng-click="authService.login(user.email, user.password)" ng-disabled='form.$invalid'>Sign in</button>
         <button class="btn" ng-click="clearForm()">Clear</button>
     </div>
-</div>
-<div ng-hide="authService.isLoginRequired()">
-    Current User: {{authService.currentUser | json}}
 </div>

@@ -211,8 +211,8 @@ describe('services.authentication', function() {
         var userInfo = { email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'};
         $httpBackend.expect('GET', '/current-user');
         $httpBackend.when('GET', '/current-user').respond(userInfo);
-        service.requestCurrentUser().success(function(response) {
-          expect(response).toBe(userInfo);
+        service.requestCurrentUser().then(function(response) {
+          expect(service.currentUser).toBe(userInfo);
         });
         $httpBackend.flush();
       });
