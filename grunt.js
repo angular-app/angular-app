@@ -29,7 +29,7 @@ module.exports = function (grunt) {
       }
     },
     test: {
-      unit: ['test/unit/**/*.js']
+      unit: ['test/unit/**/*Spec.js']
     },
     lint:{
       files:['grunt.js', '<config:src.js>', '<config:test.unit>']

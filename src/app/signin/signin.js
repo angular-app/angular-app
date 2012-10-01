@@ -1,8 +1,7 @@
-angular.module('signin', ['services.authentication', 'services.users']).controller('SignInCtrl', ['$scope', 'AuthenticationService', function($scope, AuthenticationService) {
+angular.module('signin', ['services.authentication', 'services.users']).controller('SignInCtrl', ['$scope', function($scope) {
 
   $scope.user = {};
   $scope.authError = false;
-  $scope.authService = AuthenticationService;
 
   $scope.clearForm = function() {
     $scope.user = {};

@@ -10,9 +10,9 @@ angular.module('app').config(['$routeProvider', function ($routeProvider) {
   $routeProvider.otherwise({redirectTo:'/signin'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', '$location', '$route', 'Security', 'HTTPRequestTracker', function ($scope, $location, $route, Security, HTTPRequestTracker) {
+angular.module('app').controller('AppCtrl', ['$scope', '$location', '$route', 'AuthenticationService', 'HTTPRequestTracker', function ($scope, $location, $route, AuthenticationService, HTTPRequestTracker) {
   $scope.location = $location;
-  $scope.security = Security;
+  $scope.authService = AuthenticationService;
 
   $scope.isNavbarActive = function (navBarPath) {
     return navBarPath === $scope.pathElements[0];

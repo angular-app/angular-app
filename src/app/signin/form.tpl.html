@@ -1,8 +1,4 @@
 <div class="row-fluid" ng-controller="SignInCtrl" >
-    <div class="span4 offset4 well" ng-show="authService.currentUser">
-        You are logged in as: {{authService.currentUser.firstName}} {{authService.currentUser.lastName}}
-        <button ng-click="authService.logout()">Logout</button>
-    </div>
     <div class="span4 offset4 well" ng-show="authService.isLoginRequired()">
         <h4>Sign in</h4>
         <hr>

@@ -13,7 +13,14 @@
         </ul>
         <ul class="nav pull-right">
             <li class="divider-vertical"></li>
-            <li><a href="#">{{security.getUser().login}}</a></li>
+            <li>
+                <a href="#">{{authService.currentUser.firstName}} {{authService.currentUser.lastName}}</a>
+            </li>
+            <li ng-show="authService.currentUser">
+                <form class="navbar-form">
+                    <button class="btn" ng-click="authService.logout()">Log out</button>
+                </form>
+            </li>
             <li class="divider-vertical"></li>
             <li><a href="#"><img src="static/img/spinner.gif" ng-show="hasPendingRequests()"></a></li>
         </ul>
