@@ -25,7 +25,6 @@ angular.module('admin-users').controller('UsersEditCtrl', ['$scope', '$location'
 
   $scope.password = user.password;
   angular.extend($scope, crudMethods('item', user, 'form', function () {
-    console.log('cb');
     $location.path('/admin/users');
   }, function() {
     $scope.updateError = true;
