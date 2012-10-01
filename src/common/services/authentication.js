@@ -59,6 +59,9 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
     }
   };
 
+  // Get the current user when the controller is instantiated - this could be put in the main app controller so that it is only called once??
+  service.requestCurrentUser();
+
   return service;
 }]);
 

@@ -1,6 +1,7 @@
 describe('services.authentication', function() {
 
   var $rootScope, $http, $httpBackend, success, error, status;
+  var userInfo = { email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'};
 
   beforeEach(module('services.authentication', 'ng'));
   beforeEach(inject(function($injector) {
@@ -9,6 +10,7 @@ describe('services.authentication', function() {
     $http = $injector.get('$http');
     success = jasmine.createSpy('success');
     error = jasmine.createSpy('error');
+    $httpBackend.when('GET', '/current-user').respond(200, userInfo);
   }));
 
   afterEach(function() {
@@ -208,7 +210,6 @@ describe('services.authentication', function() {
 
     describe('requestCurrentUser', function() {
       it('makes a GET request to current-user url', function() {
-        var userInfo = { email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'};
         $httpBackend.expect('GET', '/current-user');
         $httpBackend.when('GET', '/current-user').respond(userInfo);
         service.requestCurrentUser().then(function(response) {
