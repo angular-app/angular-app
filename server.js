@@ -22,11 +22,27 @@ app.use(express.cookieSession());                           // Store the session
 app.use(passport.initialize());                             // Initialize PassportJS
 app.use(passport.session());                                // Use Passport's session authentication strategy - this stores the logged in user in the session and will now run on any request
 
-app.use(function(req, res, next) { console.log('Current User:', req.user.firstName, req.user.lastName); next(); });
+security.initialize(config.mongo.dbUrl, config.mongo.apiKey, config.mongo.dbName, config.mongo.usersCollection); // Add a Mongo strategy for handling the authentication
+
+app.use(function(req, res, next) {
+  if ( req.user ) {
+    console.log('Current User:', req.user.firstName, req.user.lastName);
+  } else {
+    console.log('Unauthenticated');
+  }
+  next();
+});
 
 // Proxy database calls to the MongoDB
 app.use('/databases', security.authRequired);
 app.use('/databases', mongoProxy(config.mongo.dbUrl, config.mongo.apiKey));
+
+app.post('/login', security.login);
+
+app.post('/logout', security.logout);
+
+// Retrieve the current user
+app.get('/current-user', security.sendCurrentUser);
 
 // This route deals enables HTML5Mode by forwarding missing files to the index.html
 app.all('/*', function(req, res) {
