@@ -23,7 +23,7 @@ describe('services.authentication', function() {
     $http.get('/').then(success, error);
   };
 
-  xdescribe('Normal Responses', function() {
+  describe('Normal Responses', function() {
     var testSuccessfulResponse = function(status, data) {
         describe(status + ' HTTP Response', function() {
           it('is not affected', function() {
