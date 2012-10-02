@@ -50,15 +50,24 @@ module.exports = {
     });
   },
 
-  testFindByEmail: function(test) {
-    mockupRestInterface(test, baseUrl, { query: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', [config.testUser]);
-
+  testFindByEmail_found: function(test) {
     var db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
+    mockupRestInterface(test, baseUrl, { query: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', [config.testUser]);
     db.findByEmail('jo@bloggs.com', function(err, result) {
       test.ok(!err);
-      console.log('USER', result.email);
       test.ok(result !== null);
       test.equal(result.email, 'jo@bloggs.com');
+      test.done();
+    });
+
+  },
+
+  testFindByEmail_notfound: function(test) {
+    var db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
+    mockupRestInterface(test, baseUrl, { query: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', []);
+    db.findByEmail('jo@bloggs.com', function(err, result) {
+      test.ok(!err);
+      test.ok(result === null);
       test.done();
     });
   },
