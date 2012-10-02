@@ -8,7 +8,7 @@ var config = {
   usersCollection: 'users'
 };
 
-function mockUpPassport(test) {
+function mockUpPassport(test, authenticated) {
   var spies = { };
   security.__set__('passport', {
     use: function(fn) {
@@ -82,17 +82,18 @@ module.exports = {
   login: function(test) {
     var req = {};
 
-    var sendCalled = false;
+    var jsonCalled = false;
     var res = {
-      send: function() { sendCalled = true; }
+      json: function() { jsonCalled = true; }
     };
 
     var nextCalled = false;
     var next = function() { nextCalled = true; };
 
-    var spies = mockUpPassport(test, {}, {}, {});
+    var spies = mockUpPassport(test);
     security.login(req, res, next);
     test.ok(spies.authenticateCalled);
+    test.ok(jsonCalled);
     test.done();
   },
 
