@@ -196,15 +196,25 @@ describe('services.authentication', function() {
     });
     
     describe('login', function() {
-      it('calls retryRequests and requestCurrentUser if the http request is succesful', function() {
+      it('calls retryRequests if the user is authenticated', function() {
         spyOn(service, 'retryRequests');
         spyOn(service, 'requestCurrentUser');
         $httpBackend.expect('POST', '/login');
-        $httpBackend.when('POST', '/login').respond(200);
+        $httpBackend.when('POST', '/login').respond(200, {user: userInfo});
         service.login('email', 'password');
         $httpBackend.flush();
         expect(service.retryRequests).toHaveBeenCalled();
-        expect(service.requestCurrentUser).toHaveBeenCalled();
+        expect(service.requestCurrentUser).not.toHaveBeenCalled();
+      });
+      it('does not call retryRequests if the user is not authenticated', function() {
+        spyOn(service, 'retryRequests');
+        spyOn(service, 'requestCurrentUser');
+        $httpBackend.expect('POST', '/login');
+        $httpBackend.when('POST', '/login').respond(200, {user: null});
+        service.login('email', 'password');
+        $httpBackend.flush();
+        expect(service.retryRequests).not.toHaveBeenCalled();
+        expect(service.requestCurrentUser).not.toHaveBeenCalled();
       });
     });
 

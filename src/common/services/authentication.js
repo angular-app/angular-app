@@ -29,8 +29,11 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
     login: function(email, password) {
       var request = $http.post('/login', {email: email, password: password});
       return request.then(function(response) {
-        service.retryRequests();
-        return service.requestCurrentUser();
+        var user = response.data.user;
+        if ( user !== null ) {
+          service.currentUser = user;
+          service.retryRequests();
+        }
       });
     },
 
