@@ -113,9 +113,9 @@ module.exports = {
     var sendCalled = false;
     var req = { user : mockUpUser(false) };
     var res = {
-      json: function(status, user) {
+      json: function(status, userInfo) {
         test.equal(status, 200);
-        test.equal(user.id, req.user._id.$oid);
+        test.equal(userInfo.user.id, req.user._id.$oid);
         sendCalled = true;
       }
     };
