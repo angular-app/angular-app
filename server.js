@@ -34,7 +34,14 @@ app.use(function(req, res, next) {
 });
 
 // Proxy database calls to the MongoDB
-app.use('/databases', security.authRequired);
+app.use('/databases', security.authenticationRequired);
+app.use('/databases/ascrum/collections/users', function(req, res, next) {
+  if ( req.method !== 'GET' ) {
+    security.adminRequired(req, res, next);
+  } else {
+    next();
+  }
+});
 app.use('/databases', mongoProxy(config.mongo.dbUrl, config.mongo.apiKey));
 
 app.post('/login', security.login);

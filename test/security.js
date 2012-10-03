@@ -8,15 +8,26 @@ var config = {
   usersCollection: 'users'
 };
 
+function mockUpUser(isAdmin) {
+  return {
+    _id : { $oid: '1234567' },
+    email: 'email',
+    password: 'password',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    admin: !!isAdmin
+  };
+}
+
 function mockUpPassport(test, authenticated) {
   var spies = { };
   security.__set__('passport', {
     use: function(fn) {
       spies.useCalled = true;
     },
-    authenticate: function() {
+    authenticate: function(strategy, callback) {
       spies.authenticateCalled = true;
-      return function() {};
+      return function() { callback(); };
     }
   });
   return spies;
@@ -42,7 +53,7 @@ module.exports = {
     test.done();
   },
 
-  authRequired: function(test) {
+  authenticationRequired: function(test) {
     // Setup mocks
     var req = {};
     var res = {
@@ -54,12 +65,45 @@ module.exports = {
 
     // Test when user is unauthenticated
     req.isAuthenticated = function() { return false; };
-    security.authRequired(req, res, next);
+    security.authenticationRequired(req, res, next);
     test.ok(sendCalled);
 
     // Test when user is authenticated
     req.isAuthenticated = function() { return true; };
-    security.authRequired(req, res, next);
+    security.authenticationRequired(req, res, next);
+    test.ok(nextCalled);
+
+    test.done();
+  },
+
+  adminRequired: function(test) {
+    // Setup mocks
+    var nextCalled = false;
+    var sendCalled = false;
+    var req = {};
+    var res = {
+      send: function(status) {
+        test.equal(status, 401);
+        sendCalled = true;
+      }
+    };
+    var next = function() {
+      nextCalled = true;
+    };
+
+    // Test when user is unauthenticated
+    req.user = null;
+    security.adminRequired(req, res, next);
+    test.ok(sendCalled);
+
+    // Test when user is authenticated but not admin
+    req.user = mockUpUser(false);
+    security.adminRequired(req, res, next);
+    test.ok(sendCalled);
+
+    // Test when user is admin
+    req.user = mockUpUser(true);
+    security.adminRequired(req, res, next);
     test.ok(nextCalled);
 
     test.done();
@@ -67,10 +111,11 @@ module.exports = {
 
   sendCurrentUser: function(test) {
     var sendCalled = false;
-    var req = { user : {} };
+    var req = { user : mockUpUser(false) };
     var res = {
-      send: function(user) {
-        test.equal(user, req.user);
+      json: function(status, user) {
+        test.equal(status, 200);
+        test.equal(user.id, req.user._id.$oid);
         sendCalled = true;
       }
     };
