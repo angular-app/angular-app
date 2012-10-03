@@ -1,0 +1,20 @@
+<div class="modal" show="showLoginForm">
+    <div class="modal-header">
+        <h4>Sign in</h4>
+    </div>
+    <div class="modal-body">
+        <div class="alert alert-error" ng-show="authError">
+            {{authError}}
+        </div>
+        <form name="form">
+            <label>E-mail</label>
+            <input name="login" type="text" ng-model="user.email" required autofocus>
+            <label>Password</label>
+            <input name="pass" type="password" ng-model="user.password" required>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="login()" ng-disabled='form.$invalid'>Sign in</button>
+        <button class="btn" ng-click="clearForm()">Clear</button>
+    </div>
+</div>

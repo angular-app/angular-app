@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
 <head>
+    <script type="text/javascript" src="/static/jquery.js"></script>
     <script type="text/javascript" src="/static/angular.js"></script>
     <script type="text/javascript" src="/static/mongolab.js"></script>
+    <script type="text/javascript" src="/static/bootstrap.js"></script>
     <script type="text/javascript" src="/static/<%= grunt.config.get('pkg.name') %>.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/<%= grunt.config.get('pkg.name') %>.css"/>
 </head>
@@ -10,7 +12,7 @@
 <body ng-controller="AppCtrl">
 <div ng-include="'header.tpl.html'"></div>
 
-<div ng-include="'signin/form.tpl.html'"></div>
+<login-form></login-form>
 <div ng-view></div>
 
 </body>
