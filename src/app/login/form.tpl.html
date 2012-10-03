@@ -1,18 +1,20 @@
-<div class="row-fluid" ng-show="authService.isLoginRequired()">
-    <div class="span4 offset4 well">
+<div class="modal" show="showLoginForm">
+    <div class="modal-header">
         <h4>Sign in</h4>
-        <hr>
+    </div>
+    <div class="modal-body">
         <div class="alert alert-error" ng-show="authError">
-            Auth error...
+            {{authError}}
         </div>
         <form name="form">
             <label>E-mail</label>
-            <input class="span12" name="login" type="text" ng-model="user.email" required autofocus>
+            <input name="login" type="text" ng-model="user.email" required autofocus>
             <label>Password</label>
-            <input class="span12" name="pass" type="password" ng-model="user.password" required>
+            <input name="pass" type="password" ng-model="user.password" required>
         </form>
-        <hr>
-        <button class="btn btn-primary" ng-click="authService.login(user.email, user.password)" ng-disabled='form.$invalid'>Sign in</button>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="login()" ng-disabled='form.$invalid'>Sign in</button>
         <button class="btn" ng-click="clearForm()">Clear</button>
     </div>
 </div>

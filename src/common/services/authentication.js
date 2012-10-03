@@ -7,21 +7,12 @@ angular.module('services.authentication', []);
 angular.module('services.authentication').factory('AuthenticationService', ['$http', '$location', 'AuthenticationRequestRetryQueue', function($http, $location, queue) {
 
   function retryRequest (next) {
-    $http(next.request).then(function(response) {
+    $http(next.request.config).then(function(response) {
       next.deferred.resolve(response);
     });
   }
 
   var service = {
-    // Directives or controllers should watch this to see if a login form should be displayed
-    isLoginRequired: function() {
-      var hasMore = queue.hasMore();
-      if ( hasMore ) {
-        service.currentUser = null;
-      }
-      return hasMore;
-    },
-
     // The info about the current authenticated user after a login
     currentUser: null,
 
@@ -34,6 +25,7 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
           service.currentUser = user;
           service.retryRequests();
         }
+        return user;
       });
     },
 
@@ -57,7 +49,8 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
     // The app should probably do this at start up
     requestCurrentUser: function() {
       return $http.get('/current-user').then(function(response) {
-        service.currentUser = response.data;
+        service.currentUser = response.data.user;
+        return response;
       });
     }
   };
@@ -75,13 +68,13 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
 // In this case we have:
 //  - AuthenticationService -> [AuthenticationRequestRetryQueue, $http]
 //  - $http -> AuthenticationInterceptor -> AuthenticationRequestRetryQueue
-angular.module('services.authentication').factory('AuthenticationRequestRetryQueue', ['$q', function($q) {
+angular.module('services.authentication').factory('AuthenticationRequestRetryQueue', ['$rootScope', '$q', function($rootScope, $q) {
   var retryQueue = [];
   return {
     pushRequest: function(request) {
-      loginRequired = true;
       var deferred = $q.defer();
       retryQueue.push({ request: request, deferred: deferred});
+      $rootScope.$broadcast('AuthenticationService.unauthorized', request);
       return deferred.promise;
     },
     hasMore: function() {
@@ -98,7 +91,7 @@ angular.module('services.authentication').factory('AuthenticationInterceptor', [
   return function(promise) {
     return promise.then(null, function(response) {
       if (response.status === 401) {
-        return queue.pushRequest(response.config);
+        promise = queue.pushRequest(response);
       }
       return promise;
     });

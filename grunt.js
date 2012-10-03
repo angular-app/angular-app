@@ -51,6 +51,14 @@ module.exports = function (grunt) {
       mongo: {
         src:['lib/mongolab/*.js'],
         dest: '<%= distdir %>/mongolab.js'
+      },
+      bootstrap: {
+        src:['lib/bootstrap/*.js'],
+        dest: '<%= distdir %>/bootstrap.js'
+      },
+      jquery: {
+        src:['lib/jquery/*.js'],
+        dest: '<%= distdir %>/jquery.js'        
       }
     },
     min: {
@@ -65,6 +73,14 @@ module.exports = function (grunt) {
       mongo: {
         src:['lib/mongolab/*.js'],
         dest: '<%= distdir %>/mongolab.js'
+      },
+      bootstrap: {
+        src:['lib/bootstrap/*.js'],
+        dest: '<%= distdir %>/bootstrap.js'
+      },
+      jquery: {
+        src:['lib/jquery/*.js'],
+        dest: '<%= distdir %>/jquery.js'        
       }
     },
     recess: {

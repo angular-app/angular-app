@@ -1,7 +1,7 @@
 describe('services.authentication', function() {
 
   var $rootScope, $http, $httpBackend, success, error, status;
-  var userInfo = { email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'};
+  var userInfo = { id: '1234567890', email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'};
 
   beforeEach(module('services.authentication', 'ng'));
   beforeEach(inject(function($injector) {
@@ -10,7 +10,7 @@ describe('services.authentication', function() {
     $http = $injector.get('$http');
     success = jasmine.createSpy('success');
     error = jasmine.createSpy('error');
-    $httpBackend.when('GET', '/current-user').respond(200, userInfo);
+    $httpBackend.when('GET', '/current-user').respond(200, { user: userInfo });
   }));
 
   afterEach(function() {
@@ -135,63 +135,10 @@ describe('services.authentication', function() {
       service = $injector.get('AuthenticationService');
     }));
 
-    describe('isLoginRequired', function() {
-      it('should not require login before any responses have been received', function() {
-        expect(service.isLoginRequired()).toBe(false);
-        mockUpHttpResponse(401, 'Not Authorized');
-        expect(service.isLoginRequired()).toBe(false);
-        $httpBackend.flush();
-      });
-
-      it('should not require login after non-401 responses have been received', function() {
-        mockUpHttpResponse(400, 'Bad Request');
-        $httpBackend.flush();
-        mockUpHttpResponse(200, 'Success');
-        $httpBackend.flush();
-        expect(service.isLoginRequired()).toBe(false);
-      });
-
-      it('should require login after a 401 response has been received', function() {
-        mockUpHttpResponse(401, 'Not Authorized');
-        $httpBackend.flush();
-        expect(service.isLoginRequired()).toBe(true);
-      });
-
-      it('should require login after multiple 401 responses have been received', function() {
-        mockUpHttpResponse(401, 'Not Authorized');
-        $httpBackend.flush();
-        mockUpHttpResponse(200, 'Success');
-        mockUpHttpResponse(400, 'Bad Request');
-        mockUpHttpResponse(401, 'Not Authorized');
-        $httpBackend.flush();
-        expect(service.isLoginRequired()).toBe(true);
-      });
-    });
-
     describe('retryRequests', function() {
-      it('should not require login immediately after requests have been retried', function() {
-        mockUpHttpResponse(401, 'Not Authorized');
-        $httpBackend.flush();
-        expect(service.isLoginRequired()).toBe(true);
-        service.retryRequests();
-        expect(service.isLoginRequired()).toBe(false);
-        $httpBackend.flush();
-      });
-
-      it('should not require login after requests are no longer failing with 401 and requests have been retried', function() {
-        var mock = $httpBackend.when('GET', '/');
-    
-        // Send a GET and respond with 401 No Authorized
-        mock.respond(401, "Not Authorized");
-        $http.get('/').then(success, error);
-        $httpBackend.flush();
-        expect(service.isLoginRequired()).toBe(true);
-
-        // Now clear the 401, confirm log-in and flush the retry responses
-        mock.respond(200, "Success");
+      it('should not fail if the retryQueue is empty', function(){
         service.retryRequests();
         $httpBackend.flush();
-        expect(service.isLoginRequired()).toBe(false, 'Queue should now be empty');
       });
     });
     
@@ -220,9 +167,9 @@ describe('services.authentication', function() {
 
     describe('requestCurrentUser', function() {
       it('makes a GET request to current-user url', function() {
+        expect(service.currentUser).toBe(null);
         $httpBackend.expect('GET', '/current-user');
-        $httpBackend.when('GET', '/current-user').respond(userInfo);
-        service.requestCurrentUser().then(function(response) {
+        service.requestCurrentUser().then(function(data) {
           expect(service.currentUser).toBe(userInfo);
         });
         $httpBackend.flush();
