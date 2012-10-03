@@ -1,5 +1,5 @@
-<div class="row-fluid" ng-controller="SignInCtrl" >
-    <div class="span4 offset4 well" ng-show="authService.isLoginRequired()">
+<div class="row-fluid" ng-show="authService.isLoginRequired()">
+    <div class="span4 offset4 well">
         <h4>Sign in</h4>
         <hr>
         <div class="alert alert-error" ng-show="authError">
