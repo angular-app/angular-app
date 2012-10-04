@@ -91,7 +91,7 @@ angular.module('services.authentication').factory('AuthenticationRequestRetryQue
     },
     process: function(processFn) {
       while(service.hasMore()) {
-        processFn(queue.getNext());
+        processFn(service.getNext());
       }
     }
   };

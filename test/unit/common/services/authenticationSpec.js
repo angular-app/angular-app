@@ -93,6 +93,14 @@ describe('services.authentication', function() {
       it('should not fail if the queue is empty', function(){
         queue.process(function(item) {});
       });
+      it('should empty the queue', function() {
+        queue.pushRequest('request');
+        queue.pushRequest('request');
+        queue.pushRequest('request');
+        expect(queue.hasMore()).toBe(true);
+        queue.process(function(item) {});
+        expect(queue.hasMore()).toBe(false);
+      });
     });
     
   });
