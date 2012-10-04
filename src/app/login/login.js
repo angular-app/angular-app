@@ -30,6 +30,10 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
           }
         });
       };
+
+      $scope.cancel = function() {
+        AuthenticationService.cancelLogin();
+      };
     }
   };
   return directive;
