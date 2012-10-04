@@ -9,7 +9,7 @@
   - git clone git://github.com/angular-app/angular-app-server.git
   - cd angular-app-server
   - npm install
-  - sh server.js
+  - sh -e node server.js
   - sleep 3 # give server some time to start
 
  script: grunt release
