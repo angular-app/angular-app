@@ -73,7 +73,7 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
 //  - $http -> AuthenticationInterceptor -> AuthenticationRequestRetryQueue
 angular.module('services.authentication').factory('AuthenticationRequestRetryQueue', ['$rootScope', '$q', function($rootScope, $q) {
   var retryQueue = [];
-  service = {
+  var service = {
     pushRequest: function(request) {
       var deferred = $q.defer();
       retryQueue.push({ request: request, deferred: deferred});
