@@ -6,7 +6,7 @@
         <div class="alert alert-error" ng-show="authError">
             {{authError}}
         </div>
-        <form name="form">
+        <form name="form" ng-submit="login()" >
             <label>E-mail</label>
             <input name="login" type="text" ng-model="user.email" required autofocus>
             <label>Password</label>

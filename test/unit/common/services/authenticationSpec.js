@@ -89,6 +89,12 @@ describe('services.authentication', function() {
       expect(next.deferred.promise).toBe(promise);
     });
 
+    describe('process', function() {
+      it('should not fail if the queue is empty', function(){
+        queue.process(function(item) {});
+      });
+    });
+    
   });
 
   describe('AuthenticationInterceptor', function() {
@@ -130,37 +136,31 @@ describe('services.authentication', function() {
   });
 
   describe('AuthenticationService', function() {
-    var service;
+    var service, queue;
     beforeEach(inject(function($injector) {
       service = $injector.get('AuthenticationService');
+      queue = $injector.get('AuthenticationRequestRetryQueue');
     }));
 
-    describe('retryRequests', function() {
-      it('should not fail if the retryQueue is empty', function(){
-        service.retryRequests();
-        $httpBackend.flush();
-      });
-    });
-    
     describe('login', function() {
-      it('calls retryRequests if the user is authenticated', function() {
-        spyOn(service, 'retryRequests');
+      it('calls queue.process if the user is authenticated', function() {
+        spyOn(queue, 'process');
         spyOn(service, 'requestCurrentUser');
         $httpBackend.expect('POST', '/login');
         $httpBackend.when('POST', '/login').respond(200, {user: userInfo});
         service.login('email', 'password');
         $httpBackend.flush();
-        expect(service.retryRequests).toHaveBeenCalled();
+        expect(queue.process).toHaveBeenCalled();
         expect(service.requestCurrentUser).not.toHaveBeenCalled();
       });
-      it('does not call retryRequests if the user is not authenticated', function() {
-        spyOn(service, 'retryRequests');
+      it('does not call queue.process if the user is not authenticated', function() {
+        spyOn(queue, 'process');
         spyOn(service, 'requestCurrentUser');
         $httpBackend.expect('POST', '/login');
         $httpBackend.when('POST', '/login').respond(200, {user: null});
         service.login('email', 'password');
         $httpBackend.flush();
-        expect(service.retryRequests).not.toHaveBeenCalled();
+        expect(queue.process).not.toHaveBeenCalled();
         expect(service.requestCurrentUser).not.toHaveBeenCalled();
       });
     });

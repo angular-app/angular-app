@@ -7,6 +7,7 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
       $scope.user = {};
       $scope.authError = null;
       $scope.authService = AuthenticationService;
+      $scope.showLoginForm = false;
 
       $scope.clearForm = function() {
         $scope.user = {};

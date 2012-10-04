@@ -6,10 +6,17 @@ angular.module('services.authentication', []);
 // When the user has successfully logged in you call loginConfirmed to retry any queued requests.
 angular.module('services.authentication').factory('AuthenticationService', ['$http', '$location', 'AuthenticationRequestRetryQueue', function($http, $location, queue) {
 
-  function retryRequest (next) {
+  function retryRequest(next) {
     $http(next.request.config).then(function(response) {
       next.deferred.resolve(response);
     });
+  }
+
+  // TODO: We need a way to refresh the page to clear any data that has been loaded when the user logs out
+  //  a simple way would be to redirect to the root of the application but this feels a bit inflexible.
+  function redirect(url) {
+    url = url || '/';
+    $location.path(url);
   }
 
   var service = {
@@ -23,26 +30,17 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
         var user = response.data.user;
         if ( user !== null ) {
           service.currentUser = user;
-          service.retryRequests();
+          queue.process(retryRequest);
         }
         return user;
       });
     },
 
-    logout: function() {
+    logout: function(redirectTo) {
       $http.post('/logout').then(function() {
         service.currentUser = null;
-        // TODO: We need a way to refresh the page to clear any data that has been loaded when the user logs out
-        //  a simple way would be to redirect to the root of the application but this feels a bit inflexible.
-        $location.path('/');
+        redirect();
       });
-    },
-
-    // Retry the requests once the user has successfully logged in
-    retryRequests: function() {
-      while(queue.hasMore()) {
-        retryRequest(queue.getNext());
-      }
     },
 
     // Ask the backend to see if a users is already authenticated - this may be from a previous session.
@@ -52,6 +50,11 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
         service.currentUser = response.data.user;
         return response;
       });
+    },
+
+    cancelLogin: function(redirectTo) {
+      queue.clear();
+      redirect();
     }
   };
 
@@ -70,7 +73,7 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
 //  - $http -> AuthenticationInterceptor -> AuthenticationRequestRetryQueue
 angular.module('services.authentication').factory('AuthenticationRequestRetryQueue', ['$rootScope', '$q', function($rootScope, $q) {
   var retryQueue = [];
-  return {
+  service = {
     pushRequest: function(request) {
       var deferred = $q.defer();
       retryQueue.push({ request: request, deferred: deferred});
@@ -82,8 +85,17 @@ angular.module('services.authentication').factory('AuthenticationRequestRetryQue
     },
     getNext: function() {
       return retryQueue.shift();
+    },
+    clear: function() {
+      retryQueue = [];
+    },
+    process: function(processFn) {
+      while(service.hasMore()) {
+        processFn(queue.getNext());
+      }
     }
   };
+  return service;
 }]);
 
 // Simply intercept the request and add it to the retry queue if it is unauthorized
