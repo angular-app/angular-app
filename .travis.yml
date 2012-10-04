@@ -6,5 +6,10 @@
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - npm install -g grunt@0.3.x testacular@0.2.x
+  - git clone git://github.com/angular-app/angular-app-server.git
+  - cd angular-app-server
+  - npm install
+  - sh server.js
+  - sleep 3 # give server some time to start
 
- script: grunt
+ script: grunt release
