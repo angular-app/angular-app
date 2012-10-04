@@ -5,7 +5,7 @@ describe('my app', function() {
   });
 
   it('should automatically redirect to /signin when location hash/fragment is empty', function() {
-    expect(browser().location().path()).toBe("/signin");
+    expect(browser().location().path()).toBe("/dashboard");
   });
 
 });
