@@ -2,6 +2,10 @@
     <div class="navbar-inner">
         <a class="brand" href="#/dashboard">AScrum</a>
         <ul class="nav">
+            <li ng-class="{active:isNavbarActive('projectsInfo')}"><a href="#">Projects info</a></li>
+        </ul>
+
+        <ul class="nav" ng-show="authService.currentUser">
             <li ng-class="{active:isNavbarActive('projects')}"><a href="#/projects">My projects</a></li>
             <li class="dropdown" ng-class="{active:isNavbarActive('admin'), open:isAdminOpen}">
                 <a id="adminmenu" role="button" class="dropdown-toggle" ng-click="isAdminOpen=!isAdminOpen">Admin<b class="caret"></b></a>
@@ -13,12 +17,17 @@
         </ul>
         <ul class="nav pull-right">
             <li class="divider-vertical"></li>
-            <li>
+            <li ng-show="authService.currentUser">
                 <a href="#">{{authService.currentUser.firstName}} {{authService.currentUser.lastName}}</a>
             </li>
             <li ng-show="authService.currentUser">
                 <form class="navbar-form">
                     <button class="btn" ng-click="authService.logout()">Log out</button>
+                </form>
+            </li>
+            <li ng-show="!authService.currentUser">
+                <form class="navbar-form">
+                    <button class="btn">Log in</button>
                 </form>
             </li>
             <li class="divider-vertical"></li>
