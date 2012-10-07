@@ -1,10 +1,10 @@
 <table class="table table-bordered table-condensed table-striped table-hover">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>My Role(s)</th>
-        <th>Tools</th>
+        <th class="span3">Name</th>
+        <th class="span5">Description</th>
+        <th class="span2">My Role(s)</th>
+        <th class="span2">Tools</th>
     </tr>
     </thead>
     <tbody>
@@ -15,8 +15,8 @@
             {{project.getRoles(authService.currentUser.id)}}
         </td>
         <td>
-            <button class="btn btn-mini"  ng-click="manageBacklog(project.$id())">Product backlog</button>
-            <button class="btn btn-mini" ng-click="manageSprints(project.$id())">Sprints</button>
+            <a ng-click="manageBacklog(project.$id())">Product backlog</a>
+            <a ng-click="manageSprints(project.$id())">Sprints</a>
         </td>
     </tr>
     </tbody>

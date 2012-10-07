@@ -1,15 +1,15 @@
 <table class="table table-bordered table-condensed table-striped table-hover">
     <thead>
     <tr>
-        <th class="span6">Name</th>
-        <th class="span2">Estimation</th>
-        <th class="span2">Remaining</th>
+        <th class="span8">Name</th>
+        <th class="span1">Estimation</th>
+        <th class="span1">Remaining</th>
         <th class="span2">Tools</th>
     </tr>
     </thead>
     <tbody>
     <tr ng-repeat="task in tasks">
-        <td>{{task.name}}</td>
+        <td ng-click="edit(task)">{{task.name}}</td>
         <td>{{task.estimation}}</td>
         <td>{{task.remaining}}</td>
         <td></td>

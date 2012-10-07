@@ -11,6 +11,20 @@ angular.module('tasks').config(['$routeProvider', 'routeCRUDProvider', function 
     }
   });
 
+  var getsprintBacklogItems = function (Sprints, ProductBacklog, $route) {
+    var sprintPromise = Sprints.getById($route.current.params.sprintId);
+    return sprintPromise.then(function (sprint) {
+      return ProductBacklog.getByIds(sprint.sprintBacklog);
+    });
+  };
+
+  var getTeamMembers = function (Projects, Users, $route) {
+    var projectPromise = Projects.getById($route.current.params.projectId);
+    return projectPromise.then(function(project){
+      return Users.getByIds(project.teamMembers);
+    });
+  };
+
   $routeProvider.when('/projects/:projectId/sprints/:sprintId/tasks/new', {
     templateUrl:'projects/sprints/tasks/tasks-edit.tpl.html',
     controller:'TasksEditCtrl',
@@ -22,18 +36,20 @@ angular.module('tasks').config(['$routeProvider', 'routeCRUDProvider', function 
           state:Tasks.statesEnum[0]
         });
       }],
-      sprintBacklogItems:['Sprints', 'ProductBacklog', '$route', function (Sprints, ProductBacklog, $route) {
-        var sprintPromise = Sprints.getById($route.current.params.sprintId);
-        return sprintPromise.then(function (sprint) {
-          return ProductBacklog.getByIds(sprint.sprintBacklog);
-        });
+      sprintBacklogItems:['Sprints', 'ProductBacklog', '$route', getsprintBacklogItems],
+      teamMembers:['Projects', 'Users', '$route', getTeamMembers]
+    }
+  });
+
+  $routeProvider.when('/projects/:projectId/sprints/:sprintId/tasks/:taskId', {
+    templateUrl:'projects/sprints/tasks/tasks-edit.tpl.html',
+    controller:'TasksEditCtrl',
+    resolve:{
+      task:['Tasks', '$route', function (Tasks, $route) {
+        return Tasks.getById($route.current.params.taskId);
       }],
-      teamMembers:['Projects', 'Users', '$route', function (Projects, Users, $route) {
-        var projectPromise = Projects.getById($route.current.params.projectId);
-        return projectPromise.then(function(project){
-           return Users.getByIds(project.teamMembers);
-        });
-      }]
+      sprintBacklogItems:['Sprints', 'ProductBacklog', '$route', getsprintBacklogItems],
+      teamMembers:['Projects', 'Users', '$route', getTeamMembers]
     }
   });
 }]);
@@ -45,6 +61,12 @@ angular.module('tasks').controller('TasksListCtrl', ['$scope', '$location', '$ro
     var projectId = $route.current.params.projectId;
     var sprintId = $route.current.params.sprintId;
     $location.path('/projects/' + projectId + '/sprints/' + sprintId + '/tasks/new');
+  };
+
+  $scope.edit = function (task) {
+    var projectId = $route.current.params.projectId;
+    var sprintId = $route.current.params.sprintId;
+    $location.path('/projects/' + projectId + '/sprints/' + sprintId + '/tasks/'+task.$id());
   };
 }]);
 
