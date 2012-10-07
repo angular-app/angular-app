@@ -1,4 +1,4 @@
-angular.module('sprints', ['services.sprints', 'services.crud']);
+angular.module('sprints', ['services.sprints', 'services.crud', 'tasks']);
 angular.module('sprints').config(['$routeProvider', 'routeCRUDProvider', function($routeProvider, routeCRUDProvider){
 
   var getProjectId = function(Sprints, ProductBacklog, $route) {
@@ -38,6 +38,10 @@ angular.module('sprints').controller('SprintsListCtrl', ['$scope', '$location', 
   $scope.edit = function (id) {
     $location.path('/projects/'+projectId+'/sprints/'+id);
   };
+
+  $scope.tasks = function (sprint) {
+    $location.path('/projects/'+projectId+'/sprints/'+sprint.$id()+'/tasks');
+  };
 }]);
 
 angular.module('sprints').controller('SprintsEditCtrl', ['$scope', '$location', 'crudMethods', 'projectId', 'sprint', 'productBacklog', function($scope, $location, crudMethods, projectId, sprint, productBacklog){
@@ -50,39 +54,32 @@ angular.module('sprints').controller('SprintsEditCtrl', ['$scope', '$location', 
   }));
   $scope.sprint.sprintBacklog = $scope.sprint.sprintBacklog || [];
 
-  $scope.addBacklogItem = function (backlogItem) {
-    $scope.sprint.sprintBacklog.push({
-      backlogItemId:backlogItem.$id(),
-      name:backlogItem.name,
-      estimation:backlogItem.estimation,
-      tasks:[]
-    });
-  };
+  $scope.productBacklogLookup = {};
+  angular.forEach($scope.productBacklog, function (productBacklogItem) {
+    $scope.productBacklogLookup[productBacklogItem.$id()] = productBacklogItem;
+  });
 
   $scope.viewProductBacklogItem = function (productBacklogItemId) {
     $location.path('/projects/'+projectId+'/productbacklog/'+productBacklogItemId);
   };
 
-  $scope.removeSprintBacklogItem = function (sprintBacklogItem) {
-    $scope.sprint.sprintBacklog.splice($scope.sprint.sprintBacklog.indexOf(sprintBacklogItem),1);
+  $scope.addBacklogItem = function (backlogItem) {
+    $scope.sprint.sprintBacklog.push(backlogItem.$id());
+  };
+
+  $scope.removeBacklogItem = function (backlogItemId) {
+    $scope.sprint.sprintBacklog.splice($scope.sprint.sprintBacklog.indexOf(backlogItemId),1);
   };
 
   $scope.estimationInTotal = function () {
     var totalEstimation = 0;
-    angular.forEach(sprint.sprintBacklog, function (sprintBacklogItem) {
-      totalEstimation += sprintBacklogItem.estimation;
+    angular.forEach(sprint.sprintBacklog, function (backlogItemId) {
+      totalEstimation += $scope.productBacklogLookup[backlogItemId].estimation;
     });
     return totalEstimation;
   };
 
   $scope.notSelected = function (productBacklogItem) {
-    for (var i = 0; i < $scope.sprint.sprintBacklog.length; i++) {
-      var sprintBacklogItem = $scope.sprint.sprintBacklog[i];
-      if (sprintBacklogItem.backlogItemId === productBacklogItem.$id()){
-        return false;
-      }
-    }
-    return true;
+    return $scope.sprint.sprintBacklog.indexOf(productBacklogItem.$id())===-1;
   };
-
 }]);

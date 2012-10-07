@@ -33,10 +33,10 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="sprintBacklogItem in sprint.sprintBacklog">
-                    <td><a ng-click="viewProductBacklogItem(sprintBacklogItem.backlogItemId)">{{sprintBacklogItem.name}}</a></td>
-                    <td>{{sprintBacklogItem.estimation}}</td>
+                    <td><a ng-click="viewProductBacklogItem(sprintBacklogItem)">{{productBacklogLookup[sprintBacklogItem].name}}</a></td>
+                    <td>{{productBacklogLookup[sprintBacklogItem].estimation}}</td>
                     <td>
-                        <button class="btn btn-mini btn-danger" ng-click="removeSprintBacklogItem(sprintBacklogItem)">Remove</button>
+                        <button class="btn btn-mini btn-danger" ng-click="removeBacklogItem(sprintBacklogItem)">Remove</button>
                     </td>
                 </tr>
                 </tbody>
@@ -50,7 +50,7 @@
             </table>
         </div>
         <div class="span6">
-            <label>Product backlog (showing top 20 only)</label>
+            <label>Product backlog</label>
             <table class="table table-bordered table-condensed table-striped table-hover">
                 <thead>
                 <tr>

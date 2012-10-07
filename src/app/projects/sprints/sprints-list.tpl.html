@@ -5,17 +5,21 @@
         <th>Start date</th>
         <th>End date</th>
         <th>Status</th>
+        <th>Tools</th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="sprint in sprints" ng-click="edit(sprint.$id())">
-        <td>{{sprint.name}}</td>
-        <td>{{sprint.start}}</td>
-        <td>{{sprint.end}}</td>
-        <td>ACTIVE</td>
+    <tr ng-repeat="sprint in sprints">
+        <td ng-click="edit(sprint.$id())">{{sprint.name}}</td>
+        <td ng-click="edit(sprint.$id())">{{sprint.start}}</td>
+        <td ng-click="edit(sprint.$id())">{{sprint.end}}</td>
+        <td ng-click="edit(sprint.$id())">ACTIVE</td>
+        <td>
+            <button type="button" class="btn btn-mini" ng-click="tasks(sprint)">Tasks</button>
+        </td>
     </tr>
     <tr ng-show="!sprints.length">
-        <td colspan="4">No sprints defined</td>
+        <td colspan="5">No sprints defined</td>
     </tr>
     </tbody>
 </table>

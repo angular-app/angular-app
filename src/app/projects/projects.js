@@ -1,4 +1,4 @@
-angular.module('projects', ['productbacklog', 'sprints', 'services.projects'], ['$routeProvider', function ($routeProvider) {
+angular.module('projects', ['services.projects', 'productbacklog', 'sprints'], ['$routeProvider', function ($routeProvider) {
   $routeProvider.when('/projects', {
     templateUrl:'projects/projects-list.tpl.html',
     controller:'ProjectsViewCtrl',
@@ -21,7 +21,6 @@ angular.module('projects').controller('ProjectsViewCtrl', ['$scope', '$location'
   $scope.manageBacklog = function (projectId) {
     $location.path('/projects/'+projectId+'/productbacklog');
   };
-
 
   $scope.manageSprints = function (projectId) {
     $location.path('/projects/'+projectId+'/sprints');

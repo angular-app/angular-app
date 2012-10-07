@@ -3,7 +3,7 @@
     <tr>
         <th>Name</th>
         <th>Description</th>
-        <th>My Role</th>
+        <th>My Role(s)</th>
         <th>Tools</th>
     </tr>
     </thead>
@@ -11,7 +11,9 @@
     <tr ng-repeat="project in projects">
         <td ng-click="manageBacklog(project.$id())">{{project.name}}</td>
         <td ng-click="manageBacklog(project.$id())">{{project.desc}}</td>
-        <td>TODO</td>
+        <td>
+            {{project.getRoles(authService.currentUser.id)}}
+        </td>
         <td>
             <button class="btn btn-mini"  ng-click="manageBacklog(project.$id())">Product backlog</button>
             <button class="btn btn-mini" ng-click="manageSprints(project.$id())">Sprints</button>

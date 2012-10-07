@@ -10,7 +10,7 @@ angular.module('directives.modal', []).directive('modal', ['$parse', function($p
 
       $element.modal({ backdrop: $attrs.backdrop, keyboard: $attrs.keyboard, show: showFn($scope) });
 
-      $scope.$watch(showFn, function(value) {
+      $scope.$watch($attrs.show, function(value) {
         if ( value ) {
           $element.modal('show');
         } else {

@@ -3,8 +3,8 @@ angular.module('services.projects').factory('Projects', ['mongolabResource', fun
 
   var Projects = $mongolabResource('projects');
 
-  //TODO: actually this query should be done more on the server side...
   Projects.forUser = function(userId, successcb, errorcb) {
+    //TODO: get projects for this user only (!)
     return Projects.query({}, successcb, errorcb);
   };
 
@@ -25,6 +25,21 @@ angular.module('services.projects').factory('Projects', ['mongolabResource', fun
   };
   Projects.prototype.canActAsDevTeamMember = function (userId) {
     return !this.isProductOwner(userId);
+  };
+
+  Projects.prototype.getRoles = function (userId) {
+    var roles = [];
+    if (this.isProductOwner(userId)) {
+      roles.push('PO');
+    } else {
+      if (this.isScrumMaster(userId)){
+        roles.push('SM');
+      }
+      if (this.isDevTeamMember(userId)){
+        roles.push('DEV');
+      }
+    }
+    return roles;
   };
 
   return Projects;
