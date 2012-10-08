@@ -33,15 +33,31 @@ app.use(function(req, res, next) {
   next();
 });
 
-// Proxy database calls to the MongoDB
-app.use('/databases', security.authenticationRequired);
+app.use('/databases', function(req, res, next) {
+  if ( req.method !== 'GET' ) {
+    // We require the user is authenticated to modify any collections
+    security.authenticationRequired(req, res, next);
+  } else {
+    next();
+  }
+});
 app.use('/databases/ascrum/collections/users', function(req, res, next) {
   if ( req.method !== 'GET' ) {
+    // We require the current user to be admin to modify the users collection
     security.adminRequired(req, res, next);
   } else {
     next();
   }
 });
+app.use('/databases/ascrum/collections/projects', function(req, res, next) {
+  if ( req.method !== 'GET' ) {
+    // We require the current user to be admin to modify the projects collection
+    security.adminRequired(req, res, next);
+  } else {
+    next();
+  }
+});
+// Proxy database calls to the MongoDB
 app.use('/databases', mongoProxy(config.mongo.dbUrl, config.mongo.apiKey));
 
 app.post('/login', security.login);
