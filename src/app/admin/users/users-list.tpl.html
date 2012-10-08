@@ -7,7 +7,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in users" ng-click="edit(user)">
+    <tr ng-repeat="user in users" ng-click="edit(user.$id())">
         <td>{{user.email}}</td>
         <td>{{user.lastName}}</td>
         <td>{{user.firstName}}</td>
