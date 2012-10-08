@@ -1,17 +1,17 @@
 <div class="navbar">
     <div class="navbar-inner">
-        <a class="brand" href="#/dashboard">AScrum</a>
+        <a class="brand" href="/">AScrum</a>
         <ul class="nav">
-            <li ng-class="{active:isNavbarActive('projectsInfo')}"><a href="#">Projects info</a></li>
+            <li ng-class="{active:isNavbarActive('projectsInfo')}"><a>Projects info</a></li>
         </ul>
 
         <ul class="nav" ng-show="authService.currentUser">
-            <li ng-class="{active:isNavbarActive('projects')}"><a href="#/projects">My projects</a></li>
+            <li ng-class="{active:isNavbarActive('projects')}"><a href="/projects">My projects</a></li>
             <li class="dropdown" ng-class="{active:isNavbarActive('admin'), open:isAdminOpen}">
                 <a id="adminmenu" role="button" class="dropdown-toggle" ng-click="isAdminOpen=!isAdminOpen">Admin<b class="caret"></b></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="adminmenu">
-                    <li><a tabindex="-1" href="#/admin/projects" ng-click="isAdminOpen=false">Projects</a></li>
-                    <li><a tabindex="-1" href="#/admin/users" ng-click="isAdminOpen=false">Users</a></li>
+                    <li><a tabindex="-1" href="/admin/projects" ng-click="isAdminOpen=false">Projects</a></li>
+                    <li><a tabindex="-1" href="/admin/users" ng-click="isAdminOpen=false">Users</a></li>
                 </ul>
             </li>
         </ul>
@@ -31,7 +31,7 @@
                 </form>
             </li>
             <li class="divider-vertical"></li>
-            <li><a href="#"><img src="static/img/spinner.gif" ng-show="hasPendingRequests()"></a></li>
+            <li><a href="#"><img src="/static/img/spinner.gif" ng-show="hasPendingRequests()"></a></li>
         </ul>
     </div>
     <div>
@@ -40,7 +40,7 @@
                 <span class="divider">/</span>
                 <ng-switch on="$last">
                     <span ng-switch-when="true">{{breadcrumb}}</span>
-                    <span ng-switch-default><a href="#{{breadcrumbPath($index)}}">{{breadcrumb}}</a></span>
+                    <span ng-switch-default><a href="{{breadcrumbPath($index)}}">{{breadcrumb}}</a></span>
                 </ng-switch>
             </li>
         </ul>

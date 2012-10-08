@@ -54,29 +54,21 @@ angular.module('tasks').config(['$routeProvider', 'routeCRUDProvider', function 
   });
 }]);
 
-angular.module('tasks').controller('TasksListCtrl', ['$scope', '$location', '$route', 'tasks', function ($scope, $location, $route, tasks) {
+angular.module('tasks').controller('TasksListCtrl', ['$scope', 'crudListMethods', '$route', 'tasks', function ($scope, crudListMethods, $route, tasks) {
   $scope.tasks = tasks;
 
-  $scope['new'] = function () {
-    var projectId = $route.current.params.projectId;
-    var sprintId = $route.current.params.sprintId;
-    $location.path('/projects/' + projectId + '/sprints/' + sprintId + '/tasks/new');
-  };
-
-  $scope.edit = function (task) {
-    var projectId = $route.current.params.projectId;
-    var sprintId = $route.current.params.sprintId;
-    $location.path('/projects/' + projectId + '/sprints/' + sprintId + '/tasks/'+task.$id());
-  };
+  var projectId = $route.current.params.projectId;
+  var sprintId = $route.current.params.sprintId;
+  angular.extend($scope, crudListMethods('/projects/' + projectId + '/sprints/' + sprintId + '/tasks/new'));
 }]);
 
-angular.module('tasks').controller('TasksEditCtrl', ['$scope', '$location', '$route', 'crudMethods', 'Tasks', 'sprintBacklogItems', 'teamMembers', 'task', function ($scope, $location, $route, crudMethods, Tasks, sprintBacklogItems, teamMembers, task) {
+angular.module('tasks').controller('TasksEditCtrl', ['$scope', '$location', '$route', 'crudEditMethods', 'Tasks', 'sprintBacklogItems', 'teamMembers', 'task', function ($scope, $location, $route, crudEditMethods, Tasks, sprintBacklogItems, teamMembers, task) {
   $scope.task = task;
   $scope.statesEnum = Tasks.statesEnum;
   $scope.sprintBacklogItems = sprintBacklogItems;
   $scope.teamMembers = teamMembers;
 
-  angular.extend($scope, crudMethods('task', task, 'form', function () {
+  angular.extend($scope, crudEditMethods('task', task, 'form', function () {
     $location.path('/admin/users');
   }, function() {
     $scope.updateError = true;

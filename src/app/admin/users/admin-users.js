@@ -13,18 +13,16 @@ angular.module('admin-users', ['services.crud'], ['$routeProvider', 'routeCRUDPr
   });
 }]);
 
-angular.module('admin-users').controller('UsersListCtrl', ['$scope', '$location', 'users', function ($scope, $location, users) {
+angular.module('admin-users').controller('UsersListCtrl', ['$scope', 'crudListMethods', 'users', function ($scope, crudListMethods, users) {
   $scope.users = users;
 
-  $scope.itemView = function (item) {
-    $location.path('/admin/users/' + item.$id());
-  };
+  angular.extend($scope, crudListMethods('/admin/users'));
 }]);
 
-angular.module('admin-users').controller('UsersEditCtrl', ['$scope', '$location', 'crudMethods', 'user', function ($scope, $location, crudMethods, user) {
+angular.module('admin-users').controller('UsersEditCtrl', ['$scope', '$location', 'crudEditMethods', 'user', function ($scope, $location, crudEditMethods, user) {
 
   $scope.password = user.password;
-  angular.extend($scope, crudMethods('item', user, 'form', function () {
+  angular.extend($scope, crudEditMethods('item', user, 'form', function () {
     $location.path('/admin/users');
   }, function() {
     $scope.updateError = true;

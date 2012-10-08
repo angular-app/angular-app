@@ -1,12 +1,12 @@
 angular.module('app', ['login', 'dashboard', 'projects', 'admin', 'services.util', 'directives.crud', 'templates']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
-//  baseUrl: 'https://api.mongolab.com/api/1/databases/',
   baseUrl: 'http://localhost:3000/databases/',
   dbName: 'ascrum'
 });
 
-angular.module('app').config(['$routeProvider', function ($routeProvider) {
+angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode(true);
   $routeProvider.otherwise({redirectTo:'/dashboard'});
 }]);
 

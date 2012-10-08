@@ -17,16 +17,13 @@ angular.module('admin-projects', ['services.projects', 'services.users', 'servic
   });
 }]);
 
-angular.module('admin-projects').controller('ProjectsListCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
-
+angular.module('admin-projects').controller('ProjectsListCtrl', ['$scope', 'crudListMethods', 'projects', function ($scope, crudListMethods, projects) {
   $scope.projects = projects;
 
-  $scope.itemView = function (item) {
-    $location.path('/admin/projects/' + item.$id());
-  };
+  angular.extend($scope, crudListMethods('/admin/projects'));
 }]);
 
-angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$location', 'crudMethods', 'users', 'project', function ($scope, $location, crudMethods, users, project) {
+angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$location', 'crudEditMethods', 'users', 'project', function ($scope, $location, crudEditMethods, users, project) {
 
   $scope.selTeamMember = undefined;
 
@@ -37,7 +34,7 @@ angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$loc
     $scope.usersLookup[value.$id()] = value;
   });
 
-  angular.extend($scope, crudMethods('item', project, 'form', function () {
+  angular.extend($scope, crudEditMethods('item', project, 'form', function () {
     $location.path('/admin/projects');
   }, function () {
     $scope.updateError = true;

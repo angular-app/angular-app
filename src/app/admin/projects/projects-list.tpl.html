@@ -6,12 +6,12 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="project in projects" ng-click="itemView(project)">
+    <tr ng-repeat="project in projects" ng-click="edit(project.$id())">
         <td>{{project.name}}</td>
         <td>{{project.desc}}</td>
     </tr>
     </tbody>
 </table>
 <div class="well">
-    <a ng-href="#/admin/projects/new" class="btn">New Project</a>
+    <button class="btn" ng-click="new()">New Project</button>
 </div>

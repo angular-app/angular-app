@@ -1,5 +1,5 @@
 angular.module('services.crud', []);
-angular.module('services.crud').factory('crudMethods', function () {
+angular.module('services.crud').factory('crudEditMethods', function () {
 
   return function (itemName, item, formName, successcb, errorcb) {
 
@@ -39,6 +39,24 @@ angular.module('services.crud').factory('crudMethods', function () {
     return mixin;
   };
 });
+
+angular.module('services.crud').factory('crudListMethods', ['$location', function ($location) {
+
+  return function (pathPrefix) {
+
+    var mixin = {};
+
+    mixin['new'] = function () {
+      $location.path(pathPrefix+'/new');
+    };
+
+    mixin['edit'] = function (itemId) {
+      $location.path(pathPrefix+'/'+itemId);
+    };
+
+    return mixin;
+  };
+}]);
 
 angular.module('services.crud').provider('routeCRUD', function () {
 
