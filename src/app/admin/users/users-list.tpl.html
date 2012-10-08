@@ -7,7 +7,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="user in users" ng-click="itemView(user)">
+    <tr ng-repeat="user in users" ng-click="edit(user)">
         <td>{{user.email}}</td>
         <td>{{user.lastName}}</td>
         <td>{{user.firstName}}</td>
@@ -15,5 +15,5 @@
     </tbody>
 </table>
 <div class="well">
-    <a href="#/admin/users/new" class="btn">New User</a>
+    <button class="btn" ng-click="new()">New User</button>
 </div>

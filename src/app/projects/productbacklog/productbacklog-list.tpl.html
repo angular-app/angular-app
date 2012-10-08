@@ -8,7 +8,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="backlogItem in backlog" ng-click="showBacklogItem(backlogItem.$id())">
+    <tr ng-repeat="backlogItem in backlog" ng-click="edit(backlogItem.$id())">
         <td>{{backlogItem.name}}</td>
         <td>{{backlogItem.desc}}</td>
         <td>{{backlogItem.priority}}</td>
@@ -20,5 +20,5 @@
     </tbody>
 </table>
 <div class="well">
-    <button class="btn" ng-click="newBacklogItem()">New backlog item</button>
+    <button class="btn" ng-click="new()">New backlog item</button>
 </div>

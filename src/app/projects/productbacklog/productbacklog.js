@@ -30,21 +30,15 @@ angular.module('productbacklog').config(['$routeProvider', 'routeCRUDProvider', 
   });
 }]);
 
-angular.module('productbacklog').controller('ProductBacklogListCtrl', ['$scope', '$location', 'projectId', 'backlog', function($scope, $location, projectId, backlog){
+angular.module('productbacklog').controller('ProductBacklogListCtrl', ['$scope', 'crudListMethods', 'projectId', 'backlog', function($scope, crudListMethods, projectId, backlog){
   $scope.backlog = backlog;
 
-  $scope.newBacklogItem = function () {
-    $location.path('/projects/'+projectId+'/productbacklog/new');
-  };
-
-  $scope.showBacklogItem = function (backlogItemId) {
-    $location.path('/projects/'+projectId+'/productbacklog/'+backlogItemId);
-  };
+  angular.extend($scope, crudListMethods('/projects/'+projectId+'/productbacklog'));
 }]);
 
-angular.module('productbacklog').controller('ProductBacklogEditCtrl', ['$scope', '$location', 'crudMethods', 'projectId', 'backlogItem', function($scope, $location, crudMethods, projectId, backlogItem){
+angular.module('productbacklog').controller('ProductBacklogEditCtrl', ['$scope', '$location', 'crudEditMethods', 'projectId', 'backlogItem', function($scope, $location, crudEditMethods, projectId, backlogItem){
 
-  angular.extend($scope, crudMethods('item', backlogItem, 'form', function () {
+  angular.extend($scope, crudEditMethods('item', backlogItem, 'form', function () {
     $location.path('/projects/'+projectId+'/productbacklog');
   }, function () {
     $scope.updateError = true;

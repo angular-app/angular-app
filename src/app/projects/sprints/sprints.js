@@ -28,26 +28,20 @@ angular.module('sprints').config(['$routeProvider', 'routeCRUDProvider', functio
   });
 }]);
 
-angular.module('sprints').controller('SprintsListCtrl', ['$scope', '$location', 'projectId', 'sprints', function($scope, $location, projectId, sprints){
+angular.module('sprints').controller('SprintsListCtrl', ['$scope', '$location', 'crudListMethods', 'projectId', 'sprints', function($scope, $location, crudListMethods, projectId, sprints){
   $scope.sprints = sprints;
 
-  $scope['new'] = function(){
-    $location.path('/projects/'+projectId+'/sprints/new');
-  };
-
-  $scope.edit = function (id) {
-    $location.path('/projects/'+projectId+'/sprints/'+id);
-  };
+  angular.extend($scope, crudListMethods('/projects/'+projectId+'/sprints'));
 
   $scope.tasks = function (sprint) {
     $location.path('/projects/'+projectId+'/sprints/'+sprint.$id()+'/tasks');
   };
 }]);
 
-angular.module('sprints').controller('SprintsEditCtrl', ['$scope', '$location', 'crudMethods', 'projectId', 'sprint', 'productBacklog', function($scope, $location, crudMethods, projectId, sprint, productBacklog){
+angular.module('sprints').controller('SprintsEditCtrl', ['$scope', '$location', 'crudEditMethods', 'projectId', 'sprint', 'productBacklog', function($scope, $location, crudEditMethods, projectId, sprint, productBacklog){
 
   $scope.productBacklog = productBacklog;
-  angular.extend($scope, crudMethods('sprint', sprint, 'form', function () {
+  angular.extend($scope, crudEditMethods('sprint', sprint, 'form', function () {
     $location.path('/projects/'+projectId+'/sprints');
   }, function () {
     $scope.updateError = true;
