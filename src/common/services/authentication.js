@@ -1,10 +1,22 @@
 // Based loosely around work by Witold Szczerba - https://github.com/witoldsz/angular-http-auth
 angular.module('services.authentication', []);
 
+// The current user.  You can watch this for changes due to logging in and out
+angular.module('services.authentication').factory('currentUser', function() {
+  var userInfo = null;
+  var currentUser = {
+    update: function(info) { userInfo = info; },
+    info: function() { return userInfo; },
+    isAuthenticated: function(){ return !!userInfo; },
+    isAdmin: function() { return !!(userInfo && userInfo.admin); }
+  };
+  return currentUser;
+});
+
 // The AuthenticationService is the public API for this module.  Application developers should only need to use this service and not any of the others here.
 // The general idea is that you watch isLoginRequired for a change to true.  This happens when a http request returns 401 unauthorized. When this happens you need to show your login dialog box.
 // When the user has successfully logged in you call loginConfirmed to retry any queued requests.
-angular.module('services.authentication').factory('AuthenticationService', ['$http', '$location', 'AuthenticationRequestRetryQueue', function($http, $location, queue) {
+angular.module('services.authentication').factory('AuthenticationService', ['$rootScope', '$http', '$location', 'AuthenticationRequestRetryQueue', 'currentUser', function($rootScope, $http, $location, queue, currentUser) {
 
   function retryRequest(next) {
     $http(next.request.config).then(function(response) {
@@ -20,25 +32,27 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
   }
 
   var service = {
-    // The info about the current authenticated user after a login
-    currentUser: null,
-
     // Login to the back end - on success will trigger
     login: function(email, password) {
       var request = $http.post('/login', {email: email, password: password});
       return request.then(function(response) {
         var user = response.data.user;
+        currentUser.update(user);
         if ( user !== null ) {
-          service.currentUser = user;
           queue.process(retryRequest);
         }
         return user;
       });
     },
 
+    showLogin: function(reason) {
+      reason = reason || 'login';
+      $rootScope.$broadcast('AuthenticationService.' + reason);
+    },
+
     logout: function(redirectTo) {
       $http.post('/logout').then(function() {
-        service.currentUser = null;
+        currentUser.update(null);
         redirect();
       });
     },
@@ -47,7 +61,7 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
     // The app should probably do this at start up
     requestCurrentUser: function() {
       return $http.get('/current-user').then(function(response) {
-        service.currentUser = response.data.user;
+        currentUser.update(response.data.user);
         return response;
       });
     },
@@ -57,6 +71,18 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
       redirect();
     }
   };
+
+  // Watch the retry queue and raise an event if the queue goes from no items to some items
+  $rootScope.$watch(function() { return queue.hasMore(); }, function(value, oldValue, other) {
+    if ( value ) {
+      if ( currentUser.isAuthenticated() ) {
+        // If a user is already logged in then they must not have the required permissions
+        service.showLogin('unauthorized');
+      } else {
+        service.showLogin('unauthenticated');
+      }
+    }
+  });
 
   // Get the current user when the controller is instantiated - this could be put in the main app controller so that it is only called once??
   service.requestCurrentUser();
@@ -71,13 +97,12 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
 // In this case we have:
 //  - AuthenticationService -> [AuthenticationRequestRetryQueue, $http]
 //  - $http -> AuthenticationInterceptor -> AuthenticationRequestRetryQueue
-angular.module('services.authentication').factory('AuthenticationRequestRetryQueue', ['$rootScope', '$q', function($rootScope, $q) {
+angular.module('services.authentication').factory('AuthenticationRequestRetryQueue', ['$q', function($q) {
   var retryQueue = [];
   var service = {
     pushRequest: function(request) {
       var deferred = $q.defer();
       retryQueue.push({ request: request, deferred: deferred});
-      $rootScope.$broadcast('AuthenticationService.unauthorized', request);
       return deferred.promise;
     },
     hasMore: function() {
