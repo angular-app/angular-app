@@ -4,7 +4,7 @@ angular.module('services.authentication', []);
 // The AuthenticationService is the public API for this module.  Application developers should only need to use this service and not any of the others here.
 // The general idea is that you watch isLoginRequired for a change to true.  This happens when a http request returns 401 unauthorized. When this happens you need to show your login dialog box.
 // When the user has successfully logged in you call loginConfirmed to retry any queued requests.
-angular.module('services.authentication').factory('AuthenticationService', ['$http', '$location', 'AuthenticationRequestRetryQueue', function($http, $location, queue) {
+angular.module('services.authentication').factory('AuthenticationService', ['$rootScope', '$http', '$location', 'AuthenticationRequestRetryQueue', function($rootScope, $http, $location, queue) {
 
   function retryRequest(next) {
     $http(next.request.config).then(function(response) {
@@ -36,6 +36,11 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
       });
     },
 
+    showLogin: function(reason) {
+      reason = reason || 'login';
+      $rootScope.$broadcast('AuthenticationService.' + reason);
+    },
+
     logout: function(redirectTo) {
       $http.post('/logout').then(function() {
         service.currentUser = null;
@@ -58,6 +63,20 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
     }
   };
 
+  // Watch the retry queue and raise an event if the queue goes from no items to some items
+  $rootScope.$watch(function() { return queue.hasMore(); }, function(value, oldValue, other) {
+    console.log(value, oldValue, other);
+    if ( value ) {
+      console.log('raising');
+      if ( service.currentUser ) {
+        // If a user is already logged in then they must not have the required permissions
+        service.showLogin('unauthorized');
+      } else {
+        service.showLogin('unauthenticated');
+      }
+    }
+  });
+
   // Get the current user when the controller is instantiated - this could be put in the main app controller so that it is only called once??
   service.requestCurrentUser();
 
@@ -71,13 +90,12 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
 // In this case we have:
 //  - AuthenticationService -> [AuthenticationRequestRetryQueue, $http]
 //  - $http -> AuthenticationInterceptor -> AuthenticationRequestRetryQueue
-angular.module('services.authentication').factory('AuthenticationRequestRetryQueue', ['$rootScope', '$q', function($rootScope, $q) {
+angular.module('services.authentication').factory('AuthenticationRequestRetryQueue', ['$q', function($q) {
   var retryQueue = [];
   var service = {
     pushRequest: function(request) {
       var deferred = $q.defer();
       retryQueue.push({ request: request, deferred: deferred});
-      $rootScope.$broadcast('AuthenticationService.unauthorized', request);
       return deferred.promise;
     },
     hasMore: function() {

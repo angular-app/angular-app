@@ -10,9 +10,8 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
   $routeProvider.otherwise({redirectTo:'/dashboard'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', '$location', '$route', 'AuthenticationService', 'HTTPRequestTracker', function ($scope, $location, $route, AuthenticationService, HTTPRequestTracker) {
+angular.module('app').controller('AppCtrl', ['$scope', '$location', '$route', 'HTTPRequestTracker', function ($scope, $location, $route, HTTPRequestTracker) {
   $scope.location = $location;
-  $scope.authService = AuthenticationService;
 
   $scope.isNavbarActive = function (navBarPath) {
     return navBarPath === $scope.pathElements[0];

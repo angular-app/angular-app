@@ -144,11 +144,67 @@ describe('services.authentication', function() {
   });
 
   describe('AuthenticationService', function() {
-    var service, queue;
+    var service, queue, $rootScope;
     beforeEach(inject(function($injector) {
       service = $injector.get('AuthenticationService');
       queue = $injector.get('AuthenticationRequestRetryQueue');
+      $rootScope = $injector.get('$rootScope');
     }));
+
+    describe('events', function() {
+      var removeEventHandler;
+      function spyOnAuthEvent(reason) {
+        var spy = jasmine.createSpy('eventHandler');
+        removeEventHandler = $rootScope.$on('AuthenticationService.' + reason, spy);
+        return spy;
+      }
+      function pushRequest() {
+        queue.pushRequest('request');
+        $rootScope.$digest();
+      }
+      function process() {
+        queue.process(function(){});
+        $rootScope.$digest();
+      }
+      afterEach(function() {
+        // Flush through the call to requestCurrent, which is not important here
+        $httpBackend.flush();
+      });
+      it('should raise an unauthenticated event when the current user is null and a request is added to an empty queue.', function() {
+        var spy = spyOnAuthEvent('unauthenticated');
+        pushRequest();
+        expect(spy).toHaveBeenCalled();
+      });
+
+      it('should raise an unauthenticated event when the current user is not null and a request is added to an empty queue.', function() {
+        var spy = spyOnAuthEvent('unauthorized');
+        service.currentUser = {};
+        pushRequest();
+        expect(spy).toHaveBeenCalled();
+      });
+
+      it('should not raise an event if a request is added to a non-empty queue.', function() {
+        pushRequest();
+        var spy = spyOnAuthEvent('unauthenticated');
+        pushRequest();
+        expect(spy).not.toHaveBeenCalled();
+      });
+
+      it('should raise an event if the queue is processed then a new item is added to the queue.', function() {
+        pushRequest();
+        process();
+        var spy = spyOnAuthEvent('unauthenticated');
+        pushRequest();
+        expect(spy).toHaveBeenCalled();
+      });
+
+      it("should raise a login event if showLogin is called", function() {
+        var spy = spyOnAuthEvent('login');
+        service.showLogin();
+        $rootScope.$digest();
+        expect(spy).toHaveBeenCalled();
+      });
+    });
 
     describe('login', function() {
       it('calls queue.process if the user is authenticated', function() {

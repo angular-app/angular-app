@@ -13,11 +13,21 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
         $scope.user = {};
       };
 
-      $scope.$on('AuthenticationService.unauthorized', function(event, request) {
+      $scope.showLogin = function() {
         $scope.showLoginForm = true;
-        if ( request.data.user ) {
-          $scope.authError = "You do not have the necessary access permissions.  Do you want to login as someone else?";
-        }
+      };
+
+      $scope.$on('AuthenticationService.login', function() {
+        $scope.authError = null;
+        $scope.showLogin();
+      });
+      $scope.$on('AuthenticationService.unauthenticated', function() {
+        $scope.authError = "You must be logged in to access this part of the application.";
+        $scope.showLogin();
+      });
+      $scope.$on('AuthenticationService.unauthorized', function() {
+        $scope.authError = "You do not have the necessary access permissions.  Do you want to login as someone else?";
+        $scope.showLogin();
       });
 
       $scope.login = function() {
@@ -35,6 +45,21 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
         AuthenticationService.cancelLogin();
         $scope.showLoginForm = false;
       };
+    }
+  };
+  return directive;
+}]);
+
+angular.module('login').directive('loginToolbar', ['AuthenticationService', function(AuthenticationService) {
+  var directive = {
+    templateUrl: 'login/toolbar.tpl.html',
+    restrict: 'E',
+    replace: true,
+    scope: true,
+    link: function($scope, $element, $attrs, $controller) {
+      $scope.$watch(function() { return AuthenticationService.currentUser; }, function(value) { $scope.currentUser = value; });
+      $scope.logout = function() { AuthenticationService.logout(); };
+      $scope.login = function() { AuthenticationService.showLogin(); };
     }
   };
   return directive;
