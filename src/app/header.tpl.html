@@ -1,13 +1,13 @@
-<div class="navbar">
+<div class="navbar" ng-controller="HeaderCtrl">
     <div class="navbar-inner">
         <a class="brand" href="/">AScrum</a>
         <ul class="nav">
             <li ng-class="{active:isNavbarActive('projectsInfo')}"><a>Projects info</a></li>
         </ul>
 
-        <ul class="nav" ng-show="authService.currentUser">
+        <ul class="nav" ng-show="currentUser.isAuthenticated()">
             <li ng-class="{active:isNavbarActive('projects')}"><a href="/projects">My projects</a></li>
-            <li class="dropdown" ng-class="{active:isNavbarActive('admin'), open:isAdminOpen}">
+            <li class="dropdown" ng-class="{active:isNavbarActive('admin'), open:isAdminOpen}" ng-show="currentUser.isAdmin()">
                 <a id="adminmenu" role="button" class="dropdown-toggle" ng-click="isAdminOpen=!isAdminOpen">Admin<b class="caret"></b></a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="adminmenu">
                     <li><a tabindex="-1" href="/admin/projects" ng-click="isAdminOpen=false">Projects</a></li>

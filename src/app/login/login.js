@@ -50,14 +50,15 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
   return directive;
 }]);
 
-angular.module('login').directive('loginToolbar', ['AuthenticationService', function(AuthenticationService) {
+angular.module('login').directive('loginToolbar', ['currentUser', 'AuthenticationService', function(currentUser, AuthenticationService) {
   var directive = {
     templateUrl: 'login/toolbar.tpl.html',
     restrict: 'E',
     replace: true,
     scope: true,
     link: function($scope, $element, $attrs, $controller) {
-      $scope.$watch(function() { return AuthenticationService.currentUser; }, function(value) { $scope.currentUser = value; });
+      $scope.userInfo = currentUser.info;
+      $scope.isAuthenticated = currentUser.isAuthenticated;
       $scope.logout = function() { AuthenticationService.logout(); };
       $scope.login = function() { AuthenticationService.showLogin(); };
     }

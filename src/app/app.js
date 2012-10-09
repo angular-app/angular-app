@@ -10,9 +10,12 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
   $routeProvider.otherwise({redirectTo:'/dashboard'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', '$location', '$route', 'HTTPRequestTracker', function ($scope, $location, $route, HTTPRequestTracker) {
-  $scope.location = $location;
+angular.module('app').controller('AppCtrl', [function() {}]);
 
+angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'currentUser', 'HTTPRequestTracker', function ($scope, $location, $route, currentUser, HTTPRequestTracker) {
+  $scope.location = $location;
+  $scope.currentUser = currentUser;
+  
   $scope.isNavbarActive = function (navBarPath) {
     return navBarPath === $scope.pathElements[0];
   };

@@ -56,6 +56,34 @@ describe('services.authentication', function() {
     }
   });
 
+  describe("currentUser", function() {
+    it("should be unauthenticated to begin with", function() {
+      inject(function(currentUser) {
+        expect(currentUser.isAuthenticated()).toBe(false);
+        expect(currentUser.isAdmin()).toBe(false);
+        expect(currentUser.info()).toBe(null);
+      });
+    });
+    it("should be authenticated if we update with user info", function() {
+      inject(function(currentUser) {
+        var userInfo = {};
+        currentUser.update(userInfo);
+        expect(currentUser.isAuthenticated()).toBe(true);
+        expect(currentUser.isAdmin()).toBe(false);
+        expect(currentUser.info()).toBe(userInfo);
+      });
+    });
+    it("should be admin if we update with admin user info", function() {
+      inject(function(currentUser) {
+        var userInfo = { admin: true };
+        currentUser.update(userInfo);
+        expect(currentUser.isAuthenticated()).toBe(true);
+        expect(currentUser.isAdmin()).toBe(true);
+        expect(currentUser.info()).toBe(userInfo);
+      });
+    });
+  });
+
   describe('AuthenticationRequestRetryQueue', function() {
     var queue;
     beforeEach(inject(function($injector) {
@@ -148,6 +176,7 @@ describe('services.authentication', function() {
     beforeEach(inject(function($injector) {
       service = $injector.get('AuthenticationService');
       queue = $injector.get('AuthenticationRequestRetryQueue');
+      currentUser = $injector.get('currentUser');
       $rootScope = $injector.get('$rootScope');
     }));
 
@@ -178,7 +207,7 @@ describe('services.authentication', function() {
 
       it('should raise an unauthenticated event when the current user is not null and a request is added to an empty queue.', function() {
         var spy = spyOnAuthEvent('unauthorized');
-        service.currentUser = {};
+        currentUser.update({});
         pushRequest();
         expect(spy).toHaveBeenCalled();
       });
@@ -231,10 +260,11 @@ describe('services.authentication', function() {
 
     describe('requestCurrentUser', function() {
       it('makes a GET request to current-user url', function() {
-        expect(service.currentUser).toBe(null);
+        expect(currentUser.isAuthenticated()).toBe(false);
         $httpBackend.expect('GET', '/current-user');
         service.requestCurrentUser().then(function(data) {
-          expect(service.currentUser).toBe(userInfo);
+          expect(currentUser.isAuthenticated()).toBe(true);
+          expect(currentUser.info()).toBe(userInfo);
         });
         $httpBackend.flush();
       });
