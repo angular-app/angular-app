@@ -25,7 +25,7 @@ module.exports = function (grunt) {
     clean: ['<%= distdir %>/*'],
     copy: {
       assets: {
-        files: {'<%= distdir %>/': 'assets/**'}
+        files: {'<%= distdir %>/': 'src/assets/**'}
       }
     },
     test: {
