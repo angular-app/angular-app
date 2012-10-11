@@ -29,7 +29,7 @@ module.exports = function(grunt) {
     if (process.env.TRAVIS) {
       options.push('--browsers=Firefox');
     }
-    runTestacular('test-config-unit.js', options);
+    runTestacular('test/config/unit.js', options);
   });
 
   grunt.registerTask('e2e', 'run testacular e2e tests', function() {
@@ -37,6 +37,6 @@ module.exports = function(grunt) {
     if (process.env.TRAVIS) {
       options.push('--browsers=Firefox');
     }
-    runTestacular('test-config-e2e.js', options);
+    runTestacular('test/config/e2e.js', options);
   });
 };
