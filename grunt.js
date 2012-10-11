@@ -29,10 +29,11 @@ module.exports = function (grunt) {
       }
     },
     test: {
-      unit: ['test/unit/**/*Spec.js']
+      unit: ['test/unit/**/*Spec.js'],
+      e2e: ['test/e2e/**/*Spec.js']
     },
     lint:{
-      files:['grunt.js', '<config:src.js>', '<config:test.unit>']
+      files:['grunt.js', '<config:src.js>', '<config:test.unit>', '<config:test.e2e>']
     },
     html2js: {
       src: ['<config:src.tpl>'],
