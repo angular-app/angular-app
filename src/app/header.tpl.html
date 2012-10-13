@@ -1,8 +1,8 @@
 <div class="navbar" ng-controller="HeaderCtrl">
     <div class="navbar-inner">
-        <a class="brand" href="/">AScrum</a>
+        <a class="brand" ng-click="home()">AScrum</a>
         <ul class="nav">
-            <li ng-class="{active:isNavbarActive('projectsInfo')}"><a>Projects info</a></li>
+            <li ng-class="{active:isNavbarActive('projectsinfo')}"><a href="/projectsinfo">Projects info</a></li>
         </ul>
 
         <ul class="nav" ng-show="currentUser.isAuthenticated()">
