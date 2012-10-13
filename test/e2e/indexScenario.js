@@ -4,8 +4,7 @@ describe('my app', function() {
     browser().navigateTo('/');
   });
 
-  it('should automatically redirect to /signin when location hash/fragment is empty', function() {
-    expect(browser().location().path()).toBe("/dashboard");
+  it('publicly accessible and default route to be /projectsinfo', function() {
+    expect(browser().location().path()).toBe("/projectsinfo");
   });
-
 });
