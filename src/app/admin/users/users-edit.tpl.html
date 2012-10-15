@@ -4,7 +4,7 @@
     <div class="alert alert-error" ng-show="updateError">
         Update / delete error...
     </div>
-    <form name="form">
+    <form name="form" novalidate>
         <label>E-mail</label>
         <input class="span6" type="email" name="email" ng-model="item.email" required unique-email>
         <label>Last name</label>
