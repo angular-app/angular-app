@@ -13,7 +13,7 @@ angular.module('admin-users', ['services.crud'], ['$routeProvider', function ($r
     }
   });
   $routeProvider.when('/admin/users/new', {
-    templateUrl:'admin/users/user-edit.tpl.html',
+    templateUrl:'admin/users/users-edit.tpl.html',
     controller:'UsersEditCtrl',
     resolve:{
       user:['Users', function (Users) {
@@ -25,7 +25,7 @@ angular.module('admin-users', ['services.crud'], ['$routeProvider', function ($r
     }
   });
   $routeProvider.when('/admin/users/:userId', {
-    templateUrl:'admin/users/user-edit.tpl.html',
+    templateUrl:'admin/users/users-edit.tpl.html',
     controller:'UsersEditCtrl',
     resolve:{
       user:['$route', 'Users', function ($route, Users) {
