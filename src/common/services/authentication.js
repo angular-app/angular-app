@@ -16,7 +16,7 @@ angular.module('services.authentication').factory('currentUser', function() {
 // The AuthenticationService is the public API for this module.  Application developers should only need to use this service and not any of the others here.
 // The general idea is that you watch isLoginRequired for a change to true.  This happens when a http request returns 401 unauthorized. When this happens you need to show your login dialog box.
 // When the user has successfully logged in you call loginConfirmed to retry any queued requests.
-angular.module('services.authentication').factory('AuthenticationService', ['$rootScope', '$http', '$location', 'AuthenticationRequestRetryQueue', 'currentUser', function($rootScope, $http, $location, queue, currentUser) {
+angular.module('services.authentication').factory('AuthenticationService', ['$rootScope', '$http', '$location', '$q', 'AuthenticationRequestRetryQueue', 'currentUser', function($rootScope, $http, $location, $q, queue, currentUser) {
 
   function retryRequest(next) {
     $http(next.request.config).then(function(response) {
@@ -47,7 +47,11 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ro
 
     showLogin: function(reason) {
       reason = reason || 'login';
-      $rootScope.$broadcast('AuthenticationService.' + reason);
+      var cancel = function(redirectTo) {
+        queue.clear();
+        redirect(redirectTo);
+      };
+      $rootScope.$broadcast('AuthenticationService.loginRequired', reason, cancel);
     },
 
     logout: function(redirectTo) {
@@ -64,11 +68,6 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ro
         currentUser.update(response.data.user);
         return response;
       });
-    },
-
-    cancelLogin: function(redirectTo) {
-      queue.clear();
-      redirect();
     }
   };
 

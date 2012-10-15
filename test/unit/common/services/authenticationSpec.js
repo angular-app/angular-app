@@ -182,9 +182,9 @@ describe('services.authentication', function() {
 
     describe('events', function() {
       var removeEventHandler;
-      function spyOnAuthEvent(reason) {
+      function spyOnAuthEvent() {
         var spy = jasmine.createSpy('eventHandler');
-        removeEventHandler = $rootScope.$on('AuthenticationService.' + reason, spy);
+        removeEventHandler = $rootScope.$on('AuthenticationService.loginRequired', spy);
         return spy;
       }
       function pushRequest() {
@@ -200,21 +200,23 @@ describe('services.authentication', function() {
         $httpBackend.flush();
       });
       it('should raise an unauthenticated event when the current user is null and a request is added to an empty queue.', function() {
-        var spy = spyOnAuthEvent('unauthenticated');
+        var spy = spyOnAuthEvent();
         pushRequest();
         expect(spy).toHaveBeenCalled();
+        expect(spy.mostRecentCall.args[1]).toBe('unauthenticated');
       });
 
       it('should raise an unauthenticated event when the current user is not null and a request is added to an empty queue.', function() {
-        var spy = spyOnAuthEvent('unauthorized');
+        var spy = spyOnAuthEvent();
         currentUser.update({});
         pushRequest();
         expect(spy).toHaveBeenCalled();
+        expect(spy.mostRecentCall.args[1]).toBe('unauthorized');
       });
 
       it('should not raise an event if a request is added to a non-empty queue.', function() {
         pushRequest();
-        var spy = spyOnAuthEvent('unauthenticated');
+        var spy = spyOnAuthEvent();
         pushRequest();
         expect(spy).not.toHaveBeenCalled();
       });
@@ -222,16 +224,18 @@ describe('services.authentication', function() {
       it('should raise an event if the queue is processed then a new item is added to the queue.', function() {
         pushRequest();
         process();
-        var spy = spyOnAuthEvent('unauthenticated');
+        var spy = spyOnAuthEvent();
         pushRequest();
         expect(spy).toHaveBeenCalled();
+        expect(spy.mostRecentCall.args[1]).toBe('unauthenticated');
       });
 
       it("should raise a login event if showLogin is called", function() {
-        var spy = spyOnAuthEvent('login');
+        var spy = spyOnAuthEvent();
         service.showLogin();
         $rootScope.$digest();
         expect(spy).toHaveBeenCalled();
+        expect(spy.mostRecentCall.args[1]).toBe('login');
       });
     });
 
