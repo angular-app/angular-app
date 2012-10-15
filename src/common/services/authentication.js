@@ -68,6 +68,18 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ro
         currentUser.update(response.data.user);
         return response;
       });
+    },
+
+    requireAuthenticatedUser: function() {
+      return $http.get('/authenticated-user').then(function(response) {
+        currentUser.update(response.data.user);
+      });
+    },
+
+    requireAdminUser: function() {
+      return $http.get('/admin-user').then(function(response) {
+        currentUser.update(response.data.user);
+      });
     }
   };
 
