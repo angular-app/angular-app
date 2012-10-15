@@ -117,7 +117,8 @@ module.exports = {
         test.equal(status, 200);
         test.equal(userInfo.user.id, req.user._id.$oid);
         sendCalled = true;
-      }
+      },
+      end: function() {}
     };
     security.sendCurrentUser(req, res, null);
     test.ok(sendCalled);
