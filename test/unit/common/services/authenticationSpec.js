@@ -11,6 +11,8 @@ describe('services.authentication', function() {
     success = jasmine.createSpy('success');
     error = jasmine.createSpy('error');
     $httpBackend.when('GET', '/current-user').respond(200, { user: userInfo });
+    $httpBackend.when('GET', '/authenticated-user').respond(200, { user: userInfo });
+    $httpBackend.when('GET', '/admin-user').respond(200, { user: userInfo });
   }));
 
   afterEach(function() {
@@ -267,6 +269,30 @@ describe('services.authentication', function() {
         expect(currentUser.isAuthenticated()).toBe(false);
         $httpBackend.expect('GET', '/current-user');
         service.requestCurrentUser().then(function(data) {
+          expect(currentUser.isAuthenticated()).toBe(true);
+          expect(currentUser.info()).toBe(userInfo);
+        });
+        $httpBackend.flush();
+      });
+    });
+
+    describe('requireAuthenticatedUser', function() {
+      it('makes a GET request to authenticated-user url', function() {
+        expect(currentUser.isAuthenticated()).toBe(false);
+        $httpBackend.expect('GET', '/authenticated-user');
+        service.requireAuthenticatedUser().then(function(data) {
+          expect(currentUser.isAuthenticated()).toBe(true);
+          expect(currentUser.info()).toBe(userInfo);
+        });
+        $httpBackend.flush();
+      });
+    });
+
+    describe('requireAdminUser', function() {
+      it('makes a GET request to admin-user url', function() {
+        expect(currentUser.isAuthenticated()).toBe(false);
+        $httpBackend.expect('GET', '/admin-user');
+        service.requireAdminUser().then(function(data) {
           expect(currentUser.isAuthenticated()).toBe(true);
           expect(currentUser.info()).toBe(userInfo);
         });
