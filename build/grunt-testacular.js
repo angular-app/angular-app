@@ -21,7 +21,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test-watch', 'watch file changes and test', function() {
     var options = ['--auto-watch', '--no-single-run'];
-    runTestacular('test-config-unit.js', options);
+    runTestacular('test/config/unit.js', options);
   });
 
   grunt.registerTask('test', 'run testacular tests', function() {

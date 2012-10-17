@@ -1,4 +1,4 @@
-angular.module('app', ['login', 'projectsinfo', 'dashboard', 'projects', 'admin', 'services.breadcrumbs', 'services.util', 'directives.crud', 'templates']);
+angular.module('app', ['login', 'projectsinfo', 'dashboard', 'projects', 'admin', 'services.breadcrumbs', 'services.httpRequestTracker', 'directives.crud', 'templates']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
   baseUrl: 'http://localhost:3000/databases/',
@@ -12,7 +12,7 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
 
 angular.module('app').controller('AppCtrl', [function() {}]);
 
-angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'currentUser', 'breadcrumbs', 'HTTPRequestTracker', function ($scope, $location, $route, currentUser, breadcrumbs, HTTPRequestTracker) {
+angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'currentUser', 'breadcrumbs', 'httpRequestTracker', function ($scope, $location, $route, currentUser, breadcrumbs, httpRequestTracker) {
   $scope.location = $location;
   $scope.currentUser = currentUser;
   $scope.breadcrumbs = breadcrumbs;
@@ -30,7 +30,7 @@ angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route',
   };
 
   $scope.hasPendingRequests = function () {
-    return HTTPRequestTracker.hasPendingRequests();
+    return httpRequestTracker.hasPendingRequests();
   };
 
   $scope.$on('$routeChangeStart', function(event, next, current){
