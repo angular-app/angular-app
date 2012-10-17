@@ -11,20 +11,33 @@ describe('AuthenticationRetryQueue', function() {
     queue = $injector.get('AuthenticationRetryQueue');
   }));
 
-  it('initially has no items to retry', function() {
-    expect(queue.hasMore).toBeDefined();
-    expect(queue.hasMore()).toBe(false);
+  describe('hasMore', function() {
+    it('initially has no items to retry', function() {
+      expect(queue.hasMore).toBeDefined();
+      expect(queue.hasMore()).toBe(false);
+    });
+
+    it('has more items once one has been pushed', function() {
+      queue.push(mockRetryItem());
+      expect(queue.hasMore()).toBe(true);
+    });
   });
 
-  it('has more items once one has been pushed', function() {
-    queue.push(mockRetryItem());
-    expect(queue.hasMore()).toBe(true);
+  describe('pushPromiseFn', function() {
+    it('adds a new item to the queue', function() {
+      queue.pushPromiseFn(function() {});
+      var retryItem = queue.getNext();
+      expect(retryItem.retry).toBeDefined();
+      expect(retryItem.cancel).toBeDefined();
+    });
   });
 
-  it('has no more items once all items have been got', function() {
-    queue.push(mockRetryItem());
-    var next = queue.getNext();
-    expect(queue.hasMore()).toBe(false);
+  describe('getNext', function() {
+    it('has no more items once all items have been got', function() {
+      queue.push(mockRetryItem());
+      var next = queue.getNext();
+      expect(queue.hasMore()).toBe(false);
+    });
   });
 
   describe('retry', function() {

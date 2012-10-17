@@ -31,14 +31,7 @@ describe('services.authentication', function() {
       queue = $injector.get('AuthenticationRetryQueue');
     }));
 
-    describe('events', function() {
-
-      var removeEventHandler;
-      function spyOnAuthEvent() {
-        var spy = jasmine.createSpy('eventHandler');
-        removeEventHandler = $rootScope.$on('AuthenticationService.loginRequired', spy);
-        return spy;
-      }
+    describe('isLoginRequired', function() {
 
       function mockRetryItem() {
         return jasmine.createSpyObj('retryItem', ['retry', 'cancel']);
@@ -50,51 +43,72 @@ describe('services.authentication', function() {
       }
 
       function retryQueue() {
-        queue.retry(function(){});
+        queue.retry();
         $rootScope.$digest();
       }
+
+      function cancelQueue() {
+        queue.cancel();
+        $rootScope.$digest();
+      }
+
       afterEach(function() {
         // Flush through the call to requestCurrent, which is not important here
         $httpBackend.flush();
       });
 
-      it('should raise an unauthenticated event when the current user is null and a request is added to an empty queue.', function() {
-        var spy = spyOnAuthEvent();
+      it('should be true when the current user is null and a request is added to an empty queue.', function() {
         pushRetryItem();
-        expect(spy).toHaveBeenCalled();
-        expect(spy.mostRecentCall.args[1]).toBe('unauthenticated');
+        expect(service.isLoginRequired()).toBe(true);
       });
 
-      it('should raise an unauthenticated event when the current user is not null and a request is added to an empty queue.', function() {
-        var spy = spyOnAuthEvent();
+      it('should be true when the current user is not null and a request is added to an empty queue.', function() {
         currentUser.update({});
         pushRetryItem();
-        expect(spy).toHaveBeenCalled();
-        expect(spy.mostRecentCall.args[1]).toBe('unauthorized');
+        expect(service.isLoginRequired()).toBe(true);
       });
 
-      it('should not raise an event if a request is added to a non-empty queue.', function() {
+      it('should be true if a request is added to a non-empty queue.', function() {
         pushRetryItem();
-        var spy = spyOnAuthEvent();
         pushRetryItem();
-        expect(spy).not.toHaveBeenCalled();
+        expect(service.isLoginRequired()).toBe(true);
       });
 
-      it('should raise an event if the queue is processed then a new item is added to the queue.', function() {
+      it('should be false if no items have been added to the queue.', function() {
+        $rootScope.$digest();
+        expect(service.isLoginRequired()).toBe(false);
+      });
+
+      it('should be false if the queue has been retried.', function() {
+        pushRetryItem();
+        pushRetryItem();
+        expect(service.isLoginRequired()).toBe(true);
+        retryQueue();
+        expect(service.isLoginRequired()).toBe(false);
+      });
+
+      it('should be false if the queue has been cancelled.', function() {
+        pushRetryItem();
+        pushRetryItem();
+        expect(service.isLoginRequired()).toBe(true);
+        cancelQueue();
+        expect(service.isLoginRequired()).toBe(false);
+      });
+
+      it('should be true if the queue is processed then a new item is added to the queue.', function() {
         pushRetryItem();
         retryQueue();
-        var spy = spyOnAuthEvent();
         pushRetryItem();
-        expect(spy).toHaveBeenCalled();
-        expect(spy.mostRecentCall.args[1]).toBe('unauthenticated');
+        expect(service.isLoginRequired()).toBe(true);
       });
+    });
 
-      it("should raise a login event if loginRequired is called", function() {
-        var spy = spyOnAuthEvent();
-        service.loginRequired();
+    describe('showLogin', function() {
+      it("should make isLoginRequired true", function() {
+        service.showLogin();
         $rootScope.$digest();
-        expect(spy).toHaveBeenCalled();
-        expect(spy.mostRecentCall.args[1]).toBe('login');
+        expect(service.isLoginRequired()).toBe(true);
+        $httpBackend.flush();
       });
     });
 

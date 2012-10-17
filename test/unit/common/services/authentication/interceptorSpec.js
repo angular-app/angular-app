@@ -35,6 +35,6 @@ describe('AuthenticationInterceptor', function() {
     interceptor(promise);
     var errorHandler = promise.then.mostRecentCall.args[1];
     var newPromise = errorHandler(notAuthResponse);
-    expect(queue.getNext().deferred.promise).toBe(newPromise);
+    expect(queue.hasMore()).toBe(true);
   });
 });

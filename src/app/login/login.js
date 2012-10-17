@@ -13,14 +13,13 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
         $scope.user = {};
       };
 
-      $scope.showLogin = function(cancel, msg) {
+      $scope.showLogin = function(msg) {
         $scope.authError = msg;
         $scope.showLoginForm = true;
-        // Set up the cancel method
-        $scope.cancelLogin = function() {
-          cancel();
-          $scope.showLoginForm = false;
-        };
+      };
+
+      $scope.cancelLogin = function() {
+        AuthenticationService.cancelLogin();
       };
 
       $scope.hideLogin = function() {
@@ -40,22 +39,19 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
       }
 
       // A login is required.  If the user decides not to login then we can call cancel
-      $scope.$on('AuthenticationService.loginRequired', function(evt, reason, cancel) {
-          $scope.showLogin(cancel, getMessage(reason));
-      });
-
-      // A login has been confirmed.
-      // This may occur because the users has logged in, or may be that we have only just received a current user from the server
-      $scope.$on('AuthenticationService.loginConfirmed', function(evt, reason, cancel) {
-        $scope.hideLogin();
+      $scope.$watch(AuthenticationService.isLoginRequired, function(value) {
+        console.log('isLoginRequired', value);
+        if ( value ) {
+          $scope.showLogin(getMessage());
+        } else {
+          $scope.hideLogin();
+        }
       });
 
       $scope.login = function() {
         $scope.authError = null;
         AuthenticationService.login($scope.user.email, $scope.user.password).then(function(loggedIn) {
-          if ( loggedIn ) {
-            $scope.showLoginForm = false;
-          } else {
+          if ( !loggedIn ) {
             $scope.authError = "Login failed.  Please check your credentials and try again.";
           }
         });
