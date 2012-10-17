@@ -23,6 +23,10 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
         };
       };
 
+      $scope.hideLogin = function() {
+        $scope.showLoginForm = false;
+      };
+
       // TODO: Move this into a i8n service
       function getMessage(reason) {
         switch(reason) {
@@ -37,8 +41,13 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
 
       // A login is required.  If the user decides not to login then we can call cancel
       $scope.$on('AuthenticationService.loginRequired', function(evt, reason, cancel) {
-        console.log('loginRequired');
-        $scope.showLogin(cancel, getMessage(reason));
+          $scope.showLogin(cancel, getMessage(reason));
+      });
+
+      // A login has been confirmed.
+      // This may occur because the users has logged in, or may be that we have only just received a current user from the server
+      $scope.$on('AuthenticationService.loginConfirmed', function(evt, reason, cancel) {
+        $scope.hideLogin();
       });
 
       $scope.login = function() {

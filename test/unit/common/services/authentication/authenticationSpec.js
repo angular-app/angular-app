@@ -11,8 +11,6 @@ describe('services.authentication', function() {
     success = jasmine.createSpy('success');
     error = jasmine.createSpy('error');
     $httpBackend.when('GET', '/current-user').respond(200, { user: userInfo });
-    $httpBackend.when('GET', '/authenticated-user').respond(200, { user: userInfo });
-    $httpBackend.when('GET', '/admin-user').respond(200, { user: userInfo });
   }));
 
   afterEach(function() {
@@ -106,6 +104,7 @@ describe('services.authentication', function() {
         $httpBackend.expect('POST', '/login');
         service.login('email', 'password');
         $httpBackend.flush();
+        expect(currentUser.info()).toBe(userInfo);
       });
       it('calls queue.retry on a successful login', function() {
         $httpBackend.when('POST', '/login').respond(200, {user: userInfo});
@@ -113,10 +112,13 @@ describe('services.authentication', function() {
         service.login('email', 'password');
         $httpBackend.flush();
         expect(queue.retry).toHaveBeenCalled();
+        expect(currentUser.info()).toBe(userInfo);
       });
       it('does not call queue.retry after a login failure', function() {
         $httpBackend.when('POST', '/login').respond(200, { user: null });
+        $httpBackend.flush();
         spyOn(queue, 'retry');
+        expect(queue.retry).not.toHaveBeenCalled();
         service.login('email', 'password');
         $httpBackend.flush();
         expect(queue.retry).not.toHaveBeenCalled();

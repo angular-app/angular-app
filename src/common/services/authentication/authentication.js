@@ -16,6 +16,15 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ro
     redirect(redirectTo);
   }
 
+  function updateCurrentUser(user) {
+    currentUser.update(user);
+    if ( !!user ) {
+      console.log('login confirmed');
+      $rootScope.$broadcast('AuthenticationService.loginConfirmed');
+      queue.retry();
+    }
+  }
+
   var service = {
     loginRequired: function(reason) {
       reason = reason || 'login';
@@ -25,12 +34,8 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ro
     login: function(email, password) {
       var request = $http.post('/login', {email: email, password: password});
       return request.then(function(response) {
-        var user = response.data.user;
-        currentUser.update(user);
-        if ( user ) {
-          queue.retry();
-        }
-        return !!user;
+        updateCurrentUser(response.data.user);
+        return currentUser.isAuthenticated();
       });
     },
 
@@ -45,7 +50,7 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ro
     // The app should probably do this at start up
     requestCurrentUser: function() {
       return $http.get('/current-user').then(function(response) {
-        currentUser.update(response.data.user);
+        updateCurrentUser(response.data.user);
         return response;
       });
     },
