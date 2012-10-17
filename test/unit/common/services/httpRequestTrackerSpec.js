@@ -12,6 +12,7 @@ describe('httpRequestTracker', function () {
   });
 
   it('should report pending requests if requests are in progress', function () {
-     //TODO: having hard time mocking
+    http.pendingRequests.push({});
+    expect(httpRequestTracker.hasPendingRequests()).toBeTruthy();
   });
 });
