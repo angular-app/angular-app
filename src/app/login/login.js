@@ -43,8 +43,8 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
 
       $scope.login = function() {
         $scope.authError = null;
-        AuthenticationService.login($scope.user.email, $scope.user.password).then(function(user) {
-          if ( user ) {
+        AuthenticationService.login($scope.user.email, $scope.user.password).then(function(loggedIn) {
+          if ( loggedIn ) {
             $scope.showLoginForm = false;
           } else {
             $scope.authError = "Login failed.  Please check your credentials and try again.";
@@ -67,7 +67,7 @@ angular.module('login').directive('loginToolbar', ['currentUser', 'Authenticatio
       $scope.userInfo = currentUser.info;
       $scope.isAuthenticated = currentUser.isAuthenticated;
       $scope.logout = function() { AuthenticationService.logout(); };
-      $scope.login = function() { AuthenticationService.showLogin(); };
+      $scope.login = function() { AuthenticationService.loginRequired(); };
     }
   };
   return directive;
