@@ -51,31 +51,31 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
     // Ask the backend to see if a users is already authenticated - this may be from a previous session.
     // The app should probably do this at start up
     requestCurrentUser: function() {
-      return $http.get('/current-user').then(function(response) {
-        updateCurrentUser(response.data.user);
-        return response;
-      });
+      if ( currentUser.isAuthenticated() ) {
+        return $q.when(currentUser);
+      } else {
+        return $http.get('/current-user').then(function(response) {
+          updateCurrentUser(response.data.user);
+          return currentUser;
+        });
+      }
     },
 
     requireAuthenticatedUser: function() {
-      var promise;
-      if ( currentUser.isAuthenticated() ) {
-        // if we are authenticated already then simply resolve!
-        promise = $q.when(currentUser);
-      } else {
-        promise = queue.pushPromiseFn(service.requireAuthenticatedUser);
-      }
+      var promise = service.requestCurrentUser().then(function(currentUser) {
+        if ( !currentUser.isAuthenticated() ) {
+          return queue.pushPromiseFn(service.requireAuthenticatedUser);
+        }
+      });
       return promise;
     },
 
     requireAdminUser: function() {
-      var promise;
-      if ( currentUser.isAdmin() ) {
-        // if we are admin already then simply resolve!
-        promise = $q.when(currentUser);
-      } else {
-        promise = queue.pushPromiseFn(service.requireAdminUser);
-      }
+      var promise = service.requestCurrentUser().then(function(currentUser) {
+        if ( !currentUser.isAdmin() ) {
+          return queue.pushPromiseFn(service.requireAdminUser);
+        }
+      });
       return promise;
     }
   };
