@@ -72,7 +72,7 @@ angular.module('login').directive('loginToolbar', ['currentUser', 'Authenticatio
       $scope.userInfo = currentUser.info;
       $scope.isAuthenticated = currentUser.isAuthenticated;
       $scope.logout = function() { AuthenticationService.logout(); };
-      $scope.login = function() { AuthenticationService.loginRequired(); };
+      $scope.login = function() { AuthenticationService.showLogin(); };
     }
   };
   return directive;
