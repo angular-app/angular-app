@@ -30,6 +30,17 @@ describe('AuthenticationRetryQueue', function() {
       expect(retryItem.retry).toBeDefined();
       expect(retryItem.cancel).toBeDefined();
     });
+    it('adds a reason to the retry if specified', function() {
+      var reason = 'SOME_REASON';
+      queue.pushPromiseFn(function() {}, reason);
+      expect(queue.getReason()).toBe(reason);
+      expect(queue.getNext().reason).toBe(reason);
+    });
+    it('does not add a reason to the retry if not specified', function() {
+      queue.pushPromiseFn(function() {});
+      expect(queue.getReason()).not.toBeDefined();
+      expect(queue.getNext().reason).not.toBeDefined();
+    });
   });
 
   describe('getNext', function() {

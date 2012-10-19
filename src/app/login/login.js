@@ -1,4 +1,4 @@
-angular.module('login', ['services.authentication', 'directives.modal']).directive('loginForm', ['AuthenticationService', function(AuthenticationService) {
+angular.module('login', ['services.authentication', 'directives.modal']).directive('loginForm', ['AuthenticationService', 'currentUser', function(AuthenticationService, currentUser) {
   var directive = {
     templateUrl: 'login/form.tpl.html',
     restrict: 'E',
@@ -26,23 +26,35 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
         $scope.showLoginForm = false;
       };
 
-      // TODO: Move this into a i8n service
-      function getMessage(reason) {
+      $scope.getLoginReason = function() {
+        var reason = AuthenticationService.getLoginReason();
+        var isAuthenticated = currentUser.isAuthenticated();
+
+        var message = "";
         switch(reason) {
-          case 'unauthenticated':
-            return "You must be logged in to access this part of the application.";
-          case 'unauthorized':
-            return "You do not have the necessary access permissions.  Do you want to login as someone else?";
+          case 'user-request':
+            message = "Please enter you login details below";
+            break;
+          case 'unauthenticated-client':
+          case 'unauthorized-client':
+          case 'unauthorized-server':
+            if ( isAuthenticated ) {
+                message = "You do not have the necessary access permissions.  Do you want to login as someone else?";
+            } else {
+                message = "You must be logged in to access this part of the application.";
+            }
+            break;
           default:
-            return null;
-        }
-      }
+            message = "";
+            break;
+          }
+        return message;
+      };
 
       // A login is required.  If the user decides not to login then we can call cancel
       $scope.$watch(AuthenticationService.isLoginRequired, function(value) {
-        console.log('isLoginRequired', value);
         if ( value ) {
-          $scope.showLogin(getMessage());
+          $scope.showLogin($scope.getLoginReason());
         } else {
           $scope.hideLogin();
         }

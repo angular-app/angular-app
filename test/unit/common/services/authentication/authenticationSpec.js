@@ -108,6 +108,7 @@ describe('services.authentication', function() {
         service.showLogin();
         $rootScope.$digest();
         expect(service.isLoginRequired()).toBe(true);
+        expect(queue.getReason()).toBe('user-request');
         $httpBackend.flush();
       });
     });
@@ -179,6 +180,15 @@ describe('services.authentication', function() {
         });
         $httpBackend.flush();
       });
+      it('returns the current user immediately if they are already authenticated', function() {
+        var userInfo = {};
+        currentUser.update(userInfo);
+        expect(currentUser.isAuthenticated()).toBe(true);
+        service.requestCurrentUser().then(function(data) {
+          expect(currentUser.info()).toBe(userInfo);
+        });
+        $httpBackend.flush();
+      });
     });
 
     xdescribe('requireAuthenticatedUser', function() {
@@ -195,11 +205,12 @@ describe('services.authentication', function() {
 
     describe('requireAdminUser', function() {
       it('makes a returns a resolved promise if we are already an admin', function() {
-        currentUser.update({admin: true});
-        var resolved = false;
-        var success = jasmine.createSpy('success').andCallFake(function(){ resolved = true; });
-        // TODO: How to get this line to work in the test?
-        //expect(success).toHaveBeenCalledWith(currentUser);
+        var userInfo = {admin: true};
+        currentUser.update(userInfo);
+        service.requireAdminUser().then(function() {
+          // Currently this is not being called within the test!
+          expect(currentUser.info()).toBe(userInfo);
+        });
         $httpBackend.flush();
       });
     });

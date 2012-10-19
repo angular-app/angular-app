@@ -6,9 +6,10 @@ angular.module('services.authentication.retry-queue').factory('AuthenticationRet
     push: function(retryItem) {
       retryQueue.push(retryItem);
     },
-    pushPromiseFn: function(promiseFn) {
+    pushPromiseFn: function(promiseFn, reason) {
       var deferred = $q.defer();
       var retryItem = {
+        reason: reason,
         retry: function() {
           promiseFn().then(function(value) {
             deferred.resolve(value);

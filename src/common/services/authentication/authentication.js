@@ -23,9 +23,13 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
       return queue.hasMore();
     },
 
+    getLoginReason: function() {
+      return queue.getReason();
+    },
+
     showLogin: function() {
       // Push a no-op onto the queue to create a manual login
-      queue.push({ retry: function() {}, cancel: function() {} });
+      queue.push({ retry: function() {}, cancel: function() {}, reason: 'user-request' });
     },
 
     login: function(email, password) {
@@ -64,7 +68,7 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
     requireAuthenticatedUser: function() {
       var promise = service.requestCurrentUser().then(function(currentUser) {
         if ( !currentUser.isAuthenticated() ) {
-          return queue.pushPromiseFn(service.requireAuthenticatedUser);
+          return queue.pushPromiseFn(service.requireAuthenticatedUser, 'unauthenticated-client');
         }
       });
       return promise;
@@ -73,7 +77,7 @@ angular.module('services.authentication').factory('AuthenticationService', ['$ht
     requireAdminUser: function() {
       var promise = service.requestCurrentUser().then(function(currentUser) {
         if ( !currentUser.isAdmin() ) {
-          return queue.pushPromiseFn(service.requireAdminUser);
+          return queue.pushPromiseFn(service.requireAdminUser, 'unauthorized-client');
         }
       });
       return promise;

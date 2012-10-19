@@ -36,5 +36,6 @@ describe('AuthenticationInterceptor', function() {
     var errorHandler = promise.then.mostRecentCall.args[1];
     var newPromise = errorHandler(notAuthResponse);
     expect(queue.hasMore()).toBe(true);
+    expect(queue.getReason()).toBe('unauthorized-server');
   });
 });
