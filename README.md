@@ -1,7 +1,7 @@
 # Installation
 
 * Install node.js (requires node.js version >= 0.8.4)
-* Install global npm modules: `npm install -g grunt@0.3.x testacular@0.2.x`
+* Install global npm modules: `npm install -g grunt@0.3.x testacular@0.4.x`
 * Install local dependencies: `npm install`
 
 # Development Process
