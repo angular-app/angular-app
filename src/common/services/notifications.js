@@ -7,6 +7,14 @@ angular.module('services.notifications', []).factory('notifications', function (
   };
   var notificationsService = {};
 
+  var clearMixIn = function(notification) {
+    //TODO: do it better, without creating new function instances each time...
+    notification.$clear = function() {
+      notificationsService.clear(this);
+    };
+    return notification;
+  };
+
   $rootScope.$on('$routeChangeSuccess', function () {
     notifications.ROUTE.length = 0;
 
@@ -14,11 +22,11 @@ angular.module('services.notifications', []).factory('notifications', function (
     notifications.NEXT_ROUTE.length = 0;
   });
 
-  notificationsService.all = function(){
+  notificationsService.get = function(){
     return [].concat(notifications.GLOBAL).concat(notifications.ROUTE);
   };
 
-  notificationsService.remove = function(notification){
+  notificationsService.clear = function(notification){
     angular.forEach(notifications, function (notificationsByType) {
       var idx = notificationsByType.indexOf(notification);
       if (idx>-1){
@@ -27,22 +35,22 @@ angular.module('services.notifications', []).factory('notifications', function (
     });
   };
 
-  notificationsService.removeAll = function(){
+  notificationsService.clearAll = function(){
     angular.forEach(notifications, function (notificationsByType) {
       notificationsByType.length = 0;
     });
   };
 
-  notificationsService.pushGlobal = function(notification) {
-    notifications.GLOBAL.push(notification);
+  notificationsService.addFixed = function(notification) {
+    notifications.GLOBAL.push(clearMixIn(notification));
   };
 
-  notificationsService.pushRouteChange = function(notification) {
-    notifications.ROUTE.push(notification);
+  notificationsService.addRouteChange = function(notification) {
+    notifications.ROUTE.push(clearMixIn(notification));
   };
 
-  notificationsService.pushNextRouteChange = function(notification) {
-    notifications.NEXT_ROUTE.push(notification);
+  notificationsService.addNextRouteChange = function(notification) {
+    notifications.NEXT_ROUTE.push(clearMixIn(notification));
   };
 
   return notificationsService;
