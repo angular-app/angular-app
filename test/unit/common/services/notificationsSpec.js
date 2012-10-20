@@ -2,70 +2,52 @@ describe('notifications', function () {
 
   var $scope, notifications;
   beforeEach(module('services.notifications'));
-  beforeEach(inject(function ($rootScope, _notifications_) {
-    $scope = $rootScope;
-    notifications = _notifications_;
+  beforeEach(inject(function($injector) {
+    $scope = $injector.get('$rootScope');
+    notifications = $injector.get('notifications');
   }));
 
   describe('global notifications crud', function () {
 
-    it('should allow to add, get and clear all notifications', function () {
-      var msg1 = {type: 'alert', msg: 'Watch out!'};
-      var msg2 = {type: 'info', msg: 'Just an info!'};
-      notifications.addFixed(msg1);
-      notifications.addFixed(msg2);
+    it('should allow to add, get and remove notifications', function () {
+      var not1 = notifications.pushStickyNotification('Watch out!', 'alert');
+      var not2 = notifications.pushStickyNotification('Just an info!', 'info');
 
-      expect(notifications.get().length).toEqual(2);
-      expect(notifications.get()[0]).toBe(msg1);
+      expect(notifications.current().length).toEqual(2);
+      expect(notifications.current()[0]).toBe(not1);
 
-      notifications.clear(msg2);
-      expect(notifications.get().length).toEqual(1);
-      expect(notifications.get()[0]).toBe(msg1);
+      notifications.remove(not2);
+      expect(notifications.current().length).toEqual(1);
+      expect(notifications.current()[0]).toBe(not1);
 
-      notifications.clearAll();
-      expect(notifications.get().length).toEqual(0);
+      notifications.removeAll();
+      expect(notifications.current().length).toEqual(0);
     });
   });
 
   describe('notifications expiring after route change', function () {
 
-    it('should clear notification after route change', function () {
-      var msg = {type: 'info', msg: 'Will go away after route change'};
-
-      notifications.addFixed(msg);
-      notifications.addRouteChange(msg);
-      expect(notifications.get().length).toEqual(2);
+    it('should remove notification after route change', function () {
+      var sticky = notifications.pushStickyNotification('Will stick around after route change');
+      var currentRoute = notifications.pushCurrentRouteNotification('Will go away after route change');
+      expect(notifications.current().length).toEqual(2);
       $scope.$emit('$routeChangeSuccess');
-      expect(notifications.get().length).toEqual(1);
+      expect(notifications.current().length).toEqual(1);
+      expect(notifications.current()[0]).toBe(sticky);
     });
   });
 
 
   describe('notifications showing on next route change and expiring on a subsequent one', function () {
 
-    it('should advertise a notification after a route change and clear on the subsequent route change', function () {
-      var msg = {type: 'info', msg: 'Will go away after route change'};
-
-      notifications.addFixed(msg);
-      notifications.addNextRouteChange(msg);
-      expect(notifications.get().length).toEqual(1);
+    it('should advertise a notification after a route change and remove on the subsequent route change', function () {
+      notifications.pushStickyNotification('Will stick around after route change');
+      notifications.pushNextRouteNotification('Will not be there till after route change');
+      expect(notifications.current().length).toEqual(1);
       $scope.$emit('$routeChangeSuccess');
-      expect(notifications.get().length).toEqual(2);
+      expect(notifications.current().length).toEqual(2);
       $scope.$emit('$routeChangeSuccess');
-      expect(notifications.get().length).toEqual(1);
-    });
-  });
-
-  describe('canceling a notification instance', function () {
-
-    it('should allow cancelation of notification instances', function () {
-      var msg = {type:'info', msg:'To be canceled'};
-
-      notifications.addFixed(msg);
-      expect(notifications.get().length).toEqual(1);
-
-      notifications.get()[0].$clear();
-      expect(notifications.get().length).toEqual(0);
+      expect(notifications.current().length).toEqual(1);
     });
   });
 });
