@@ -13,6 +13,10 @@ describe('notifications', function () {
       var not1 = notifications.pushSticky('Watch out!', 'alert');
       var not2 = notifications.pushSticky('Just an info!', 'info');
 
+      expect(notifications.sticky().getAll().length).toBe(2);
+      expect(notifications.forCurrentRoute().getAll().length).toBe(0);
+      expect(notifications.forNextRoute().getAll().length).toBe(0);
+
       expect(notifications.getCurrent().length).toEqual(2);
       expect(notifications.getCurrent()[0]).toBe(not1);
 
@@ -20,8 +24,17 @@ describe('notifications', function () {
       expect(notifications.getCurrent().length).toEqual(1);
       expect(notifications.getCurrent()[0]).toBe(not1);
 
+      expect(notifications.sticky().getAll().length).toBe(1);
+      expect(notifications.forCurrentRoute().getAll().length).toBe(0);
+      expect(notifications.forNextRoute().getAll().length).toBe(0);
+
       notifications.removeAll();
       expect(notifications.getCurrent().length).toEqual(0);
+
+      expect(notifications.sticky().getAll().length).toBe(0);
+      expect(notifications.forCurrentRoute().getAll().length).toBe(0);
+      expect(notifications.forNextRoute().getAll().length).toBe(0);
+
     });
 
     it('removeal of a non-existing notification doesnt trigger errors', function () {
