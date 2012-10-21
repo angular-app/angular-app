@@ -1,6 +1,5 @@
-angular.module('services.notifications', []);
+angular.module('services.notifications', []).factory('notifications', function ($rootScope) {
 
-angular.module('services.notifications').factory('notifications', function ($rootScope) {
 
   // A factory to create a notification list object that manages its own notifications
   var createNotificationList = function() {
@@ -14,8 +13,10 @@ angular.module('services.notifications').factory('notifications', function ($roo
         var notification = {
           message: message,
           type: type || 'info',
-          remove: function() {
-            notificationList.remove(notification);
+          $remove: function() {
+            notificationList.remove(function(notificationInList) {
+              return notification === notificationInList;
+            });
           }
         };
         return angular.extend(notification, options);
@@ -53,16 +54,8 @@ angular.module('services.notifications').factory('notifications', function ($roo
   var notificationLists = {};
   var includeInCurrent = [];
   var notificationsService = {
-    // Returns a concatenated array of all the notifications from all the lists in the service
-    all: function() {
-      var notifications = [];
-      angular.forEach(notificationLists, function(list) {
-        notifications = notifications.concat(list.getAll());
-      });
-      return notifications;
-    },
 
-    current: function() {
+    getCurrent: function() {
       var notifications = [];
       angular.forEach(includeInCurrent, function(listName) {
         notifications = notifications.concat(notificationLists[listName].getAll());
@@ -108,7 +101,7 @@ angular.module('services.notifications').factory('notifications', function ($roo
   };
 
   function pushFunctionName(listName) {
-    return 'push'+listName+'Notification';
+    return 'push'+listName;
   }
 
   // Add and configure a new list in the notification service.
@@ -125,16 +118,16 @@ angular.module('services.notifications').factory('notifications', function ($roo
   }
 
   addNotificationListToService('Sticky');
-  addNotificationListToService('CurrentRoute');
-  addNotificationListToService('NextRoute');
+  addNotificationListToService('ForCurrentRoute');
+  addNotificationListToService('ForNextRoute');
 
   includeInCurrent.push('Sticky');
-  includeInCurrent.push('CurrentRoute');
+  includeInCurrent.push('ForCurrentRoute');
 
   // Rewire the CurrentRoute and NextRoute notification lists when the route changes
   $rootScope.$on('$routeChangeSuccess', function () {
-    moveNotificationList('NextRoute', 'CurrentRoute');
-    addNotificationListToService('NextRoute');
+    moveNotificationList('ForNextRoute', 'ForCurrentRoute');
+    addNotificationListToService('ForNextRoute');
   });
 
   return notificationsService;
