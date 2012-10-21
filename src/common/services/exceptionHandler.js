@@ -11,5 +11,5 @@ angular.module('services.exceptionHandler', ['services.notifications', 'services
         cause:cause
       });
     };
-  }])
+  }]);
 }]);
