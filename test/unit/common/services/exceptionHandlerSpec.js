@@ -36,4 +36,16 @@ describe('exception handler', function () {
       $exceptionHandler(new Error('root cause'));
     }).toThrow('issue with notifications');
   });
+
+  it('should call through to the delegate', function() {
+    inject(function(exceptionHandlerFactory) {
+      var error = new Error('Something went wrong...');
+      var cause = 'Some obscure problem...';
+
+      var delegate = jasmine.createSpy('delegate');
+      var exceptionHandler = exceptionHandlerFactory(delegate);
+      exceptionHandler(error, cause);
+      expect(delegate).toHaveBeenCalledWith(error, cause);
+    });
+  });
 });
