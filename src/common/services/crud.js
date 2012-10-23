@@ -58,36 +58,40 @@ angular.module('services.crud').factory('crudListMethods', ['$location', functio
   };
 }]);
 
-angular.module('services.crud').provider('routeCRUD', function routeCRUDProvider($routeProvider) {
+(function() {
+  function routeCRUDProvider($routeProvider) {
+
+    var routeResolveFactory = function (dependencies, resolveFunctions) {
+      var resolve = {};
+      angular.forEach(resolveFunctions, function(fn, resolveDepName){
+        var resolveDepsAndFn = angular.copy(dependencies);
+        resolveDepsAndFn.push('$route');
+        resolveDepsAndFn.push(fn);
+        resolve[resolveDepName] = resolveDepsAndFn;
+      });
+      return resolve;
+    };
+
+    var routeDefFactory = function (resourceName, partialPrefix, resourceOperationType, additionalDeps, resolveFactoryFns) {
+      return {
+        templateUrl:partialPrefix+'/'+resourceName.toLowerCase()+'-'+resourceOperationType.toLowerCase()+'.tpl.html',
+        controller:resourceName+resourceOperationType +'Ctrl',
+        resolve:routeResolveFactory([resourceName].concat(additionalDeps), resolveFactoryFns)
+      };
+    };
+
+    this.defineRoutes = function(urlPrefix, partialPrefix, resourceName, additionalDeps, dataRetrievalDef) {
+      $routeProvider.when(urlPrefix, routeDefFactory(resourceName, partialPrefix, 'List', additionalDeps, dataRetrievalDef.listItems));
+      $routeProvider.when(urlPrefix+'/new', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.newItem));
+      $routeProvider.when(urlPrefix+'/:itemId', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.editItem));
+    };
+
+    this.$get = function () {
+      //we are not interested in instances
+      return {};
+    };
+  }
   routeCRUDProvider.$inject = ['$routeProvider'];
 
-  var routeResolveFactory = function (dependencies, resolveFunctions) {
-    var resolve = {};
-    angular.forEach(resolveFunctions, function(fn, resolveDepName){
-      var resolveDepsAndFn = angular.copy(dependencies);
-      resolveDepsAndFn.push('$route');
-      resolveDepsAndFn.push(fn);
-      resolve[resolveDepName] = resolveDepsAndFn;
-    });
-    return resolve;
-  };
-
-  var routeDefFactory = function (resourceName, partialPrefix, resourceOperationType, additionalDeps, resolveFactoryFns) {
-    return {
-      templateUrl:partialPrefix+'/'+resourceName.toLowerCase()+'-'+resourceOperationType.toLowerCase()+'.tpl.html',
-      controller:resourceName+resourceOperationType +'Ctrl',
-      resolve:routeResolveFactory([resourceName].concat(additionalDeps), resolveFactoryFns)
-    };
-  };
-
-  this.defineRoutes = function(urlPrefix, partialPrefix, resourceName, additionalDeps, dataRetrievalDef) {
-    $routeProvider.when(urlPrefix, routeDefFactory(resourceName, partialPrefix, 'List', additionalDeps, dataRetrievalDef.listItems));
-    $routeProvider.when(urlPrefix+'/new', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.newItem));
-    $routeProvider.when(urlPrefix+'/:itemId', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.editItem));
-  };
-
-  this.$get = function () {
-    //we are not interested in instances
-    return {};
-  };
-});
+  angular.module('services.crud').provider('routeCRUD', routeCRUDProvider);
+})();
