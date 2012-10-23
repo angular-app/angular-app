@@ -58,7 +58,8 @@ angular.module('services.crud').factory('crudListMethods', ['$location', functio
   };
 }]);
 
-angular.module('services.crud').provider('routeCRUD', function () {
+angular.module('services.crud').provider('routeCRUD', function routeCRUDProvider($routeProvider) {
+  routeCRUDProvider.$inject = ['$routeProvider'];
 
   var routeResolveFactory = function (dependencies, resolveFunctions) {
     var resolve = {};
@@ -79,8 +80,7 @@ angular.module('services.crud').provider('routeCRUD', function () {
     };
   };
 
-  this.defineRoutes = function($routeProvider, urlPrefix, partialPrefix, resourceName, additionalDeps, dataRetrievalDef) {
-    //there is a bug in AngularJS where we can't specify dependencies for a provider in an array format thus we need to pass the $routeProvider in
+  this.defineRoutes = function(urlPrefix, partialPrefix, resourceName, additionalDeps, dataRetrievalDef) {
     $routeProvider.when(urlPrefix, routeDefFactory(resourceName, partialPrefix, 'List', additionalDeps, dataRetrievalDef.listItems));
     $routeProvider.when(urlPrefix+'/new', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.newItem));
     $routeProvider.when(urlPrefix+'/:itemId', routeDefFactory(resourceName, partialPrefix, 'Edit', additionalDeps, dataRetrievalDef.editItem));

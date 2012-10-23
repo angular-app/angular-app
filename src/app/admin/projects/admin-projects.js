@@ -1,10 +1,10 @@
-angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud'], ['$routeProvider', 'routeCRUDProvider', function ($routeProvider, routeCRUDProvider) {
+angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud'], ['routeCRUDProvider', function (routeCRUDProvider) {
 
   var getAllUsers = function(Projects, Users, $route){
     return Users.all();
   };
 
-  routeCRUDProvider.defineRoutes($routeProvider, '/admin/projects', 'admin/projects', 'Projects', ['Users'], {
+  routeCRUDProvider.defineRoutes('/admin/projects', 'admin/projects', 'Projects', ['Users'], {
     listItems:{'projects': function(Projects){
       return Projects.all();
     }},
