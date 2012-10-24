@@ -13,6 +13,7 @@
 <div ng-include="'header.tpl.html'"></div>
 
 <login-form></login-form>
+<div ng-include="'notifications.tpl.html'" class="container-fluid" ng-show="notifications.getCurrent().length"></div>
 <div ng-view class="container-fluid"></div>
 
 </body>

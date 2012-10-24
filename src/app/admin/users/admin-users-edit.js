@@ -12,7 +12,6 @@ angular.module('admin-users-edit',['services.crud'])
 
   $scope.password = user.password;
 
-  
 }])
 
 /**

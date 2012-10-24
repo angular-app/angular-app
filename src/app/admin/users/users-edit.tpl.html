@@ -1,10 +1,6 @@
 <div class="well">
-    <h4>User form</h4>
-    <hr>
-    <div class="alert alert-error" ng-show="updateError">
-        Update / delete error...
-    </div>
     <form name="form" novalidate>
+        <legend>User</legend>
         <label>E-mail</label>
         <input class="span6" type="email" name="email" ng-model="item.email" required unique-email>
         <span ng-show="showError('email', 'required')" class="help-inline">This field is required.</span>
