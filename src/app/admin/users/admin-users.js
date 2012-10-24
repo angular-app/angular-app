@@ -1,4 +1,4 @@
-angular.module('admin-users', ['services.crud'], ['$routeProvider', function ($routeProvider) {
+angular.module('admin-users', ['services.crud', 'services.notifications', 'services.localizedMessages'], ['$routeProvider', function ($routeProvider) {
 
   $routeProvider.when('/admin/users', {
     templateUrl:'admin/users/users-list.tpl.html',
@@ -44,13 +44,14 @@ angular.module('admin-users').controller('UsersListCtrl', ['$scope', 'crudListMe
   angular.extend($scope, crudListMethods('/admin/users'));
 }]);
 
-angular.module('admin-users').controller('UsersEditCtrl', ['$scope', '$location', 'crudEditMethods', 'user', function ($scope, $location, crudEditMethods, user) {
+angular.module('admin-users').controller('UsersEditCtrl', ['$scope', '$location', 'crudEditMethods', 'notifications', 'localizedMessages', 'user', function ($scope, $location, crudEditMethods, notifications, localizedMessages, user) {
 
   $scope.password = user.password;
-  angular.extend($scope, crudEditMethods('item', user, 'form', function () {
+  angular.extend($scope, crudEditMethods('item', user, 'form', function (user) {
+    notifications.pushForNextRoute(localizedMessages.get('crud.user.save.success', {id : user.$id()}), 'success');
     $location.path('/admin/users');
   }, function() {
-    $scope.updateError = true;
+    notifications.pushForCurrentRoute(localizedMessages.get('crud.user.save.error'), 'error');
   }));
 }]);
 
