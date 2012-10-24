@@ -1,8 +1,26 @@
-angular.module('app', ['login', 'projectsinfo', 'dashboard', 'projects', 'admin', 'services.breadcrumbs', 'services.httpRequestTracker', 'directives.crud', 'templates']);
+angular.module('app', [
+  'login',
+  'projectsinfo',
+  'dashboard',
+  'projects',
+  'admin',
+  'services.breadcrumbs',
+  'services.notifications',
+  'services.localizedMessages',
+  'services.httpRequestTracker',
+  'directives.crud',
+  'templates']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
   baseUrl: 'http://localhost:3000/databases/',
   dbName: 'ascrum'
+});
+
+//TODO: move those messages to a separate module
+angular.module('app').constant('I18N.MESSAGES', {
+  'errors.route.changeError':'Route change error',
+  'crud.user.save.success':"A user with id '{{id}}' was saved successfully.",
+  'crud.user.save.error':"Something went wrong when saving a user..."
 });
 
 angular.module('app').config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
@@ -10,9 +28,20 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
   $routeProvider.otherwise({redirectTo:'/projectsinfo'});
 }]);
 
-angular.module('app').controller('AppCtrl', [function() {}]);
+angular.module('app').controller('AppCtrl', ['$scope', 'notifications', 'localizedMessages', function($scope, notifications, localizedMessages) {
 
-angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'currentUser', 'breadcrumbs', 'httpRequestTracker', function ($scope, $location, $route, currentUser, breadcrumbs, httpRequestTracker) {
+  $scope.notifications = notifications;
+
+  $scope.removeNotification = function (notification) {
+    notification.$remove();
+  };
+
+  $scope.$on('$routeChangeError', function(event, current, previous, rejection){
+    notifications.pushForCurrentRoute(localizedMessages.get('errors.route.changeError'), 'error', rejection);
+  });
+}]);
+
+angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'currentUser', 'breadcrumbs', 'notifications', 'httpRequestTracker', function ($scope, $location, $route, currentUser, breadcrumbs, notifications, httpRequestTracker) {
   $scope.location = $location;
   $scope.currentUser = currentUser;
   $scope.breadcrumbs = breadcrumbs;
@@ -32,13 +61,4 @@ angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route',
   $scope.hasPendingRequests = function () {
     return httpRequestTracker.hasPendingRequests();
   };
-
-  $scope.$on('$routeChangeStart', function(event, next, current){
-    $scope.routeChangeError = undefined;
-  });
-
-  $scope.$on('$routeChangeError', function(event, current, previous, rejection){
-    //TODO: this is too MongoLab specific, itroduce error resolution service
-    $scope.routeChangeError = 'Route change error: '+rejection.code;
-  });
 }]);
