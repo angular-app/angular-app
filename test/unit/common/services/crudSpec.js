@@ -28,8 +28,75 @@ describe('CRUD scope mix-ins', function () {
       beforeEach(inject(function ($rootScope) {
         item = {key:'value'};
         scope = $rootScope;
+        // Set up an empty FormController mock
+        scope.form = {
+          item: {
+            $error: {}
+          }
+        };
         angular.extend(scope, crudEditMethods('item', item, 'form', successcb, errorcb));
       }));
+
+      describe('getCssClasses', function() {
+
+        it('should return an object with error and success members', function() {
+          scope.form.item = {
+            $pristine: true, $dirty: false,
+            $valid: true, $invalid: false
+          };
+
+          expect(scope.getCssClasses().error).toBeDefined();
+          expect(scope.getCssClasses().success).toBeDefined();
+        });
+        it('should have error and success false if the item is pristine', function() {
+          scope.form.item = {
+            $pristine: true, $dirty: false,
+            $valid: true, $invalid: false
+          };
+
+          expect(scope.getCssClasses().error).toBeFalsy();
+          expect(scope.getCssClasses().success).toBeFalsy();
+
+          scope.form.item = {
+            $pristine: true, $dirty: false,
+            $valid: false, $invalid: true
+          };
+
+          expect(scope.getCssClasses().error).toBeFalsy();
+          expect(scope.getCssClasses().success).toBeFalsy();
+        });
+
+        it('should have error true and success false if the item is dirty and invalid', function() {
+          scope.form.item = {
+            $pristine: false, $dirty: true,
+            $valid: false, $invalid: true
+          };
+
+          expect(scope.getCssClasses().error).toBeTruthy();
+          expect(scope.getCssClasses().success).toBeFalsy();
+        });
+
+        it('should have error false and success true if the item is dirty and valid', function() {
+          scope.form.item = {
+            $pristine: false, $dirty: true,
+            $valid: true, $invalid: false
+          };
+
+          expect(scope.getCssClasses().error).toBeFalsy();
+          expect(scope.getCssClasses().success).toBeTruthy();
+        });
+      });
+
+      describe('showError', function() {
+        it('should return false if no error is set', function() {
+          expect(scope.showError('required')).toBeFalsy();
+        });
+        it('should return true if the specified error is set', function() {
+          scope.form.item.$error.required = true;
+          expect(scope.showError('required')).toBeTruthy();
+          expect(scope.showError('email')).toBeFalsy();
+        });
+      });
 
       describe('copy and revert changes', function () {
         it('should correctly detect when revert is possible', function () {

@@ -36,6 +36,27 @@ angular.module('services.crud').factory('crudEditMethods', function () {
       return item.$id();
     };
 
+    /**
+     * Get the CSS classes for this item, to be used by the ng-class directive
+     * @return {object} A hash where each key is a CSS class and the corresponding value is true if the class is to be applied.
+     */
+    mixin.getCssClasses = function() {
+      var ngModelContoller = this[formName][itemName];
+      return {
+        error: ngModelContoller.$invalid && ngModelContoller.$dirty,
+        success: ngModelContoller.$valid && ngModelContoller.$dirty
+      };
+    };
+
+    /**
+     * Whether to show an error message for the specified error
+     * @param  {string} error - The name of the error as given by a validation directive
+     * @return {Boolean} true if the error should be shown
+     */
+    mixin.showError = function(error) {
+      return this[formName][itemName].$error[error];
+    };
+
     return mixin;
   };
 });
