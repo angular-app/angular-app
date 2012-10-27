@@ -7,6 +7,9 @@
     <form name="form" novalidate>
         <label>E-mail</label>
         <input class="span6" type="email" name="email" ng-model="item.email" required unique-email>
+        <span ng-show="showError('email', 'required')" class="help-inline">This field is required.</span>
+        <span ng-show="showError('email', 'email')" class="help-inline">Please enter a valid email address.</span>
+        <span ng-show="showError('email', 'uniqueEmail')" class="help-inline">This email address is not available - please enter another.</span>
         <label>Last name</label>
         <input class="span6" type="text" name="lastName" ng-model="item.lastName" required>
         <label>First name</label>

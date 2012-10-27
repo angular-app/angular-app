@@ -45,8 +45,8 @@ describe('CRUD scope mix-ins', function () {
             $valid: true, $invalid: false
           };
 
-          expect(scope.getCssClasses().error).toBeDefined();
-          expect(scope.getCssClasses().success).toBeDefined();
+          expect(scope.getCssClasses('item').error).toBeDefined();
+          expect(scope.getCssClasses('item').success).toBeDefined();
         });
         it('should have error and success false if the item is pristine', function() {
           scope.form.item = {
@@ -54,16 +54,16 @@ describe('CRUD scope mix-ins', function () {
             $valid: true, $invalid: false
           };
 
-          expect(scope.getCssClasses().error).toBeFalsy();
-          expect(scope.getCssClasses().success).toBeFalsy();
+          expect(scope.getCssClasses('item').error).toBeFalsy();
+          expect(scope.getCssClasses('item').success).toBeFalsy();
 
           scope.form.item = {
             $pristine: true, $dirty: false,
             $valid: false, $invalid: true
           };
 
-          expect(scope.getCssClasses().error).toBeFalsy();
-          expect(scope.getCssClasses().success).toBeFalsy();
+          expect(scope.getCssClasses('item').error).toBeFalsy();
+          expect(scope.getCssClasses('item').success).toBeFalsy();
         });
 
         it('should have error true and success false if the item is dirty and invalid', function() {
@@ -72,8 +72,8 @@ describe('CRUD scope mix-ins', function () {
             $valid: false, $invalid: true
           };
 
-          expect(scope.getCssClasses().error).toBeTruthy();
-          expect(scope.getCssClasses().success).toBeFalsy();
+          expect(scope.getCssClasses('item').error).toBeTruthy();
+          expect(scope.getCssClasses('item').success).toBeFalsy();
         });
 
         it('should have error false and success true if the item is dirty and valid', function() {
@@ -82,19 +82,19 @@ describe('CRUD scope mix-ins', function () {
             $valid: true, $invalid: false
           };
 
-          expect(scope.getCssClasses().error).toBeFalsy();
-          expect(scope.getCssClasses().success).toBeTruthy();
+          expect(scope.getCssClasses('item').error).toBeFalsy();
+          expect(scope.getCssClasses('item').success).toBeTruthy();
         });
       });
 
       describe('showError', function() {
         it('should return false if no error is set', function() {
-          expect(scope.showError('required')).toBeFalsy();
+          expect(scope.showError('item','required')).toBeFalsy();
         });
         it('should return true if the specified error is set', function() {
           scope.form.item.$error.required = true;
-          expect(scope.showError('required')).toBeTruthy();
-          expect(scope.showError('email')).toBeFalsy();
+          expect(scope.showError('item','required')).toBeTruthy();
+          expect(scope.showError('item','email')).toBeFalsy();
         });
       });
 
