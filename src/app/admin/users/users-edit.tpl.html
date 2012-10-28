@@ -12,12 +12,18 @@
         <span ng-show="showError('email', 'uniqueEmail')" class="help-inline">This email address is not available - please enter another.</span>
         <label>Last name</label>
         <input class="span6" type="text" name="lastName" ng-model="item.lastName" required>
+        <span ng-show="showError('lastName', 'required')" class="help-inline">This field is required.</span>
         <label>First name</label>
         <input class="span6" type="text" name="firstName" ng-model="item.firstName" required>
+        <span ng-show="showError('firstName', 'required')" class="help-inline">This field is required.</span>
         <label>Password</label>
         <input class="span6" type="password" name="password" ng-model="item.password" required>
+        <span ng-show="showError('password', 'required')" class="help-inline">This field is required.</span>
+        <span ng-show="showError('passwordRepeat', 'equal')" class="help-inline">Passwords do not match.</span>
         <label>Password (repeat)</label>
         <input class="span6" type="password" name="passwordRepeat" ng-model="password" required validate-equals="item.password">
+        <span ng-show="showError('passwordRepeat', 'required')" class="help-inline">This field is required.</span>
+        <span ng-show="showError('passwordRepeat', 'equal')" class="help-inline">Passwords do not match.</span>
         <label>Admin</label>
         <input type="checkbox" ng-model="item.admin">
     </form>

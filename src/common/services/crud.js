@@ -56,7 +56,7 @@ angular.module('services.crud').factory('crudEditMethods', function () {
      * @return {Boolean} true if the error should be shown
      */
     mixin.showError = function(fieldName, error) {
-      return this[formName][itemName].$error[error];
+      return this[formName][fieldName].$error[error];
     };
 
     return mixin;
