@@ -5,8 +5,7 @@ angular.module('app', [
   'projects',
   'admin',
   'services.breadcrumbs',
-  'services.notifications',
-  'services.localizedMessages',
+  'services.i18nNotifications',
   'services.httpRequestTracker',
   'directives.crud',
   'templates']);
@@ -28,16 +27,16 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
   $routeProvider.otherwise({redirectTo:'/projectsinfo'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'notifications', 'localizedMessages', function($scope, notifications, localizedMessages) {
+angular.module('app').controller('AppCtrl', ['$scope', 'notifications', 'localizedMessages', function($scope, i18nNotifications) {
 
-  $scope.notifications = notifications;
+  $scope.notifications = i18nNotifications;
 
   $scope.removeNotification = function (notification) {
     notification.$remove();
   };
 
   $scope.$on('$routeChangeError', function(event, current, previous, rejection){
-    notifications.pushForCurrentRoute(localizedMessages.get('errors.route.changeError'), 'error', rejection);
+    i18nNotifications.pushForCurrentRoute('errors.route.changeError', 'error', {}, {rejection: rejection});
   });
 }]);
 

@@ -1,142 +1,59 @@
 angular.module('services.notifications', []).factory('notifications', function ($rootScope) {
 
-  // A factory to create a notification list object that manages its own notifications
-  var createNotificationList = function() {
-    var list = [];
-
-    var notificationList = {
-      // Create a new notification with a string message and optional type (defaults to 'info').
-      // The options can be used to attach custom fields to the notification
-      // The notification will contain a remove method that can be used to remove itself from the list
-      createNotification: function(message, type, options) {
-        var notification = {
-          message: message,
-          type: type || 'info',
-          $remove: function() {
-            notificationList.remove(function(notificationInList) {
-              return notification === notificationInList;
-            });
-          }
-        };
-        return angular.extend(notification, options);
-      },
-
-      // Remove a notification from this list that is matched by the matchNotificationFn function.
-      remove: function(matchNotificationFn) {
-        angular.forEach(list, function(notification, index) {
-          if ( matchNotificationFn(notification) ) {
-            list.splice(index, 1);
-          }
-        });
-      },
-
-      // Remove all the notifications from this list
-      removeAll: function() {
-        list.length = 0;
-      },
-
-      // Push a notification to the end of this list
-      push: function(notification) {
-        list.push(notification);
-      },
-
-      // Access the notifications in this list
-      getAll: function() {
-        return list;
-      }
-    };
-
-    return notificationList;
+  var notifications = {
+    'STICKY' : [],
+    'ROUTE_CURRENT' : [],
+    'ROUTE_NEXT' : []
   };
+  var notificationsService = {};
 
-
-  var notificationLists = {};
-  var includeInCurrent = [];
-  var notificationsService = {
-
-    getCurrent: function() {
-      var notifications = [];
-      angular.forEach(includeInCurrent, function(listName) {
-        notifications = notifications.concat(notificationLists[listName].getAll());
-      });
-      return notifications;
-    },
-
-    // Remove a notification from the lists of the service, matching it either by the object itself or by the message string
-    remove: function(messageOrNotification) {
-      var matchFn;
-      if ( angular.isString(messageOrNotification) ) {
-        matchFn = function(notification) { return notification.message === messageOrNotification; };
-      } else {
-        matchFn = function(notification) { return notification === messageOrNotification; };
-      }
-      angular.forEach(notificationLists, function(list) {
-        list.remove(matchFn);
-      });
-    },
-
-    // Remove all the messages from all the lists in the service
-    removeAll: function(){
-      angular.forEach(notificationLists, function (list) {
-        list.removeAll();
-      });
-    },
-
-    // Push a notification to the specified list
-    pushNotification: function(listName, message, type, options) {
-      var list = notificationLists[listName];
-      if ( angular.isDefined(list) ) {
-        var notification = list.createNotification(message, type, options);
-        list.push(notification);
-        return notification;
-      } else {
-        throw new Error('"' + list + '"" is not a valid notification list.');
-      }
+  var addNotification = function(notificationsArray, notificationObj) {
+    if (notificationObj) {
+      notificationObj.$remove = function() {
+        notificationsService.remove(notificationObj);
+      };
+      notificationsArray.push(notificationObj);
     }
-
-    // addNotificationListToService (see below) will create a method on the service to push notifications to the list
-    // For example, addNotificationListToService('CurrentRoute') will create notificationsService.pushCurrentRouteNotification(message, type, options)
-
+    return notificationObj;
   };
 
-  function pushFunctionName(listName) {
-    return 'push'+listName;
-  }
-  function accessFunctionName(listName) {
-    return listName.substr(0,1).toLowerCase() + listName.substr(1);
-  }
-
-  // Add and configure a new list in the notification service.
-  function addNotificationListToService(name) {
-    notificationLists[name] = createNotificationList(name);
-    notificationsService[pushFunctionName(name)] = function(message, type, options) { return notificationsService.pushNotification(name, message, type, options); };
-    notificationsService[accessFunctionName(name)] = function() { return notificationLists[name]; };
-  }
-
-  function deleteNotificationList(name) {
-    delete notificationsService[pushFunctionName(name)];
-    delete notificationLists[name];
-    delete notificationsService[accessFunctionName(name)];
-  }
-
-  function moveNotificationList(oldListName, newListName) {
-    notificationsService[pushFunctionName(newListName)] = notificationsService[pushFunctionName(oldListName)];
-    notificationLists[newListName] = notificationLists[oldListName];
-    deleteNotificationList(oldListName);
-  }
-
-  addNotificationListToService('Sticky');
-  addNotificationListToService('ForCurrentRoute');
-  addNotificationListToService('ForNextRoute');
-
-  includeInCurrent.push('Sticky');
-  includeInCurrent.push('ForCurrentRoute');
-
-  // Rewire the CurrentRoute and NextRoute notification lists when the route changes
   $rootScope.$on('$routeChangeSuccess', function () {
-    moveNotificationList('ForNextRoute', 'ForCurrentRoute');
-    addNotificationListToService('ForNextRoute');
+    notifications.ROUTE_CURRENT.length = 0;
+
+    notifications.ROUTE_CURRENT = angular.copy(notifications.ROUTE_NEXT);
+    notifications.ROUTE_NEXT.length = 0;
   });
+
+  notificationsService.getCurrent = function(){
+    return [].concat(notifications.STICKY).concat(notifications.ROUTE_CURRENT);
+  };
+
+  notificationsService.pushSticky = function(notification) {
+    return addNotification(notifications.STICKY, notification);
+  };
+
+  notificationsService.pushForCurrentRoute = function(notification) {
+    return addNotification(notifications.ROUTE_CURRENT, notification);
+  };
+
+  notificationsService.pushForNextRoute = function(notification) {
+    return addNotification(notifications.ROUTE_NEXT, notification);
+  };
+
+  notificationsService.remove = function(notification){
+    angular.forEach(notifications, function (notificationsByType) {
+      var idx = notificationsByType.indexOf(notification);
+      if (idx>-1){
+        notificationsByType.splice(idx,1);
+      }
+    });
+  };
+
+  notificationsService.removeAll = function(){
+    angular.forEach(notifications, function (notificationsByType) {
+      notificationsByType.length = 0;
+    });
+  };
 
   return notificationsService;
 });

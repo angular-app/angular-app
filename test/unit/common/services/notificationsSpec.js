@@ -10,34 +10,19 @@ describe('notifications', function () {
   describe('global notifications crud', function () {
 
     it('should allow to add, get and remove notifications', function () {
-      var not1 = notifications.pushSticky('Watch out!', 'alert');
-      var not2 = notifications.pushSticky('Just an info!', 'info');
-
-      expect(notifications.sticky().getAll().length).toBe(2);
-      expect(notifications.forCurrentRoute().getAll().length).toBe(0);
-      expect(notifications.forNextRoute().getAll().length).toBe(0);
-
-      expect(notifications.getCurrent().length).toEqual(2);
-      expect(notifications.getCurrent()[0]).toBe(not1);
+      var not1 = notifications.pushSticky('Watch out!');
+      var not2 = notifications.pushSticky('Just an info!');
+      expect(notifications.getCurrent().length).toBe(2);
 
       notifications.remove(not2);
       expect(notifications.getCurrent().length).toEqual(1);
       expect(notifications.getCurrent()[0]).toBe(not1);
 
-      expect(notifications.sticky().getAll().length).toBe(1);
-      expect(notifications.forCurrentRoute().getAll().length).toBe(0);
-      expect(notifications.forNextRoute().getAll().length).toBe(0);
-
       notifications.removeAll();
       expect(notifications.getCurrent().length).toEqual(0);
-
-      expect(notifications.sticky().getAll().length).toBe(0);
-      expect(notifications.forCurrentRoute().getAll().length).toBe(0);
-      expect(notifications.forNextRoute().getAll().length).toBe(0);
-
     });
 
-    it('removeal of a non-existing notification doesnt trigger errors', function () {
+    it('removal of a non-existing notification doesnt trigger errors', function () {
       notifications.remove({});
     });
   });
@@ -71,10 +56,10 @@ describe('notifications', function () {
   describe('removing a notification instance', function () {
 
     it('should allow removal of notification instances', function () {
-      var sticky = notifications.pushSticky('Will be removed!');
+      var sticky = notifications.pushSticky({msg:'Will be removed!'});
       expect(notifications.getCurrent().length).toEqual(1);
-     notifications.getCurrent()[0].$remove();
-     expect(notifications.getCurrent().length).toEqual(0);
+      notifications.getCurrent()[0].$remove();
+      expect(notifications.getCurrent().length).toEqual(0);
     });
   });
 });
