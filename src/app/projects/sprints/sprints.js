@@ -1,30 +1,45 @@
 angular.module('sprints', ['services.sprints', 'services.crud', 'tasks']);
-angular.module('sprints').config(['$routeProvider', 'routeCRUDProvider', function($routeProvider, routeCRUDProvider){
+angular.module('sprints').config(['$routeProvider', function($routeProvider){
 
-  var getProjectId = function(Sprints, ProductBacklog, $route) {
+  var projectId = ['$route', function($route) {
     return $route.current.params.projectId;
-  };
+  }];
 
-  var getSprints = function (Sprints, ProductBacklog, $route) {
-    return Sprints.forProject($route.current.params.projectId);
-  };
-
-  var newSprint = function (Sprints, ProductBacklog, $route) {
-    return new Sprints({projectId:$route.current.params.projectId});
-  };
-
-  var getSprint = function (Sprints, ProductBacklog, $route) {
-    return Sprints.getById($route.current.params.itemId);
-  };
-
-  var getBacklog = function (Sprints, ProductBacklog, $route) {
+  var productBacklog = ['$route', 'ProductBacklog', function ($route, ProductBacklog) {
     return ProductBacklog.forProject($route.current.params.projectId);
-  };
+  }];
 
-  routeCRUDProvider.defineRoutes($routeProvider, '/projects/:projectId/sprints', 'projects/sprints', 'Sprints', ['ProductBacklog'], {
-    listItems:{sprints:getSprints, projectId:getProjectId},
-    newItem:{sprint:newSprint, projectId:getProjectId, productBacklog:getBacklog},
-    editItem:{sprint:getSprint, projectId:getProjectId, productBacklog:getBacklog}
+  $routeProvider.when('/projects/:projectId/sprints', {
+    templateUrl : 'projects/sprints/sprints-list.tpl.html',
+    controller: 'SprintsListCtrl',
+    resolve: {
+      projectId: projectId,
+      sprints: ['$route', 'Sprints', function($route, Sprints){
+        return Sprints.forProject($route.current.params.projectId);
+      }]
+    }
+  });
+  $routeProvider.when('/projects/:projectId/sprints/new', {
+    templateUrl : 'projects/sprints/sprints-edit.tpl.html',
+    controller: 'SprintsEditCtrl',
+    resolve: {
+      projectId: projectId,
+      sprint: ['$route', 'Sprints', function($route, Sprints){
+        return new Sprints({projectId:$route.current.params.projectId});
+      }],
+      productBacklog : productBacklog
+    }
+  });
+  $routeProvider.when('/projects/:projectId/sprints/:sprintId', {
+    templateUrl : 'projects/sprints/sprints-edit.tpl.html',
+    controller: 'SprintsEditCtrl',
+    resolve: {
+      projectId: projectId,
+      sprint: ['$route', 'Sprints', function($route, Sprints){
+        return Sprints.getById($route.current.params.sprintId);
+      }],
+      productBacklog : productBacklog
+    }
   });
 }]);
 
