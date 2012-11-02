@@ -1,5 +1,9 @@
 angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routeProvider', function ($routeProvider) {
 
+  var currentUser =  ['AuthenticationService', function(AuthenticationService) {
+    return AuthenticationService.requireAuthenticatedUser();
+  }];
+
   $routeProvider.when('/admin/users', {
     templateUrl:'admin/users/users-list.tpl.html',
     controller:'UsersListCtrl',
@@ -7,9 +11,7 @@ angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routePro
       users:['Users', function (Users) {
         return Users.all();
       }],
-      currentUser: ['AuthenticationService', function(AuthenticationService) {
-        return AuthenticationService.requireAuthenticatedUser();
-      }]
+      currentUser: currentUser
     }
   });
   $routeProvider.when('/admin/users/new', {
@@ -19,9 +21,7 @@ angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routePro
       user:['Users', function (Users) {
         return new Users();
       }],
-      currentUser: ['AuthenticationService', function(AuthenticationService) {
-        return AuthenticationService.requireAdminUser();
-      }]
+      currentUser: currentUser
     }
   });
   $routeProvider.when('/admin/users/:userId', {
@@ -31,9 +31,7 @@ angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routePro
       user:['$route', 'Users', function ($route, Users) {
         return Users.getById($route.current.params.userId);
       }],
-      currentUser: ['AuthenticationService', function(AuthenticationService) {
-        return AuthenticationService.requireAdminUser();
-      }]
+      currentUser: currentUser
     }
   });
 }]);
