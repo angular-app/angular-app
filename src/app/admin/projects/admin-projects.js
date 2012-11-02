@@ -1,19 +1,44 @@
-angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud'], ['routeCRUDProvider', function (routeCRUDProvider) {
+angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud'], ['$routeProvider', function ($routeProvider) {
+
+  var adminUser =  ['AuthenticationService', function(AuthenticationService) {
+    return AuthenticationService.requireAdminUser();
+  }];
 
   var getAllUsers = function(Projects, Users, $route){
     return Users.all();
   };
 
-  routeCRUDProvider.defineRoutes('/admin/projects', 'admin/projects', 'Projects', ['Users'], {
-    listItems:{'projects': function(Projects){
-      return Projects.all();
-    }},
-    newItem:{'project':function (Projects) {
-      return new Projects();
-    }, users: getAllUsers},
-    editItem:{'project':function (Projects, Users, $route) {
-      return Projects.getById($route.current.params.itemId);
-    }, users: getAllUsers}
+  $routeProvider.when('/admin/projects', {
+    templateUrl:'admin/projects/projects-list.tpl.html',
+    controller:'ProjectsListCtrl',
+    resolve:{
+      projects:['Projects', function (Projects) {
+        return Projects.all();
+      }],
+      adminUser: adminUser
+    }
+  });
+  $routeProvider.when('/admin/projects/new', {
+    templateUrl:'admin/projects/projects-edit.tpl.html',
+    controller:'ProjectsEditCtrl',
+    resolve:{
+      users: getAllUsers,
+      project:['Projects', function (Projects) {
+        return new Projects();
+      }],
+      adminUser: adminUser
+    }
+  });
+  $routeProvider.when('/admin/projects/:projectId', {
+    templateUrl:'admin/projects/projects-edit.tpl.html',
+    controller:'ProjectsEditCtrl',
+    resolve:{
+      users: getAllUsers,
+      project:['$route', 'Projects', function ($route, Projects) {
+        return Projects.getById($route.current.params.projectId);
+      }],
+      adminUser: adminUser
+    }
   });
 }]);
 

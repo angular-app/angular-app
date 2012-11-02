@@ -1,7 +1,7 @@
 angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routeProvider', function ($routeProvider) {
 
-  var currentUser =  ['AuthenticationService', function(AuthenticationService) {
-    return AuthenticationService.requireAuthenticatedUser();
+  var adminUser =  ['AuthenticationService', function(AuthenticationService) {
+    return AuthenticationService.requireAdminUser();
   }];
 
   $routeProvider.when('/admin/users', {
@@ -11,7 +11,7 @@ angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routePro
       users:['Users', function (Users) {
         return Users.all();
       }],
-      currentUser: currentUser
+      currentUser: adminUser
     }
   });
   $routeProvider.when('/admin/users/new', {
@@ -21,7 +21,7 @@ angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routePro
       user:['Users', function (Users) {
         return new Users();
       }],
-      currentUser: currentUser
+      currentUser: adminUser
     }
   });
   $routeProvider.when('/admin/users/:userId', {
@@ -31,7 +31,7 @@ angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routePro
       user:['$route', 'Users', function ($route, Users) {
         return Users.getById($route.current.params.userId);
       }],
-      currentUser: currentUser
+      currentUser: adminUser
     }
   });
 }]);
