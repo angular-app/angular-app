@@ -1,18 +1,18 @@
-angular.module('services.exceptionHandler', ['services.notifications', 'services.localizedMessages']);
+angular.module('services.exceptionHandler', ['services.i18nNotifications']);
 
-angular.module('services.exceptionHandler').factory('exceptionHandlerFactory', ['$injector', 'localizedMessages', function($injector, localizedMessages) {
+angular.module('services.exceptionHandler').factory('exceptionHandlerFactory', ['$injector', function($injector) {
   return function($delegate) {
-    var notifications;
+
     return function (exception, cause) {
       // Lazy load notifications to get around circular dependency
-      //Circular dependency: $rootScope <- notifications <- $exceptionHandler
-      var notifications = notifications || $injector.get('notifications');
+      //Circular dependency: $rootScope <- notifications <- i18nNotifications <- $exceptionHandler
+      var i18nNotifications = $injector.get('i18nNotifications');
 
       // Pass through to original handler
       $delegate(exception, cause);
 
       // Push a notification error
-      notifications.pushForCurrentRoute(localizedMessages.get('error.fatal'), 'error', {
+      i18nNotifications.pushForCurrentRoute('error.fatal', 'error', {}, {
         exception:exception,
         cause:cause
       });
