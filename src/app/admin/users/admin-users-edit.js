@@ -1,17 +1,17 @@
-angular.module('admin-users-edit',['services.crud'])
+angular.module('admin-users-edit',['services.crud', 'services.i18nNotifications'])
 
-.controller('UsersEditCtrl', ['$scope', '$location', 'crudEditMethods', 'user', function ($scope, $location, crudEditMethods, user) {
+.controller('UsersEditCtrl', ['$scope', '$location', 'crudEditMethods', 'i18nNotifications', 'user', function ($scope, $location, crudEditMethods, i18nNotifications, user) {
   var successFn = function () {
+    i18nNotifications.pushForNextRoute('crud.user.save.success', 'success', {id : user.$id()});
     $location.path('/admin/users');
   };
   var errorFn = function() {
-    $scope.updateError = true;
+    i18nNotifications.pushForCurrentRoute('crud.user.save.error', 'error');
   };
-
-  angular.extend($scope, crudEditMethods('item', user, 'form', successFn, errorFn));
 
   $scope.password = user.password;
 
+  angular.extend($scope, crudEditMethods('item', user, 'form', successFn, errorFn));
 }])
 
 /**
