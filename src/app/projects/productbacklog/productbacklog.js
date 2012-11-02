@@ -1,31 +1,38 @@
 angular.module('productbacklog', ['services.productbacklog', 'services.crud']);
-angular.module('productbacklog').config(['$routeProvider', 'routeCRUDProvider', function($routeProvider, routeCRUDProvider){
+angular.module('productbacklog').config(['$routeProvider', function($routeProvider){
 
-  var getProjectId = function(ProductBacklog, $route) {
+  var projectId = ['$route', function($route) {
     return $route.current.params.projectId;
-  };
+  }];
 
-  var getBacklog = function (ProductBacklog, $route) {
-    return ProductBacklog.forProject($route.current.params.projectId);
-  };
-
-  var newBacklogItem = function (ProductBacklog, $route) {
-    return new ProductBacklog({projectId:$route.current.params.projectId});
-  };
-
-  var getBacklogItem = function (ProductBacklog, $route) {
-    return ProductBacklog.getById($route.current.params.itemId);
-  };
-
-  routeCRUDProvider.defineRoutes($routeProvider, '/projects/:projectId/productbacklog', 'projects/productbacklog', 'ProductBacklog', [], {
-    listItems:{'backlog':getBacklog, 'projectId':getProjectId},
-    newItem:{'backlogItem':newBacklogItem, 'projectId':getProjectId},
-    editItem:{'backlogItem':getBacklogItem, 'projectId':getProjectId}
-  }, {
-    editItem:{
-      itemId:function (locals) {
-        return locals.backlogItem.name;
-      }
+  $routeProvider.when('/projects/:projectId/productbacklog', {
+    templateUrl:'projects/productbacklog/productbacklog-list.tpl.html',
+    controller:'ProductBacklogListCtrl',
+    resolve : {
+      projectId: projectId,
+      backlog : ['$route', 'ProductBacklog', function($route, ProductBacklog){
+        return ProductBacklog.forProject($route.current.params.projectId);
+      }]
+    }
+  });
+  $routeProvider.when('/projects/:projectId/productbacklog/new', {
+    templateUrl:'projects/productbacklog/productbacklog-edit.tpl.html',
+    controller:'ProductBacklogEditCtrl',
+    resolve : {
+      projectId: projectId,
+      backlogItem : ['$route', 'ProductBacklog', function($route, ProductBacklog){
+        return new ProductBacklog({projectId:$route.current.params.projectId});
+      }]
+    }
+  });
+  $routeProvider.when('/projects/:projectId/productbacklog/:backlogItemId', {
+    templateUrl:'projects/productbacklog/productbacklog-edit.tpl.html',
+    controller:'ProductBacklogEditCtrl',
+    resolve : {
+      projectId: projectId,
+      backlogItem : ['$route', 'ProductBacklog', function($route, ProductBacklog){
+        return ProductBacklog.getById($route.current.params.backlogItemId);
+      }]
     }
   });
 }]);
