@@ -27,12 +27,12 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
   $routeProvider.otherwise({redirectTo:'/projectsinfo'});
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'notifications', 'localizedMessages', function($scope, i18nNotifications) {
+angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages', function($scope, i18nNotifications) {
 
   $scope.notifications = i18nNotifications;
 
   $scope.removeNotification = function (notification) {
-    notification.$remove();
+    i18nNotifications.remove(notification);
   };
 
   $scope.$on('$routeChangeError', function(event, current, previous, rejection){

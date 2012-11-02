@@ -7,13 +7,11 @@ angular.module('services.notifications', []).factory('notifications', function (
   };
   var notificationsService = {};
 
-  var addNotification = function(notificationsArray, notificationObj) {
-    if (notificationObj) {
-      notificationObj.$remove = function() {
-        notificationsService.remove(notificationObj);
-      };
-      notificationsArray.push(notificationObj);
+  var addNotification = function (notificationsArray, notificationObj) {
+    if (!angular.isObject(notificationObj)) {
+      throw new Error("Only object can be added to the notification service");
     }
+    notificationsArray.push(notificationObj);
     return notificationObj;
   };
 
@@ -25,7 +23,7 @@ angular.module('services.notifications', []).factory('notifications', function (
   });
 
   notificationsService.getCurrent = function(){
-    return [].concat(notifications.STICKY).concat(notifications.ROUTE_CURRENT);
+    return [].concat(notifications.STICKY, notifications.ROUTE_CURRENT);
   };
 
   notificationsService.pushSticky = function(notification) {

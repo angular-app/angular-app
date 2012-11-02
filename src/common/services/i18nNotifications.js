@@ -20,6 +20,9 @@ angular.module('services.i18nNotifications').factory('i18nNotifications', ['loca
     },
     getCurrent:function () {
       return notifications.getCurrent();
+    },
+    remove:function (notification) {
+      return notifications.remove(notification);
     }
   };
 
