@@ -1,4 +1,4 @@
-angular.module('login', ['services.authentication', 'directives.modal']).directive('loginForm', ['AuthenticationService', 'currentUser', function(AuthenticationService, currentUser) {
+angular.module('login', ['services.authentication', 'services.localizedMessages', 'directives.modal']).directive('loginForm', ['AuthenticationService', 'localizedMessages', 'currentUser', function(AuthenticationService, localizedMessages, currentUser) {
   var directive = {
     templateUrl: 'login/form.tpl.html',
     restrict: 'E',
@@ -39,9 +39,9 @@ angular.module('login', ['services.authentication', 'directives.modal']).directi
           case 'unauthorized-client':
           case 'unauthorized-server':
             if ( isAuthenticated ) {
-                message = "You do not have the necessary access permissions.  Do you want to login as someone else?";
+                message = localizedMessages.get('login.error.notAuthorized');
             } else {
-                message = "You must be logged in to access this part of the application.";
+                message = localizedMessages.get('login.error.notAuthenticated');
             }
             break;
           default:
