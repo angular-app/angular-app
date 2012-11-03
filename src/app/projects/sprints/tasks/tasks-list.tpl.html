@@ -9,7 +9,7 @@
     </thead>
     <tbody>
     <tr ng-repeat="task in tasks">
-        <td ng-click="edit(task)">{{task.name}}</td>
+        <td ng-click="edit(task.$id())">{{task.name}}</td>
         <td>{{task.estimation}}</td>
         <td>{{task.remaining}}</td>
         <td></td>
