@@ -1,5 +1,5 @@
-angular.module('services.tasks', ['mongolabResource']);
-angular.module('services.tasks').factory('Tasks', ['mongolabResource', function (mongolabResource) {
+angular.module('resources.tasks', ['mongolabResource']);
+angular.module('resources.tasks').factory('Tasks', ['mongolabResource', function (mongolabResource) {
 
   var Tasks = mongolabResource('tasks');
 

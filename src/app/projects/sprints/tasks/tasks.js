@@ -1,4 +1,4 @@
-angular.module('tasks', ['services.tasks', 'services.crud']);
+angular.module('tasks', ['resources.tasks', 'services.crud']);
 angular.module('tasks').config(['$routeProvider', function ($routeProvider) {
 
   var sprintBacklogItems = ['Sprints', 'ProductBacklog', '$route', function (Sprints, ProductBacklog, $route) {

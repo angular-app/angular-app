@@ -1,4 +1,4 @@
-angular.module('sprints', ['services.sprints', 'services.crud', 'tasks']);
+angular.module('sprints', ['resources.sprints', 'services.crud', 'tasks']);
 angular.module('sprints').config(['$routeProvider', function($routeProvider){
 
   var projectId = ['$route', function($route) {

@@ -1,4 +1,4 @@
-angular.module('dashboard',['services.projects', 'services.tasks', 'services.authentication'], ['$routeProvider', function($routeProvider){
+angular.module('dashboard',['resources.projects', 'resources.tasks', 'services.authentication'], ['$routeProvider', function($routeProvider){
   $routeProvider.when('/dashboard', {
     templateUrl:'dashboard/dashboard.tpl.html',
     controller:'DashboardCtrl',

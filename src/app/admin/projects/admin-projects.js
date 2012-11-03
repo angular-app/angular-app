@@ -1,4 +1,4 @@
-angular.module('admin-projects', ['services.projects', 'services.users', 'services.crud'], ['$routeProvider', function ($routeProvider) {
+angular.module('admin-projects', ['resources.projects', 'resources.users', 'services.crud'], ['$routeProvider', function ($routeProvider) {
 
   var adminUser =  ['AuthenticationService', function(AuthenticationService) {
     return AuthenticationService.requireAdminUser();

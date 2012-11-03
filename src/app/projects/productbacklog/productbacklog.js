@@ -1,4 +1,4 @@
-angular.module('productbacklog', ['services.productbacklog', 'services.crud']);
+angular.module('productbacklog', ['resources.productbacklog', 'services.crud']);
 angular.module('productbacklog').config(['$routeProvider', function($routeProvider){
 
   var projectId = ['$route', function($route) {

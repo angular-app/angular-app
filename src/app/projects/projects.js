@@ -1,4 +1,4 @@
-angular.module('projects', ['services.projects', 'productbacklog', 'sprints'], ['$routeProvider', function ($routeProvider) {
+angular.module('projects', ['resources.projects', 'productbacklog', 'sprints'], ['$routeProvider', function ($routeProvider) {
   $routeProvider.when('/projects', {
     templateUrl:'projects/projects-list.tpl.html',
     controller:'ProjectsViewCtrl',
