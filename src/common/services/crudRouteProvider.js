@@ -44,5 +44,5 @@
   // Add our injection dependencies here since we cannot do it in module.provider()
   crudRouteProvider.$inject = ['$routeProvider'];
 
-  angular.module('services.crudRouteProvider', []).provider('resourceRoute', crudRouteProvider);
+  angular.module('services.crudRouteProvider', []).provider('crudRoute', crudRouteProvider);
 })();
