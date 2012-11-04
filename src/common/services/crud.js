@@ -1,4 +1,4 @@
-angular.module('services.crud', ['services.resourceRouteProvider']);
+angular.module('services.crud', ['services.crudRouteProvider']);
 angular.module('services.crud').factory('crudEditMethods', function () {
 
   return function (itemName, item, formName, successcb, errorcb) {
