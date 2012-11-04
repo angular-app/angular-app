@@ -1,4 +1,4 @@
-angular.module('services.notifications', []).factory('notifications', function ($rootScope) {
+angular.module('services.notifications', []).factory('notifications', ['$rootScope', function ($rootScope) {
 
   var notifications = {
     'STICKY' : [],
@@ -54,4 +54,4 @@ angular.module('services.notifications', []).factory('notifications', function (
   };
 
   return notificationsService;
-});
+}]);
