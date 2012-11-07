@@ -5,9 +5,9 @@ basePath = '../..';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  'lib/angular/angular.js',
-  'lib/mongolab/mongolab-resource.js',
-  'test/lib/angular/angular-mocks.js',
+  'vendor/angular/angular.js',
+  'vendor/mongolab/mongolab-resource.js',
+  'test/vendor/angular/angular-mocks.js',
   'src/**/*.js',
   'test/unit/**/*Spec.js',
   'dist/tmp/**/*.js'

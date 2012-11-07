@@ -46,20 +46,20 @@ module.exports = function (grunt) {
         dest:'<%= distdir %>/<%= pkg.name %>.js'
       },
       angular: {
-        src:['lib/angular/angular.js'],
+        src:['vendor/angular/angular.js'],
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
-        src:['lib/mongolab/*.js'],
+        src:['vendor/mongolab/*.js'],
         dest: '<%= distdir %>/mongolab.js'
       },
       bootstrap: {
-        src:['lib/bootstrap/*.js'],
+        src:['vendor/bootstrap/*.js'],
         dest: '<%= distdir %>/bootstrap.js'
       },
       jquery: {
-        src:['lib/jquery/*.js'],
-        dest: '<%= distdir %>/jquery.js'        
+        src:['vendor/jquery/*.js'],
+        dest: '<%= distdir %>/jquery.js'
       }
     },
     min: {
@@ -72,16 +72,16 @@ module.exports = function (grunt) {
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
-        src:['lib/mongolab/*.js'],
+        src:['vendor/mongolab/*.js'],
         dest: '<%= distdir %>/mongolab.js'
       },
       bootstrap: {
-        src:['lib/bootstrap/*.js'],
+        src:['vendor/bootstrap/*.js'],
         dest: '<%= distdir %>/bootstrap.js'
       },
       jquery: {
-        src:['lib/jquery/*.js'],
-        dest: '<%= distdir %>/jquery.js'        
+        src:['vendor/jquery/*.js'],
+        dest: '<%= distdir %>/jquery.js'
       }
     },
     recess: {
