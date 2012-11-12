@@ -1,4 +1,6 @@
-angular.module('admin-projects', ['resources.projects', 'resources.users', 'services.crud'], ['crudRouteProvider', function (crudRouteProvider) {
+angular.module('admin-projects', ['resources.projects', 'resources.users', 'services.crud'])
+
+.config(['crudRouteProvider', function (crudRouteProvider) {
 
   var adminUser =  ['AuthenticationService', function(AuthenticationService) {
     return AuthenticationService.requireAdminUser();
@@ -23,15 +25,15 @@ angular.module('admin-projects', ['resources.projects', 'resources.users', 'serv
       users: getAllUsers,
       adminUser: adminUser
     });
-}]);
+}])
 
-angular.module('admin-projects').controller('ProjectsListCtrl', ['$scope', 'crudListMethods', 'projects', function($scope, crudListMethods, projects) {
+.controller('ProjectsListCtrl', ['$scope', 'crudListMethods', 'projects', function($scope, crudListMethods, projects) {
   $scope.projects = projects;
 
   angular.extend($scope, crudListMethods('/admin/projects'));
-}]);
+}])
 
-angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$location', 'crudEditMethods', 'users', 'project', function($scope, $location, crudEditMethods, users, project) {
+.controller('ProjectsEditCtrl', ['$scope', '$location', 'crudEditMethods', 'users', 'project', function($scope, $location, crudEditMethods, users, project) {
 
   $scope.selTeamMember = undefined;
 
