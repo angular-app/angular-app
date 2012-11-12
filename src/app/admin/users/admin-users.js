@@ -1,4 +1,6 @@
-angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routeProvider', function ($routeProvider) {
+angular.module('admin-users', ['admin-users-edit', 'services.crud'])
+
+.config(['$routeProvider', function ($routeProvider) {
 
   var adminUser =  ['AuthenticationService', function(AuthenticationService) {
     return AuthenticationService.requireAdminUser();
@@ -34,9 +36,9 @@ angular.module('admin-users', ['admin-users-edit', 'services.crud'], ['$routePro
       currentUser: adminUser
     }
   });
-}]);
+}])
 
-angular.module('admin-users').controller('UsersListCtrl', ['$scope', 'crudListMethods', 'users', function ($scope, crudListMethods, users) {
+.controller('UsersListCtrl', ['$scope', 'crudListMethods', 'users', function ($scope, crudListMethods, users) {
   $scope.users = users;
 
   angular.extend($scope, crudListMethods('/admin/users'));
