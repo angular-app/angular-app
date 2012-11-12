@@ -36,7 +36,7 @@ angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$loc
   $scope.selTeamMember = undefined;
 
   $scope.users = users;
-  //prepare users lookup, just keep refferences for easier lookup
+  //prepare users lookup, just keep references for easier lookup
   $scope.usersLookup = {};
   angular.forEach(users, function(value, key) {
     $scope.usersLookup[value.$id()] = value;
