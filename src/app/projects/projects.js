@@ -1,4 +1,6 @@
-angular.module('projects', ['resources.projects', 'productbacklog', 'sprints'], ['$routeProvider', function ($routeProvider) {
+angular.module('projects', ['resources.projects', 'productbacklog', 'sprints'])
+
+.config(['$routeProvider', function ($routeProvider) {
   $routeProvider.when('/projects', {
     templateUrl:'projects/projects-list.tpl.html',
     controller:'ProjectsViewCtrl',
@@ -9,9 +11,9 @@ angular.module('projects', ['resources.projects', 'productbacklog', 'sprints'], 
       }]
     }
   });
-}]);
+}])
 
-angular.module('projects').controller('ProjectsViewCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
+.controller('ProjectsViewCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
   $scope.projects = projects;
 
   $scope.viewProject = function (projectId) {
