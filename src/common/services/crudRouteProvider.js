@@ -3,8 +3,10 @@
 
     this.$get = function () { return {}; }; //we are not interested in instances
 
-    this.routesFor = function(resourceName, urlPrefix) {
+    this.routesFor = function(resourceName, urlPrefix, routePrefix) {
       var baseUrl = urlPrefix + '/' + resourceName.toLowerCase();
+      routePrefix = routePrefix || urlPrefix;
+      var baseRoute = '/' + routePrefix + '/' + resourceName.toLowerCase();
 
       var createRoute = function (operation, resolveFns) {
         return {
@@ -16,15 +18,15 @@
 
       var routeBuilder = {
         whenList: function(resolveFns) {
-          routeBuilder.when('/'+baseUrl, createRoute('List', resolveFns));
+          routeBuilder.when(baseRoute, createRoute('List', resolveFns));
           return routeBuilder;
         },
         whenNew: function(resolveFns) {
-          routeBuilder.when('/'+baseUrl +'/new', createRoute('Edit', resolveFns));
+          routeBuilder.when(baseRoute +'/new', createRoute('Edit', resolveFns));
           return routeBuilder;
         },
         whenEdit: function(resolveFns) {
-          routeBuilder.when('/'+baseUrl+'/:itemId', createRoute('Edit', resolveFns));
+          routeBuilder.when(baseRoute+'/:itemId', createRoute('Edit', resolveFns));
           return routeBuilder;
         },
         when: function(path, route) {
