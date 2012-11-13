@@ -46,14 +46,18 @@ angular.module('sprints', ['resources.sprints', 'services.crud', 'tasks'])
   };
 }])
 
-.controller('SprintsEditCtrl', ['$scope', '$location', 'crudEditMethods', 'projectId', 'sprint', 'productBacklog', function($scope, $location, crudEditMethods, projectId, sprint, productBacklog){
+.controller('SprintsEditCtrl', ['$scope', '$location', 'projectId', 'sprint', 'productBacklog', function($scope, $location, projectId, sprint, productBacklog){
 
   $scope.productBacklog = productBacklog;
-  angular.extend($scope, crudEditMethods('sprint', sprint, 'form', function () {
+  $scope.sprint = sprint;
+
+  $scope.onSave = function () {
     $location.path('/projects/'+projectId+'/sprints');
-  }, function () {
+  };
+  $scope.onError = function () {
     $scope.updateError = true;
-  }));
+  };
+  
   $scope.sprint.sprintBacklog = $scope.sprint.sprintBacklog || [];
 
   $scope.productBacklogLookup = {};

@@ -1,86 +1,105 @@
-angular.module('admin-projects', ['resources.projects', 'resources.users', 'services.crud'])
-
-.config(['crudRouteProvider', function (crudRouteProvider) {
+angular.module('admin-projects', ['resources.projects', 'resources.users', 'services.crud'], ['$routeProvider', function ($routeProvider) {
 
   var adminUser =  ['AuthenticationService', function(AuthenticationService) {
     return AuthenticationService.requireAdminUser();
   }];
 
-  var getAllUsers = ['Projects', 'Users', '$route', function(Projects, Users, $route){
+  var getAllUsers = function(Projects, Users, $route){
     return Users.all();
-  }];
+  };
 
-  crudRouteProvider.routesFor('Projects', 'admin')
-    .whenList({
-      projects: ['Projects', function(Projects) { return Projects.all(); }],
+  $routeProvider.when('/admin/projects', {
+    templateUrl:'admin/projects/projects-list.tpl.html',
+    controller:'ProjectsListCtrl',
+    resolve:{
+      projects:['Projects', function (Projects) {
+        return Projects.all();
+      }],
       adminUser: adminUser
-    })
-    .whenNew({
-      project: ['Projects', function(Projects) { return new Projects(); }],
+    }
+  });
+  $routeProvider.when('/admin/projects/new', {
+    templateUrl:'admin/projects/projects-edit.tpl.html',
+    controller:'ProjectsEditCtrl',
+    resolve:{
       users: getAllUsers,
+      project:['Projects', function (Projects) {
+        return new Projects();
+      }],
       adminUser: adminUser
-    })
-    .whenEdit({
-      project: ['Projects', 'Users', '$route', function(Projects, Users, $route) { return Projects.getById($route.current.params.itemId); }],
+    }
+  });
+  $routeProvider.when('/admin/projects/:projectId', {
+    templateUrl:'admin/projects/projects-edit.tpl.html',
+    controller:'ProjectsEditCtrl',
+    resolve:{
       users: getAllUsers,
+      project:['$route', 'Projects', function ($route, Projects) {
+        return Projects.getById($route.current.params.projectId);
+      }],
       adminUser: adminUser
-    });
-}])
+    }
+  });
+}]);
 
-.controller('ProjectsListCtrl', ['$scope', 'crudListMethods', 'projects', function($scope, crudListMethods, projects) {
+angular.module('admin-projects').controller('ProjectsListCtrl', ['$scope', 'crudListMethods', 'projects', function ($scope, crudListMethods, projects) {
   $scope.projects = projects;
 
   angular.extend($scope, crudListMethods('/admin/projects'));
-}])
+}]);
 
-.controller('ProjectsEditCtrl', ['$scope', '$location', 'crudEditMethods', 'users', 'project', function($scope, $location, crudEditMethods, users, project) {
+angular.module('admin-projects').controller('ProjectsEditCtrl', ['$scope', '$location', 'users', 'project', function ($scope, $location, users, project) {
+
+  $scope.project = project;
 
   $scope.selTeamMember = undefined;
 
   $scope.users = users;
-  //prepare users lookup, just keep references for easier lookup
+  //prepare users lookup, just keep refferences for easier lookup
   $scope.usersLookup = {};
-  angular.forEach(users, function(value, key) {
+  angular.forEach(users, function(value, key){
     $scope.usersLookup[value.$id()] = value;
   });
 
-  angular.extend($scope, crudEditMethods('item', project, 'form', function() {
+  $scope.onSave = function () {
     $location.path('/admin/projects');
-  }, function() {
+  };
+
+  $scope.onError = function () {
     $scope.updateError = true;
-  }));
+  };
 
-  $scope.item.teamMembers = $scope.item.teamMembers || [];
+  $scope.project.teamMembers = $scope.project.teamMembers || [];
 
-  $scope.productOwnerCandidates = function() {
-    return $scope.users.filter(function(user) {
-      return $scope.usersLookup[user.$id()] && $scope.item.canActAsProductOwner(user.$id());
+  $scope.productOwnerCandidates = function () {
+    return $scope.users.filter(function(user){
+      return $scope.usersLookup[user.$id()] && $scope.project.canActAsProductOwner(user.$id());
     });
   };
 
   $scope.scrumMasterCandidates = function() {
-    return $scope.users.filter(function(user) {
-      return $scope.usersLookup[user.$id()] && $scope.item.canActAsScrumMaster(user.$id());
+    return $scope.users.filter(function(user){
+      return $scope.usersLookup[user.$id()] && $scope.project.canActAsScrumMaster(user.$id());
     });
   };
 
   $scope.teamMemberCandidates = function() {
-    return $scope.users.filter(function(user) {
-      return $scope.usersLookup[user.$id()] && $scope.item.canActAsDevTeamMember(user.$id()) && !$scope.item.isDevTeamMember(user.$id());
+    return $scope.users.filter(function(user){
+      return $scope.usersLookup[user.$id()] && $scope.project.canActAsDevTeamMember(user.$id()) && !$scope.project.isDevTeamMember(user.$id());
     });
   };
 
-  $scope.addTeamMember = function() {
-    if($scope.selTeamMember) {
-      $scope.item.teamMembers.push($scope.selTeamMember);
+  $scope.addTeamMember = function () {
+    if ($scope.selTeamMember){
+      $scope.project.teamMembers.push($scope.selTeamMember);
       $scope.selTeamMember = undefined;
     }
   };
 
-  $scope.removeTeamMember = function(teamMember) {
-    var idx = $scope.item.teamMembers.indexOf(teamMember);
-    if(idx >= 0) {
-      $scope.item.teamMembers.splice(idx, 1);
+  $scope.removeTeamMember = function (teamMember) {
+    var idx = $scope.project.teamMembers.indexOf(teamMember);
+    if (idx >= 0) {
+      $scope.project.teamMembers.splice(idx, 1);
     }
   };
 }]);

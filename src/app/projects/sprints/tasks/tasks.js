@@ -53,15 +53,16 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
   angular.extend($scope, crudListMethods('/projects/' + projectId + '/sprints/' + sprintId + '/tasks'));
 }])
 
-.controller('TasksEditCtrl', ['$scope', '$location', '$route', 'crudEditMethods', 'Tasks', 'sprintBacklogItems', 'teamMembers', 'task', function ($scope, $location, $route, crudEditMethods, Tasks, sprintBacklogItems, teamMembers, task) {
+.controller('TasksEditCtrl', ['$scope', '$location', '$route', 'Tasks', 'sprintBacklogItems', 'teamMembers', 'task', function ($scope, $location, $route, Tasks, sprintBacklogItems, teamMembers, task) {
   $scope.task = task;
   $scope.statesEnum = Tasks.statesEnum;
   $scope.sprintBacklogItems = sprintBacklogItems;
   $scope.teamMembers = teamMembers;
 
-  angular.extend($scope, crudEditMethods('task', task, 'form', function () {
+  $scope.onSave = function () {
     $location.path('/admin/users');
-  }, function() {
+  };
+  $scope.onError = function() {
     $scope.updateError = true;
-  }));
+  };
 }]);
