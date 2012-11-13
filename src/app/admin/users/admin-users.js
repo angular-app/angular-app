@@ -17,7 +17,7 @@ angular.module('admin-users', ['admin-users-edit', 'services.crud'])
     })
     .whenEdit({
       user:['$route', 'Users', function ($route, Users) {
-        return Users.getById($route.current.params.userId);
+        return Users.getById($route.current.params.itemId);
       }],
       currentUser: adminUser
     });
