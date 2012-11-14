@@ -6,57 +6,175 @@ describe('crud-edit directive', function () {
     resourceMock = jasmine.createSpyObj('resource', ['$saveOrUpdate', '$remove']);
   });
 
-  it('requires a form element', function() {
-    inject(function($compile, $rootScope) {
-      expect(function() {
-        $compile('<form crud-edit></form>')($rootScope);
-      }).not.toThrow();
-      expect(function() {
-        $compile('<div crud-edit></div>')($rootScope);
-      }).toThrow();
+  describe('scope initialization', function() {
+    it('requires a form element', function() {
+      inject(function($compile, $rootScope) {
+        expect(function() {
+          $compile('<form crud-edit></form>')($rootScope);
+        }).not.toThrow();
+        expect(function() {
+          $compile('<div crud-edit></div>')($rootScope);
+        }).toThrow();
+      });
+    });
+
+    it('should attach methods to the scope', function() {
+      inject(function($compile, $rootScope) {
+        var element = $compile('<form crud-edit></form>')($rootScope);
+        expect(element.scope().save).toBeDefined();
+        expect(element.scope().canSave).toBeDefined();
+        expect(element.scope().revertChanges).toBeDefined();
+        expect(element.scope().canRevert).toBeDefined();
+        expect(element.scope().remove).toBeDefined();
+        expect(element.scope().canRemove).toBeDefined();
+        expect(element.scope().getCssClasses).toBeDefined();
+        expect(element.scope().showError).toBeDefined();
+      });
+    });
+
+    it('should not modify the parent scope', function() {
+      inject(function($compile, $rootScope) {
+        var element = $compile('<form crud-edit></form>')($rootScope);
+        expect($rootScope.save).not.toBeDefined();
+        expect($rootScope.canSave).not.toBeDefined();
+        expect($rootScope.revertChanges).not.toBeDefined();
+        expect($rootScope.canRevert).not.toBeDefined();
+        expect($rootScope.remove).not.toBeDefined();
+        expect($rootScope.canRemove).not.toBeDefined();
+        expect($rootScope.getCssClasses).not.toBeDefined();
+        expect($rootScope.showError).not.toBeDefined();
+      });
     });
   });
 
-  it('should attach methods to the scope', function() {
-    inject(function($compile, $rootScope) {
-      var element = $compile('<form crud-edit></form>')($rootScope);
-      expect($rootScope.save).toBeDefined();
-      expect($rootScope.canSave).toBeDefined();
-      expect($rootScope.revertChanges).toBeDefined();
-      expect($rootScope.canRevert).toBeDefined();
-      expect($rootScope.remove).toBeDefined();
-      expect($rootScope.canRemove).toBeDefined();
-      expect($rootScope.getCssClasses).toBeDefined();
-      expect($rootScope.showError).toBeDefined();
-    });
-  });
-
-  it('scope.save should call resource.$saveOrUpdate', function() {
-    inject(function($compile, $rootScope) {
+  describe('scope methods', function() {
+    var element, scope, form, someField;
+    beforeEach(inject(function($compile, $rootScope) {
       $rootScope.resource = resourceMock;
-      var element = $compile('<form crud-edit="resource"></form>')($rootScope);
-      $rootScope.save();
-      expect(resourceMock.$saveOrUpdate).toHaveBeenCalled();
-    });
-  });
+      $rootScope.resource.someVal = 'original';
+      element = $compile('<form name="form" crud-edit="resource"><input name="someField" ng-model="resource.someVal"></form>')($rootScope);
+      scope = element.scope();
+      form = scope.form;
+      someField = scope.form.someField;
+    }));
 
-  it('scope.remove should call resource.$remove if resource.$id returns true', function() {
-    inject(function($compile, $rootScope) {
-      resourceMock.$id = jasmine.createSpy('$id').andReturn(true);
-      $rootScope.resource = resourceMock;
-      var element = $compile('<form crud-edit="resource"></form>')($rootScope);
-      $rootScope.remove();
-      expect(resourceMock.$remove).toHaveBeenCalled();
+    describe('save', function() {
+      it('scope.save should call resource.$saveOrUpdate', function() {
+        scope.save();
+        expect(resourceMock.$saveOrUpdate).toHaveBeenCalled();
+      });
     });
-  });
 
-  it('scope.remove should call resource.$remove if resource.$id returns false', function() {
-    inject(function($compile, $rootScope) {
-      resourceMock.$id = jasmine.createSpy('$id').andReturn(false);
-      $rootScope.resource = resourceMock;
-      var element = $compile('<form crud-edit="resource"></form>')($rootScope);
-      $rootScope.remove();
-      expect(resourceMock.$remove).not.toHaveBeenCalled();
+    describe('canSave', function() {
+      it('should return true if the model is valid and different to the original', function() {
+        expect(scope.canSave()).toBeFalsy();
+        someField.$setViewValue('different');
+        expect(scope.canSave()).toBeTruthy();
+      });
+      it('should return false if the model is invalid', function() {
+        expect(scope.canSave()).toBeFalsy();
+        someField.$setValidity('required',false);
+        expect(scope.canSave()).toBeFalsy();
+        someField.$setViewValue('different');
+        expect(scope.canSave()).toBeFalsy();
+      });
     });
+
+    describe('revertChanges', function() {
+      it('should reset the resource to its original state', function() {
+        var original = angular.copy(scope.resource);
+        expect(scope.resource).toEqual(original);
+        scope.resource.someVal = 'different';
+        expect(scope.resource).not.toEqual(original);
+        scope.revertChanges();
+        expect(scope.resource).toEqual(original);
+      });
+    });
+
+    describe('canRevert', function() {
+      it('should return false if the model is same as the original', function() {
+        expect(scope.canRevert()).toBeFalsy();
+        someField.$setValidity('required', false);
+        expect(scope.canRevert()).toBeFalsy();
+      });
+      it('should return true if the model is different to the original', function() {
+        expect(scope.canRevert()).toBeFalsy();
+        someField.$setViewValue('different');
+        expect(scope.canRevert()).toBeTruthy();
+        someField.$setValidity('required', false);
+        expect(scope.canRevert()).toBeTruthy();
+      });
+    });
+
+    describe('remove', function() {
+      it('scope.remove should call resource.$remove if resource.$id returns true', function() {
+        resourceMock.$id = jasmine.createSpy('$id').andReturn(true);
+        scope.remove();
+        expect(resourceMock.$remove).toHaveBeenCalled();
+      });
+
+      it('scope.remove should call resource.$remove if resource.$id returns false', function() {
+        resourceMock.$id = jasmine.createSpy('$id').andReturn(false);
+        scope.remove();
+        expect(resourceMock.$remove).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('getCssClasses', function() {
+      it('should return an object with error and success members', function() {
+        expect(scope.getCssClasses('someField').error).toBeDefined();
+        expect(scope.getCssClasses('someField').success).toBeDefined();
+      });
+
+      it('should have error and success false if the item is same as original', function() {
+        expect(scope.getCssClasses('someField').error).toBeFalsy();
+        expect(scope.getCssClasses('someField').success).toBeFalsy();
+
+        someField.$setValidity('required', false);
+
+        expect(scope.getCssClasses('someField').error).toBeFalsy();
+        expect(scope.getCssClasses('someField').success).toBeFalsy();
+
+        someField.$setViewValue('original'); // This makes the form dirty but identical to the original
+        someField.$setValidity('required', true);
+
+        expect(scope.getCssClasses('someField').error).toBeFalsy();
+        expect(scope.getCssClasses('someField').success).toBeFalsy();
+
+        someField.$setValidity('required', false);
+
+        expect(scope.getCssClasses('someField').error).toBeFalsy();
+        expect(scope.getCssClasses('someField').success).toBeFalsy();
+      });
+
+      it('should have error true and success false if the item is different to original and invalid', function() {
+        someField.$setViewValue('different');
+        someField.$setValidity('required', false);
+
+        expect(scope.getCssClasses('someField').error).toBeTruthy();
+        expect(scope.getCssClasses('someField').success).toBeFalsy();
+      });
+
+
+      it('should have error false and success true if the item is dirty and valid', function() {
+        someField.$setViewValue('');
+
+        expect(scope.getCssClasses('someField').error).toBeFalsy();
+        expect(scope.getCssClasses('someField').success).toBeTruthy();
+      });
+    });
+
+    describe('showError', function() {
+      it('should return false if no error is set', function() {
+        expect(scope.showError('someField','required')).toBeFalsy();
+      });
+
+      it('should return true if the specified error is set', function() {
+        someField.$setValidity('required', false);
+        expect(scope.showError('someField','required')).toBeTruthy();
+        expect(scope.showError('someField','email')).toBeFalsy();
+      });
+    });
+
   });
 });

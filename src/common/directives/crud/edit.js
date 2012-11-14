@@ -2,6 +2,7 @@ angular.module('directives.crud.edit', [])
 
 .directive('crudEdit', ['$parse', function($parse) {
   return {
+    scope: true,
     require: '^form',
     link: function(scope, element, attrs, form) {
       var resourceName = attrs.crudEdit;
@@ -52,8 +53,8 @@ angular.module('directives.crud.edit', [])
       scope.getCssClasses = function(fieldName) {
         var ngModelContoller = form[fieldName];
         return {
-          error: ngModelContoller.$invalid && ngModelContoller.$dirty,
-          success: ngModelContoller.$valid && ngModelContoller.$dirty
+          error: ngModelContoller.$invalid && !angular.equals(resource, original),
+          success: ngModelContoller.$valid && !angular.equals(resource, original)
         };
       };
 
