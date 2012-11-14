@@ -14,7 +14,7 @@ angular.module('directives.crud.edit', [])
       // onRemove attribute -> onRemove scope -> onSave attribute -> onSave scope -> noop
       var onRemove = attrs.onRemove ? $parse(attrs.onRemove) : ( scope.onRemove || onSave );
       // onError attribute -> onError scope -> noop
-      var onError = attrs.onError ? $parse(attrs.onError) : ( scope.onError || noop );
+      var onError = attrs.onError ? $parse(attrs.onError) : ( scope.onError || angular.noop );
 
       scope.save = function() {
         resource.$saveOrUpdate(onSave, onSave, onError, onError);
