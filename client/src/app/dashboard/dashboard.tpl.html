@@ -1,0 +1,26 @@
+<h4>My projects</h4>
+<div ng-include="'projects/projects-list.tpl.html'">
+</div>
+
+<h4>My tasks</h4>
+<table class="table table-bordered table-condensed table-striped table-hover">
+    <thead>
+    <tr>
+        <th class="span8">Name</th>
+        <th class="span1">Estimation</th>
+        <th class="span1">Remaining</th>
+        <th class="span2">Tools</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="task in tasks">
+        <td>{{task.name}}</td>
+        <td>{{task.estimation}}</td>
+        <td>{{task.remaining}}</td>
+        <td></td>
+    </tr>
+    <tr ng-show="!tasks.length">
+        <td colspan="4">No tasks for you!</td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+<div class="well">
+    <div class="row-fluid">
+        <form name="form">
+            <div class="span6">
+                <label>Name</label>
+                <input type="text" name="name" ng-model="task.name" class="span10" required autofocus>
+                <label>Product Backlog item</label>
+                <select name="productBacklog" class="span10" ng-model="task.productBacklogItemId" ng-options="backlogItem.$id() as backlogItem.name for backlogItem in sprintBacklogItems" required></select>
+                <label>Description</label>
+                <textarea rows="8" cols="10" ng-model="task.desc" class="span10" required>
+                </textarea>
+            </div>
+            <div class="span6">
+                <label>Estimation</label>
+                <input type="number" name="estimation" ng-model="task.estimation" class="span5" required>
+                <label>Remaining</label>
+                <input type="number" name="remaining" ng-model="task.remaining" class="span5" required>
+                <label>State</label>
+                <select name="state" ng-model="task.state" class="span5" required ng-options="state for state in statesEnum"></select>
+                <label>Assigned to</label>
+                <select name="state" ng-model="task.assignedUserId" class="span10" ng-options="teamMember.$id() as teamMember.getFullName() for teamMember in teamMembers"></select>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <crud-buttons></crud-buttons>
+</div>

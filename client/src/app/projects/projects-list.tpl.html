@@ -1,0 +1,23 @@
+<table class="table table-bordered table-condensed table-striped table-hover">
+    <thead>
+    <tr>
+        <th class="span3">Name</th>
+        <th class="span5">Description</th>
+        <th class="span2">My Role(s)</th>
+        <th class="span2">Tools</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="project in projects">
+        <td ng-click="manageBacklog(project.$id())">{{project.name}}</td>
+        <td ng-click="manageBacklog(project.$id())">{{project.desc}}</td>
+        <td>
+            {{project.getRoles(authService.currentUser.id)}}
+        </td>
+        <td>
+            <a ng-click="manageBacklog(project.$id())">Product backlog</a>
+            <a ng-click="manageSprints(project.$id())">Sprints</a>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,24 @@
+<table class="table table-bordered table-condensed table-striped table-hover">
+    <thead>
+    <tr>
+        <th class="span8">Name</th>
+        <th class="span1">Estimation</th>
+        <th class="span1">Remaining</th>
+        <th class="span2">Tools</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="task in tasks">
+        <td ng-click="edit(task.$id())">{{task.name}}</td>
+        <td>{{task.estimation}}</td>
+        <td>{{task.remaining}}</td>
+        <td></td>
+    </tr>
+    <tr ng-show="!tasks.length">
+        <td colspan="4">No tasks defined for this sprint</td>
+    </tr>
+    </tbody>
+</table>
+<div class="well">
+    <button class="btn" ng-click="new()">New task</button>
+</div>
