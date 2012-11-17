@@ -9,7 +9,7 @@ var createDocument = function(collection, document, done) {
   var url = baseUrl + collection + '/?apiKey=' + config.apiKey;
   console.log(url);
   console.log(queryOptions);
-  var request = rest.postJson(url, { data: document });
+  var request = rest.postJson(url, document);
   request.on('error', function(err, response) { done(err, null); });
   request.on('fail', function(err, response) { done(err, null); });
   request.on('success', function(data) { done(null, data); });
