@@ -1,0 +1,35 @@
+<div class="navbar" ng-controller="HeaderCtrl">
+    <div class="navbar-inner">
+        <a class="brand" ng-click="home()">AScrum</a>
+        <ul class="nav">
+            <li ng-class="{active:isNavbarActive('projectsinfo')}"><a href="/projectsinfo">Projects info</a></li>
+        </ul>
+
+        <ul class="nav" ng-show="currentUser.isAuthenticated()">
+            <li ng-class="{active:isNavbarActive('projects')}"><a href="/projects">My projects</a></li>
+            <li class="dropdown" ng-class="{active:isNavbarActive('admin'), open:isAdminOpen}" ng-show="currentUser.isAdmin()">
+                <a id="adminmenu" role="button" class="dropdown-toggle" ng-click="isAdminOpen=!isAdminOpen">Admin<b class="caret"></b></a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="adminmenu">
+                    <li><a tabindex="-1" href="/admin/projects" ng-click="isAdminOpen=false">Projects</a></li>
+                    <li><a tabindex="-1" href="/admin/users" ng-click="isAdminOpen=false">Users</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav pull-right" ng-show="hasPendingRequests()">
+            <li class="divider-vertical"></li>
+            <li><a href="#"><img src="/static/img/spinner.gif"></a></li>
+        </ul>
+        <login-toolbar></login-toolbar>
+    </div>
+    <div>
+        <ul class="breadcrumb">
+            <li ng-repeat="breadcrumb in breadcrumbs.getAll()">
+                <span class="divider">/</span>
+                <ng-switch on="$last">
+                    <span ng-switch-when="true">{{breadcrumb.name}}</span>
+                    <span ng-switch-default><a href="{{breadcrumb.path}}">{{breadcrumb.name}}</a></span>
+                </ng-switch>
+            </li>
+        </ul>
+    </div>
+</div>
