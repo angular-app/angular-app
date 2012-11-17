@@ -9,13 +9,22 @@ angular.module('directives.crud.edit', [])
       var resource = scope[resourceName];
       var original = angular.copy(resource);
 
+      var makeFn = function(name) {
+        var fn = scope.$parent.$eval(attrs[name]);
+        if ( !angular.isFunction(fn) ) {
+          throw new Error('crudEdit directive: The attribute "' + name + '" must evaluate to a function');
+        }
+        return fn;
+      };
+
       // Set up callbacks with fallback
       // onSave attribute -> onSave scope -> noop
-      var onSave = attrs.onSave ? $parse(attrs.onSave) : ( scope.onSave || angular.noop );
+      var onSave = attrs.onSave ? makeFn('onSave') : ( scope.onSave || angular.noop );
       // onRemove attribute -> onRemove scope -> onSave attribute -> onSave scope -> noop
-      var onRemove = attrs.onRemove ? $parse(attrs.onRemove) : ( scope.onRemove || onSave );
+      var onRemove = attrs.onRemove ? makeFn('onRemove') : ( scope.onRemove || onSave );
       // onError attribute -> onError scope -> noop
-      var onError = attrs.onError ? $parse(attrs.onError) : ( scope.onError || angular.noop );
+      var onError = attrs.onError ? makeFn('onError') : ( scope.onError || angular.noop );
+
 
       scope.save = function() {
         resource.$saveOrUpdate(onSave, onSave, onError, onError);

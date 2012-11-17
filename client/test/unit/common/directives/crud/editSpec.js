@@ -48,20 +48,57 @@ describe('crud-edit directive', function () {
   });
 
   describe('scope methods', function() {
-    var element, scope, form, someField;
-    beforeEach(inject(function($compile, $rootScope) {
+    var element, scope, form, someField, $rootScope;
+    beforeEach(inject(function($compile, _$rootScope_) {
+      $rootScope = _$rootScope_;
       $rootScope.resource = resourceMock;
       $rootScope.resource.someVal = 'original';
       element = $compile('<form name="form" crud-edit="resource"><input name="someField" ng-model="resource.someVal"></form>')($rootScope);
       scope = element.scope();
-      form = scope.form;
       someField = scope.form.someField;
     }));
 
     describe('save', function() {
-      it('scope.save should call resource.$saveOrUpdate', function() {
+      it('scope.save should call resource.$saveOrUpdate with noop callbacks by default', function() {
+        scope.save();
+        expect(resourceMock.$saveOrUpdate).toHaveBeenCalledWith(angular.noop, angular.noop, angular.noop, angular.noop);
+      });
+      it('scope.save should call resource.$saveOrUpdate with scope callbacks if specified', function() {
+        // We must recompile/link the directive to get it to pick up the new callbacks
+        inject(function($compile) {
+          $rootScope.onSave = jasmine.createSpy('onSave');
+          $rootScope.onError = jasmine.createSpy('onError');
+
+          element = $compile('<form name="form" crud-edit="resource"><input name="someField" ng-model="resource.someVal"></form>')($rootScope);
+          scope = element.scope();
+        });
+
+        scope.save();
+        expect(resourceMock.$saveOrUpdate).toHaveBeenCalledWith(scope.onSave, scope.onSave, scope.onError, scope.onError);
+      });
+
+      it('scope.save should call resource.$saveOrUpdate with attribute callbacks if specified', function() {
+        // We must recompile/link the directive to get it to pick up the new callbacks
+        inject(function($compile) {
+          $rootScope.onSaveAttr = jasmine.createSpy('onSaveAttr');
+          $rootScope.onErrorAttr = jasmine.createSpy('onErrorAttr');
+          $rootScope.onSave = jasmine.createSpy('onSave');
+          $rootScope.onError = jasmine.createSpy('onError');
+
+          element = $compile('<form name="form" crud-edit="resource" on-save="onSaveAttr" on-error="onErrorAttr"><input name="someField" ng-model="resource.someVal"></form>')($rootScope);
+          scope = element.scope();
+        });
+
+        resourceMock.$saveOrUpdate.andCallFake(function(onSave1, onSave2, onError1, onError2) {
+          onSave1();
+          onSave2();
+          onError1();
+          onError2();
+        });
         scope.save();
         expect(resourceMock.$saveOrUpdate).toHaveBeenCalled();
+        expect($rootScope.onSaveAttr).toHaveBeenCalled();
+        expect($rootScope.onErrorAttr).toHaveBeenCalled();
       });
     });
 
@@ -110,7 +147,22 @@ describe('crud-edit directive', function () {
       it('scope.remove should call resource.$remove if resource.$id returns true', function() {
         resourceMock.$id = jasmine.createSpy('$id').andReturn(true);
         scope.remove();
-        expect(resourceMock.$remove).toHaveBeenCalled();
+        expect(resourceMock.$remove).toHaveBeenCalledWith(angular.noop, angular.noop);
+      });
+
+      it('scope.remove should call resource.$remove with scope callbacks if specified', function() {
+        // We must recompile/link the directive to get it to pick up the new callbacks
+        inject(function($compile) {
+          $rootScope.onSave = jasmine.createSpy('onSave');
+          $rootScope.onError = jasmine.createSpy('onError');
+
+          element = $compile('<form name="form" crud-edit="resource"><input name="someField" ng-model="resource.someVal"></form>')($rootScope);
+          scope = element.scope();
+        });
+
+        resourceMock.$id = jasmine.createSpy('$id').andReturn(true);
+        scope.remove();
+        expect(resourceMock.$remove).toHaveBeenCalledWith(scope.onSave, scope.onError);
       });
 
       it('scope.remove should call resource.$remove if resource.$id returns false', function() {
@@ -175,6 +227,5 @@ describe('crud-edit directive', function () {
         expect(scope.showError('someField','email')).toBeFalsy();
       });
     });
-
   });
 });
