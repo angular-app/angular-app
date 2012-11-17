@@ -35,6 +35,7 @@ angular.module('admin-projects', ['resources.projects', 'resources.users', 'serv
 
 .controller('ProjectsEditCtrl', ['$scope', '$location', 'crudEditMethods', 'users', 'project', function($scope, $location, crudEditMethods, users, project) {
 
+  $scope.project = project;
   $scope.selTeamMember = undefined;
 
   $scope.users = users;
@@ -44,43 +45,44 @@ angular.module('admin-projects', ['resources.projects', 'resources.users', 'serv
     $scope.usersLookup[value.$id()] = value;
   });
 
-  angular.extend($scope, crudEditMethods('item', project, 'form', function() {
+  $scope.onSave = function() {
     $location.path('/admin/projects');
-  }, function() {
+  };
+  $scope.onError = function() {
     $scope.updateError = true;
-  }));
+  };
 
-  $scope.item.teamMembers = $scope.item.teamMembers || [];
+  $scope.project.teamMembers = $scope.project.teamMembers || [];
 
   $scope.productOwnerCandidates = function() {
     return $scope.users.filter(function(user) {
-      return $scope.usersLookup[user.$id()] && $scope.item.canActAsProductOwner(user.$id());
+      return $scope.usersLookup[user.$id()] && $scope.project.canActAsProductOwner(user.$id());
     });
   };
 
   $scope.scrumMasterCandidates = function() {
     return $scope.users.filter(function(user) {
-      return $scope.usersLookup[user.$id()] && $scope.item.canActAsScrumMaster(user.$id());
+      return $scope.usersLookup[user.$id()] && $scope.project.canActAsScrumMaster(user.$id());
     });
   };
 
   $scope.teamMemberCandidates = function() {
     return $scope.users.filter(function(user) {
-      return $scope.usersLookup[user.$id()] && $scope.item.canActAsDevTeamMember(user.$id()) && !$scope.item.isDevTeamMember(user.$id());
+      return $scope.usersLookup[user.$id()] && $scope.project.canActAsDevTeamMember(user.$id()) && !$scope.project.isDevTeamMember(user.$id());
     });
   };
 
   $scope.addTeamMember = function() {
     if($scope.selTeamMember) {
-      $scope.item.teamMembers.push($scope.selTeamMember);
+      $scope.project.teamMembers.push($scope.selTeamMember);
       $scope.selTeamMember = undefined;
     }
   };
 
   $scope.removeTeamMember = function(teamMember) {
-    var idx = $scope.item.teamMembers.indexOf(teamMember);
+    var idx = $scope.project.teamMembers.indexOf(teamMember);
     if(idx >= 0) {
-      $scope.item.teamMembers.splice(idx, 1);
+      $scope.project.teamMembers.splice(idx, 1);
     }
   };
 }]);

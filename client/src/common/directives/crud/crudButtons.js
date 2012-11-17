@@ -1,7 +1,6 @@
-angular.module('directives.crud', []);
+angular.module('directives.crud.buttons', [])
 
-//TODO: does it make any sense to create an isolated scope here? Somehow a ngInclude would do the trick but is not that cool :-)
-angular.module('directives.crud').directive('crudButtons', function () {
+.directive('crudButtons', function () {
   return {
     restrict:'E',
     replace:true,

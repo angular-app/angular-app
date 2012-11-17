@@ -35,11 +35,15 @@ angular.module('productbacklog').controller('ProductBacklogListCtrl', ['$scope',
   angular.extend($scope, crudListMethods('/projects/'+projectId+'/productbacklog'));
 }]);
 
-angular.module('productbacklog').controller('ProductBacklogEditCtrl', ['$scope', '$location', 'crudEditMethods', 'projectId', 'backlogItem', function($scope, $location, crudEditMethods, projectId, backlogItem){
+angular.module('productbacklog').controller('ProductBacklogEditCtrl', ['$scope', '$location', 'projectId', 'backlogItem', function($scope, $location, projectId, backlogItem){
 
-  angular.extend($scope, crudEditMethods('item', backlogItem, 'form', function () {
+  $scope.backlogItem = backlogItem;
+
+  $scope.onSave = function () {
     $location.path('/projects/'+projectId+'/productbacklog');
-  }, function () {
+  };
+
+  $scope.onError = function () {
     $scope.updateError = true;
-  }));
+  };
 }]);
