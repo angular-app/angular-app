@@ -13,6 +13,7 @@
     npm install
     cd ..
     ```
+
 ## Client App
 * Install local dependencies:
     ```
@@ -30,6 +31,7 @@ The app made up of a number of javascript, css and html files that need to be me
 ## Configure Server
 The server stores its data in a MongoLab database.  You will need to create an account with them -it free: https://mongolab.com/signup/.  Once you have signed up, you will be provided with an API key.  Create a database to use for this application.
 * Edit `server/config.js` to set the MongoLab API Key you received and the name of the database you created.
+* Run the `server/initDB.js` file to initialize the database with a first admin user (admin@abc.com : changeme).
 
 # Running
 ## Start the Server
