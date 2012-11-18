@@ -3,24 +3,54 @@ describe('crud-edit directive', function () {
 
   beforeEach(module('directives.crud.edit'));
   beforeEach(function() {
-    resourceMock = jasmine.createSpyObj('resource', ['$saveOrUpdate', '$remove']);
+    resourceMock = jasmine.createSpyObj('resource', ['$saveOrUpdate', '$remove', '$id']);
+    inject(function($rootScope) {
+      $rootScope.resource = resourceMock;
+    });
   });
 
   describe('scope initialization', function() {
+    it('requires a valid resource object', function() {
+      inject(function($compile, $rootScope) {
+        expect(function() {
+          $compile('<form crud-edit="resource"></form>')($rootScope);
+        }).not.toThrow();
+        expect(function() {
+          $compile('<form crud-edit></form>')($rootScope);
+        }).toThrow();
+        expect(function() {
+          $compile('<form crud-edit="nonObject"></form>')($rootScope);
+        }).toThrow();
+        expect(function() {
+          $rootScope.nonResourceObject = {};
+          $compile('<form crud-edit="nonResourceObject"></form>')($rootScope);
+        }).toThrow();
+      });
+    });
+
+    it('should evaluate a complex expression for the resource', function() {
+      inject(function($compile, $rootScope) {
+        expect(function() {
+          $rootScope.wrapper = { wrappedResourceFn: function() { return resourceMock; } };
+          $compile('<form crud-edit="wrapper.wrappedResourceFn()"></form>')($rootScope);
+        }).not.toThrow();
+      });
+    });
+
     it('requires a form element', function() {
       inject(function($compile, $rootScope) {
         expect(function() {
-          $compile('<form crud-edit></form>')($rootScope);
+          $compile('<form crud-edit="resource"></form>')($rootScope);
         }).not.toThrow();
         expect(function() {
-          $compile('<div crud-edit></div>')($rootScope);
+          $compile('<div crud-edit="resource"></div>')($rootScope);
         }).toThrow();
       });
     });
 
     it('should attach methods to the scope', function() {
       inject(function($compile, $rootScope) {
-        var element = $compile('<form crud-edit></form>')($rootScope);
+        var element = $compile('<form crud-edit="resource"></form>')($rootScope);
         expect(element.scope().save).toBeDefined();
         expect(element.scope().canSave).toBeDefined();
         expect(element.scope().revertChanges).toBeDefined();
@@ -34,7 +64,7 @@ describe('crud-edit directive', function () {
 
     it('should not modify the parent scope', function() {
       inject(function($compile, $rootScope) {
-        var element = $compile('<form crud-edit></form>')($rootScope);
+        var element = $compile('<form crud-edit="resource"></form>')($rootScope);
         expect($rootScope.save).not.toBeDefined();
         expect($rootScope.canSave).not.toBeDefined();
         expect($rootScope.revertChanges).not.toBeDefined();
@@ -51,7 +81,6 @@ describe('crud-edit directive', function () {
     var element, scope, form, someField, $rootScope;
     beforeEach(inject(function($compile, _$rootScope_) {
       $rootScope = _$rootScope_;
-      $rootScope.resource = resourceMock;
       $rootScope.resource.someVal = 'original';
       element = $compile('<form name="form" crud-edit="resource"><input name="someField" ng-model="resource.someVal"></form>')($rootScope);
       scope = element.scope();
