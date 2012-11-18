@@ -33,7 +33,7 @@ angular.module('admin-projects', ['resources.projects', 'resources.users', 'serv
   angular.extend($scope, crudListMethods('/admin/projects'));
 }])
 
-.controller('ProjectsEditCtrl', ['$scope', '$location', 'crudEditMethods', 'users', 'project', function($scope, $location, crudEditMethods, users, project) {
+.controller('ProjectsEditCtrl', ['$scope', '$location', 'users', 'project', function($scope, $location, users, project) {
 
   $scope.project = project;
   $scope.selTeamMember = undefined;
