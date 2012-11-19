@@ -21,6 +21,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "grunt": "~0.3.17",
     "grunt-recess": "~0.1.0",
     "grunt-contrib-clean": "~0.3.0",
     "grunt-contrib-copy": "~0.3.0"
