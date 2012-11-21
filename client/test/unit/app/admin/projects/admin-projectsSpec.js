@@ -56,25 +56,27 @@ describe('admin projects', function () {
       expect(params.users.filter).toHaveBeenCalled();
     });
     it('should push items into team members array in addTeamMember only if a team member is selected', function() {
-      var pushTeamMember = spyOn($scope.project.teamMembers,'push');
+      expect($scope.project.teamMembers.length).toBe(0);
       $scope.addTeamMember();
-      expect(pushTeamMember).not.toHaveBeenCalled();
+      expect($scope.project.teamMembers.length).toBe(0);
 
-      $scope.selTeamMember = {};
+      var someTeamMember = {};
+      $scope.selTeamMember = someTeamMember;
       $scope.addTeamMember();
-      expect(pushTeamMember).toHaveBeenCalled();
+      expect($scope.project.teamMembers.length).toBe(1);
+      expect($scope.project.teamMembers[0]).toBe(someTeamMember);
       expect($scope.selTeamMember).toBeUndefined();
     });
-    it('should remove the specified team member if it is in the team members array', function() {
-      var indexOfTeamMembers = spyOn($scope.project.teamMembers,'indexOf').andReturn(-1);
-      $scope.removeTeamMember();
-      expect(indexOfTeamMembers).toHaveBeenCalled();
+    it('should remove the specified team member only if it is in the team members array', function() {
+      var someTeamMember = {};
+      var otherTeamMember = {};
+      $scope.project.teamMembers.push(someTeamMember);
+      $scope.removeTeamMember(someTeamMember);
+      expect($scope.project.teamMembers.length).toBe(0);
       
-      indexOfTeamMembers.andReturn(0);
-      spliceTeamMembers = spyOn($scope.project.teamMembers,'splice');
-      $scope.removeTeamMember();
-      expect(indexOfTeamMembers).toHaveBeenCalled();
-      expect(spliceTeamMembers).toHaveBeenCalled();
+      $scope.project.teamMembers.push(someTeamMember);
+      $scope.removeTeamMember(otherTeamMember);
+      expect($scope.project.teamMembers.length).toBe(1);
     });
   });
 });
