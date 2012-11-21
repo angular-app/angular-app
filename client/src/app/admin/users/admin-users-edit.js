@@ -1,4 +1,4 @@
-angular.module('admin-users-edit',['services.crud', 'services.i18nNotifications'])
+angular.module('admin-users-edit',['services.crud', 'services.i18nNotifications', 'resources.users'])
 
 .controller('UsersEditCtrl', ['$scope', '$location', 'i18nNotifications', 'user', function ($scope, $location, i18nNotifications, user) {
 
