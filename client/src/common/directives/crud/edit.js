@@ -66,6 +66,7 @@ angular.module('directives.crud.edit', [])
       // The following functions can be called to modify the behaviour of elements in the form
       // - e.g. ng-disable="!canSave()"
       scope.canSave = function() {
+        console.log(form.$valid, form.$invalid);
         return form.$valid && !angular.equals(resource, original);
       };
       scope.canRevert = function() {
