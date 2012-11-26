@@ -3,10 +3,16 @@
 # Installation
 
 ## Tools
-* Install node.js (requires node.js version >= 0.8.4)
-* Install global npm modules: `npm install -g grunt@0.3.x testacular@0.4.x`
+Our development process and back end server rely on applications written in NodeJS (nodejs.org).  You need to install NodeJS and then the development tools.
+NodeJs comes with a package manager called npm for installing NodeJS applications and libraries.
+* Install node.js (requires node.js version >= 0.8.4) - [http://nodejs.org/download/]
+* Install Grunt and Testacular as global npm modules:
+    ```
+    npm install -g grunt@0.3.x testacular@0.4.x
+    ```
 
 ## App Server
+Our backend application server is a NodeJS application that relies upon some 3rd Party libraries.  You need to install these using the NodeJS package manager, npm 
 * Install local dependencies: 
 
     ```
@@ -16,6 +22,7 @@
     ```
 
 ## Client App
+Our client application is a straight HTML/Javascript application but our development process uses a NodeJS build tool called Grunt [gruntjs.com].  Grunt relies upon some 3rd party libraries that we need to install as local dependencies using npm.
 * Install local dependencies:
 
     ```
@@ -26,18 +33,38 @@
 
 # Building
 
+_*If you are using Windows then you must run `grunt` as `grunt.cmd`.  Throughout the rest of this README we will just write `grunt`.*_
+
 ## Build the client app
-The app made up of a number of javascript, css and html files that need to be merged into a final distribution for running.
-* Build client application: `grunt build` (or `grunt.cmd build` on Windows)
+The app made up of a number of javascript, css and html files that need to be merged into a final distribution for running.  We use the Grunt build tool to do this.
+* Build client application: `grunt build`
 
 ## Configure Server
-The server stores its data in a MongoLab database.  You will need to create an account with them -it free: https://mongolab.com/signup/.  Once you have signed up, you will be provided with an API key.  Create a database to use for this application.
-* Edit `server/config.js` to set the MongoLab API Key you received and the name of the database you created.
-* Run the `server/initDB.js` file to initialize the database with a first admin user (admin@abc.com : changeme).
+The server stores its data in a MongoLab database.
+* Create an account at MongoLab - it's free: [https://mongolab.com/signup/].
+* Create a database to use for this application: [https://mongolab.com/newdb]
+* Grab your API key: [https://mongolab.com/user?username=YOUR_USERNAME_HERE]
+* Edit `server/config.js` to set your MongoLab API Key and the name of the database you created.
+    ```
+    mongo: {
+        dbUrl: 'https://api.mongolab.com/api/1/databases',  // The base url of the MongoLab DB server
+        apiKey: 'YOUR_API_KEY_HERE',                        // Our MongoLab API key
+        dbName: 'YOUR_DB_NAME_HERE',                        // The name of database to which this server connect
+        usersCollection: 'users'                            // The name of the collection that will contain our user information
+    },
+    ```
+* Run our initialization script to initialize the database with a first admin user (admin@abc.com : changeme).
+
+    ```
+    `node server/initDB.js`
+    ```
 
 # Running
 ## Start the Server
-* Run the server with `node server/server.js`
+* Run the server
+    ```
+    node server/server.js
+    ```
 * Browse to the application at [http://localhost:3000]
 
 # Folders structure
