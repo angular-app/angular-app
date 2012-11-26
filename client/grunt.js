@@ -30,7 +30,7 @@ module.exports = function (grunt) {
     },
     test: {
       unit: ['test/unit/**/*Spec.js'],
-      e2e: ['test/e2e/**/*Spec.js']
+      e2e: ['test/e2e/**/*Scenario.js']
     },
     lint:{
       files:['grunt.js', '<config:src.js>', '<config:test.unit>', '<config:test.e2e>']
