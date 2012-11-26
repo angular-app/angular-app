@@ -7,6 +7,7 @@ Our development process and back end server rely on applications written in Node
 NodeJs comes with a package manager called npm for installing NodeJS applications and libraries.
 * Install node.js (requires node.js version >= 0.8.4) - [http://nodejs.org/download/]
 * Install Grunt and Testacular as global npm modules:
+
     ```
     npm install -g grunt@0.3.x testacular@0.4.x
     ```
@@ -45,6 +46,7 @@ The server stores its data in a MongoLab database.
 * Create a database to use for this application: [https://mongolab.com/newdb]
 * Grab your API key: [https://mongolab.com/user?username=YOUR_USERNAME_HERE]
 * Edit `server/config.js` to set your MongoLab API Key and the name of the database you created.
+
     ```
     mongo: {
         dbUrl: 'https://api.mongolab.com/api/1/databases',  // The base url of the MongoLab DB server
@@ -53,6 +55,7 @@ The server stores its data in a MongoLab database.
         usersCollection: 'users'                            // The name of the collection that will contain our user information
     },
     ```
+
 * Run our initialization script to initialize the database with a first admin user (admin@abc.com : changeme).
 
     ```
