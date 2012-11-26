@@ -100,6 +100,6 @@ The e2e tests require the server to be started and also one or more browsers ope
 ## Continuous testing
 You can have grunt (testacular) continuously watch for file changes and automatically run all the tests on every change, without rebuilding the distribution files.  This can make the test run faster when you are doing test driven development and don't need to actually run the application itself.
 
-* Run `grunt test-watch`
+* Run `grunt test-watch`.
 * Open one or more browsers and point them to [http://localhost:8080/__testacular/].
 * Each time a file changes the tests will be run against each browser.
