@@ -7,6 +7,13 @@ describe('button directive', function () {
       expect(element.hasClass('btn')).toBe(true);
     });
   });
+
+  it('leaves the contents of the button intact', function() {
+    inject(function($compile, $rootScope) {
+      var element = $compile('<button>Click Me!</button>')($rootScope);
+      expect(element.text()).toBe('Click Me!');
+    });
+  });
 });
 
 describe('primaryButton directive', function () {
@@ -28,5 +35,12 @@ describe('primaryButton directive', function () {
 
   it('adds a "btn" class to button elements (because it is a button!)', function() {
     expect(element.hasClass('btn')).toBe(true);
+  });
+
+  it('transcludes the contents of the button correctly', function() {
+    inject(function($compile, $rootScope) {
+      var element = $compile('<primary-button>Click Me!</primary-button>')($rootScope);
+      expect(element.text()).toBe('Click Me!');
+    });
   });
 });
