@@ -19,6 +19,7 @@ angular.module('app').constant('MONGOLAB_CONFIG', {
 angular.module('app').constant('I18N.MESSAGES', {
   'errors.route.changeError':'Route change error',
   'crud.user.save.success':"A user with id '{{id}}' was saved successfully.",
+  'crud.user.remove.success':"A user with id '{{id}}' was removed successfully.",
   'crud.user.save.error':"Something went wrong when saving a user...",
   'login.error.notAuthorized':"You do not have the necessary access permissions.  Do you want to login as someone else?",
   'login.error.notAuthenticated':"You must be logged in to access this part of the application."

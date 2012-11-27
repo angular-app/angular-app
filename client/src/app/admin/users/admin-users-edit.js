@@ -11,6 +11,10 @@ angular.module('admin-users-edit',['services.crud', 'services.i18nNotifications'
     i18nNotifications.pushForCurrentRoute('crud.user.save.error', 'error');
   };
 
+  $scope.onRemove = function() {
+    i18nNotifications.pushForNextRoute('crud.user.remove.success', 'success', {id : user.$id()});
+  };
+
   $scope.user = user;
   $scope.password = user.password;
 
