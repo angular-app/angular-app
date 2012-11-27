@@ -30,13 +30,13 @@
                     <tr ng-repeat="userId in project.teamMembers">
                         <td>{{usersLookup[userId].getFullName()}}</td>
                         <td>
-                            <button class="btn btn-small" ng-click="removeTeamMember(userId)">Remove</button>
+                            <button class="btn-small" ng-click="removeTeamMember(userId)">Remove</button>
                         </td>
                     </tr>
                     <tr>
                         <td><select class="span6" ng-model="selTeamMember" ng-options="user._id.$oid as user.getFullName() for user in teamMemberCandidates()"></select></td>
                         <td>
-                            <button class="btn btn-small" ng-click="addTeamMember()" ng-disabled="!selTeamMember">Add</button>
+                            <button class="btn-small" ng-click="addTeamMember()" ng-disabled="!selTeamMember">Add</button>
                         </td>
                     </tr>
                     </tbody>

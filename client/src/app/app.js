@@ -8,6 +8,7 @@ angular.module('app', [
   'services.i18nNotifications',
   'services.httpRequestTracker',
   'directives.crud',
+  'directives.button',
   'templates']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
