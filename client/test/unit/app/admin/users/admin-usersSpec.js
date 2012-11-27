@@ -41,7 +41,7 @@ describe('admin users', function () {
       });
 
       it('should call $location in onSave', function() {
-        $scope.onSave();
+        $scope.onSave({});
         expect(params.i18nNotifications.pushForNextRoute).toHaveBeenCalled();
         expect(params.$location.path).toHaveBeenCalled();
       });
