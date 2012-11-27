@@ -62,7 +62,7 @@
                     <tr ng-repeat="productBacklogItem in productBacklog | filter:notSelected">
                         <td><a ng-click="viewProductBacklogItem(productBacklogItem.$id())">{{productBacklogItem.name}}</a></td>
                         <td>{{productBacklogItem.estimation}}</td>
-                        <td><button class="btn-mini btn-primary" ng-click="addBacklogItem(productBacklogItem)">Add to sprint</button></td>
+                        <td><primary-button class="btn-mini" ng-click="addBacklogItem(productBacklogItem)">Add to sprint</primary-button></td>
                     </tr>
                     </tbody>
                 </table>
