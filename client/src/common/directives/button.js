@@ -3,7 +3,7 @@ angular.module('directives.button', [])
 .directive('button', function() {
   return {
     restrict: 'E',
-    link: function(scope, element) {
+    compile: function(element) {
       element.addClass('btn');
     }
   };
@@ -15,7 +15,7 @@ angular.module('directives.button', [])
     template: '<button ng-transclude></button>',
     transclude: true,
     replace: true,
-    link: function(scope, element) {
+    compile: function(element) {
       element.addClass('btn-primary');
     }
   };
