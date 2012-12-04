@@ -118,9 +118,11 @@ The default grunt task will build (checks the javascript (lint), runs the unit t
 * `grunt` or `grunt.cmd` (on Windows)
 * Open one or more browsers and point them to [http://localhost:8080/__testacular/].  Once the browsers connect the tests will run and the build will complete.
 * If you leave the browsers open at this url then future runs of `grunt` will automatically run the tests against these browsers.
-## Continuous Building
+
+### Continuous Building
 The watch grunt task will monitor the source files and run the default build task every time a file changes: `grunt watch`.
-## Build without tests
+
+### Build without tests
 If for some reason you don't want to run the test but just generate the files - not a good idea(!!) - you can simply run the build task: `grunt build`.
 
 ### Building release code
