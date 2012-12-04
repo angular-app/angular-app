@@ -120,54 +120,54 @@ describe('admin users', function () {
   });
 
   describe('uniqueEmail directive', function() {
-    var Users, $scope, form;
+    var $scope, testInput, querySpy, respondWith;
 
-    function setTestValue(value) {
-      $scope.model.testValue = value;
-      $scope.$digest();
-    }
-
-    // Mockup Users resource
+    // We are best to mock up the whole Users object this way because Users
+    // relies on so many other services, including the MONGOLAB_CONFIG constant
     angular.module('test', []).factory('Users', function() {
-      Users = jasmine.createSpyObj('Users', ['query']);
-      return Users;
+      querySpy = jasmine.createSpy('query');
+      querySpy.andCallFake(function(query, response) {
+        // We capture the response so that the tests can call it with their own data
+        respondWith = response;
+      });
+      return { query: querySpy };
     });
-
     beforeEach(module('test'));
+
     beforeEach(inject(function($compile, $rootScope){
       $scope = $rootScope;
       var element = angular.element(
-        '<form name="form"><input name="testInput" ng-model="model.testValue" unique-email></form>'
+        '<form name="form">' +
+          '<input name="testInput" ng-model="model.testValue" unique-email>' +
+        '</form>'
       );
-      $scope.model = { testValue: null};
       $compile(element)($scope);
+      $scope.model = {};
       $scope.$digest();
-      form = $scope.form;
+      // Keep a reference to the test input for the tests
+      testInput = $scope.form.testInput;
     }));
     it('should be valid initially', function() {
-        expect(form.testInput.$valid).toBe(true);
+        expect(testInput.$valid).toBe(true);
     });
     it('should not call Users.query when the model changes', function() {
-      setTestValue('different');
-      expect(Users.query).not.toHaveBeenCalled();
+      $scope.model.testValue = 'different';
+      $scope.$digest();
+      expect(querySpy).not.toHaveBeenCalled();
     });
     it('should call Users.query when the view changes', function() {
-      form.testInput.$setViewValue('different');
-      expect(Users.query).toHaveBeenCalled();
+      testInput.$setViewValue('different');
+      expect(querySpy).toHaveBeenCalled();
     });
-    it('should set model to invalid if the Users callback contains users', function() {
-      Users.query.andCallFake(function(query, callback) {
-        callback(['someUser']);
-      });
-      form.testInput.$setViewValue('different');
-      expect(form.testInput.$valid).toBe(false);
+    it('should set model to invalid if the Users.query response contains users', function() {
+      testInput.$setViewValue('different');
+      respondWith(['someUser']);
+      expect(testInput.$valid).toBe(false);
     });
-    it('should set model to valid if the Users callback contains no users', function() {
-      Users.query.andCallFake(function(query, callback) {
-        callback([]);
-      });
-      form.testInput.$setViewValue('different');
-      expect(form.testInput.$valid).toBe(true);
+    it('should set model to valid if the Users.query response contains no users', function() {
+      testInput.$setViewValue('different');
+      respondWith([]);
+      expect(testInput.$valid).toBe(true);
     });
   });
 });
