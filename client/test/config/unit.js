@@ -9,7 +9,7 @@ files = [
   'vendor/mongolab/mongolab-resource.js',
   'test/vendor/angular/angular-mocks.js',
   'src/**/*.js',
-  'test/unit/**/*Spec.js',
+  'test/unit/**/*.spec.js',
   'dist/tmp/**/*.js'
 ];
 

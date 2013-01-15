@@ -5,7 +5,7 @@ basePath = '../..';
 files = [
   ANGULAR_SCENARIO,
   ANGULAR_SCENARIO_ADAPTER,
-  'test/e2e/**/*Scenario.js'
+  'test/e2e/**/*.scenario.js'
 ];
 
 // use dots reporter, as travis terminal does not support escaping sequences
