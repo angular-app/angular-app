@@ -33,7 +33,7 @@ angular.module('admin-projects', ['resources.projects', 'resources.users', 'serv
   angular.extend($scope, crudListMethods('/admin/projects'));
 }])
 
-.controller('ProjectsEditCtrl', ['$scope', '$location', 'users', 'project', function($scope, $location, users, project) {
+.controller('ProjectsEditCtrl', ['$scope', '$location', 'i18nNotifications', 'users', 'project', function($scope, $location, i18nNotifications, users, project) {
 
   $scope.project = project;
   $scope.selTeamMember = undefined;
@@ -45,11 +45,13 @@ angular.module('admin-projects', ['resources.projects', 'resources.users', 'serv
     $scope.usersLookup[value.$id()] = value;
   });
 
-  $scope.onSave = function() {
+  $scope.onSave = function(project) {
+    i18nNotifications.pushForNextRoute('crud.project.save.success', 'success', {id : project.$id()});
     $location.path('/admin/projects');
   };
+
   $scope.onError = function() {
-    $scope.updateError = true;
+    i18nNotifications.pushForCurrentRoute('crud.project.save.error', 'error');
   };
 
   $scope.project.teamMembers = $scope.project.teamMembers || [];
