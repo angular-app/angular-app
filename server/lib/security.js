@@ -24,6 +24,7 @@ var security = {
     passport.use(new MongoStrategy(url, apiKey, dbName, authCollection));
   },
   authenticationRequired: function(req, res, next) {
+    console.log('authRequired');
     if (req.isAuthenticated()) {
       next();
     } else {
@@ -31,6 +32,7 @@ var security = {
     }
   },
   adminRequired: function(req, res, next) {
+    console.log('adminRequired');
     if (req.user && req.user.admin ) {
       next();
     } else {

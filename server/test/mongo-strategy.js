@@ -2,7 +2,7 @@ var rewire = require("rewire");
 var MongoDBStrategy = rewire('../lib/mongo-strategy');
 
 var config = {
-  dbUrl: 'https://api.mongolab.com/api/1/databases',
+  dbUrl: 'https://api.mongolab.com/api/1',
   dbName: 'ascrum',
   dbCollection: 'users',
   apiKey: '4fb51e55e4b02e56a67b0b66',
@@ -35,7 +35,7 @@ function mockupRestInterface(test, expectedUrl, expectedOptions, expectedEvent, 
   });
 }
 
-var baseUrl = config.dbUrl + '/' + config.dbName + '/collections/' + config.dbCollection + '/';
+var baseUrl = config.dbUrl + '/databases/' + config.dbName + '/collections/' + config.dbCollection + '/';
   
 module.exports = {
   testGet: function(test) {

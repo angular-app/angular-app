@@ -3,6 +3,7 @@ var mongoProxy = require('./lib/mongo-proxy');
 var config = require('./config.js');
 var passport = require('passport');
 var security = require('./lib/security');
+require('express-namespace');
 
 var app = express();
 
@@ -23,7 +24,7 @@ app.use(express.cookieSession());                           // Store the session
 app.use(passport.initialize());                             // Initialize PassportJS
 app.use(passport.session());                                // Use Passport's session authentication strategy - this stores the logged in user in the session and will now run on any request
 
-security.initialize(config.mongo.dbUrl, config.mongo.apiKey, config.mongo.dbName, config.mongo.usersCollection); // Add a Mongo strategy for handling the authentication
+security.initialize(config.mongo.dbUrl, config.mongo.apiKey, config.security.dbName, config.security.usersCollection); // Add a Mongo strategy for handling the authentication
 
 app.use(function(req, res, next) {
   if ( req.user ) {
@@ -34,35 +35,27 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use('/databases', function(req, res, next) {
-  if ( req.method !== 'GET' ) {
-    // We require the user is authenticated to modify any collections
-    security.authenticationRequired(req, res, next);
-  } else {
+app.namespace('/databases/:db/collections/:collection*', function() {
+  app.all('/', function(req, res, next) {
+    if ( req.method !== 'GET' ) {
+      // We require the user is authenticated to modify any collections
+      security.authenticationRequired(req, res, next);
+    } else {
+      next();
+    }
+  });
+  app.all('/', function(req, res, next) {
+    if ( req.method !== 'GET' && (req.params.collection === 'users' || req.params.collection === 'projects') ) {
+      // We require the current user to be admin to modify the users or projects collection
+      return security.adminRequired(req, res, next);
+    }
     next();
-  }
+  });
+  // Proxy database calls to the MongoDB
+  app.all('/', mongoProxy(config.mongo.dbUrl, config.mongo.apiKey));
 });
-app.use('/databases/ascrum/collections/users', function(req, res, next) {
-  if ( req.method !== 'GET' ) {
-    // We require the current user to be admin to modify the users collection
-    security.adminRequired(req, res, next);
-  } else {
-    next();
-  }
-});
-app.use('/databases/ascrum/collections/projects', function(req, res, next) {
-  if ( req.method !== 'GET' ) {
-    // We require the current user to be admin to modify the projects collection
-    security.adminRequired(req, res, next);
-  } else {
-    next();
-  }
-});
-// Proxy database calls to the MongoDB
-app.use('/databases', mongoProxy(config.mongo.dbUrl, config.mongo.apiKey));
 
 app.post('/login', security.login);
-
 app.post('/logout', security.logout);
 
 // Retrieve the current user

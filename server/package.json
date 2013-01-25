@@ -4,13 +4,15 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express": "~3.0.0",
+    "express": "~3.0",
     "passport": "~0.1.12",
     "passport-local": "~0.1.6",
-    "restler": "~2.0.1"
+    "restler": "~2.0.1",
+    "express-namespace": "~0.1.1"
   },
   "devDependencies": {
     "rewire": "~1.0.3",
-    "supervisor": "~0.4.1"
+    "supervisor": "~0.4.1",
+    "grunt": "~0.3"
   }
 }

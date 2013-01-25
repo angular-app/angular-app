@@ -8,7 +8,7 @@ function MongoDBStrategy(dbUrl, apiKey, dbName, collection) {
   this.apiKey = apiKey;
   this.dbName = dbName;
   this.collection = collection;
-  this.baseUrl = this.dbUrl + '/' + this.dbName + '/collections/' + collection + '/';
+  this.baseUrl = this.dbUrl + '/databases/' + this.dbName + '/collections/' + collection + '/';
 
   // Call the super constructor - passing in our user verification function
   // We use the email field for the username
