@@ -40,10 +40,12 @@ angular.module('productbacklog').controller('ProductBacklogEditCtrl', ['$scope',
   $scope.backlogItem = backlogItem;
 
   $scope.onSave = function () {
+    //TODO: missing message
     $location.path('/projects/'+projectId+'/productbacklog');
   };
 
   $scope.onError = function () {
+    //TODO: missing message
     $scope.updateError = true;
   };
 }]);
