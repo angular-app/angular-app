@@ -81,10 +81,12 @@ The server stores its data in a MongoLab database.
 
     ```
     mongo: {
-        dbUrl: 'https://api.mongolab.com/api/1/databases',  // The base url of the MongoLab DB server
-        apiKey: 'YOUR_API_KEY_HERE',                        // Our MongoLab API key
-        dbName: 'YOUR_DB_NAME_HERE',                        // The name of database to which this server connect
-        usersCollection: 'users'                            // The name of the collection that will contain our user information
+        dbUrl: 'https://api.mongolab.com/api/1',    // The base url of the MongoLab DB server
+        apiKey: 'YOUR_API_KEY_HERE',                // Our MongoLab API key
+    },
+    security: {
+        dbName: 'YOUR_DB_NAME_HERE',                // The name of database that contains the security information
+        usersCollection: 'users'                    // The name of the collection contains user information
     },
     ```
 
