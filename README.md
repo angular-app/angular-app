@@ -96,6 +96,16 @@ The server stores its data in a MongoLab database.
     `node server/initDB.js`
     ```
 
+### Configure Client
+The client specifies the name of the MongoDB to use in `client/src/app/app.js`.  If your DB is not called "ascrum" then you need to change the MONGOLAB_CONFIG constant:
+
+```
+angular.module('app').constant('MONGOLAB_CONFIG', {
+  baseUrl: 'http://localhost:3000/databases/',
+  dbName: 'ascrum'
+});
+```
+
 ## Running
 ### Start the Server
 * Run the server
