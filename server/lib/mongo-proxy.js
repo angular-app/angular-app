@@ -42,10 +42,7 @@ module.exports = function(basePath, apiKey) {
       options = mapRequest(req);
       dbReq = request(options).pipe(res);
       return dbReq.on("response", function(r) {
-        r.pipe(res);
-        return r.on("end", function() {
-          return res.end();
-        });
+        return r.pipe(res);
       });
     } catch (error) {
       console.log("ERROR: ", error.stack);
