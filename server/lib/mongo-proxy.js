@@ -31,6 +31,11 @@ module.exports = function(basePath, apiKey) {
   mapRequest = module.exports.mapRequest = function(req) {
     var newReq;
     newReq = mapUrl(req.url);
+    if (req.method !== "GET" && req.body) {
+      if (req.body instanceof Object) {
+        newReq.body = JSON.stringify(req.body);
+      }
+    }
     newReq.method = req.method;
     newReq.headers = req.headers || {};
     newReq.headers.host = newReq.hostname;
