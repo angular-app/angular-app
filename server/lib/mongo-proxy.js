@@ -1,71 +1,58 @@
-var url = require('url');
-var qs = require('querystring');
-var https = require('https');
+var format, https, qs, request, url;
+
+url = require("url");
+
+request = require("request");
+
+format = require("util").format;
+
+qs = require("querystring");
+
+https = require("https");
 
 module.exports = function(basePath, apiKey) {
-  console.log('Proxying MongoLab at', basePath, 'with', apiKey);
-
+  var mapRequest, mapUrl, proxy;
+  console.log("Proxying MongoLab at " + basePath + " with " + apiKey);
   basePath = url.parse(basePath);
-
-  // Map the request url to the mongolab url
-  // @Returns a parsed Url object
-  var mapUrl = module.exports.mapUrl = function(reqUrlString) {
-    var reqUrl = url.parse(reqUrlString, true);
-    var newUrl = {
-      hostname: basePath.hostname,
-      protocol: basePath.protocol
+  mapUrl = module.exports.mapUrl = function(reqUrlString) {
+    var key, newUrl, path, query, reqUrl;
+    reqUrl = url.parse(reqUrlString, true);
+    newUrl = {};
+    query = {
+      apiKey: apiKey
     };
-    var query = { apiKey: apiKey};
-    for(var key in reqUrl.query) {
+    for (key in reqUrl.query) {
       query[key] = reqUrl.query[key];
     }
-    // https request expects path not pathname!
-    newUrl.path = basePath.pathname + reqUrl.pathname + '?' + qs.stringify(query);
-
+    path = "" + basePath.pathname + reqUrl.pathname + "?" + (qs.stringify(query));
+    newUrl.uri = format("%s//%s%s", basePath.protocol, basePath.hostname, path);
     return newUrl;
   };
-
-
-  // Map the incoming request to a request to the DB
-  var mapRequest = module.exports.mapRequest = function(req) {
-    var newReq = mapUrl(req.url);
+  mapRequest = module.exports.mapRequest = function(req) {
+    var newReq;
+    newReq = mapUrl(req.url);
     newReq.method = req.method;
     newReq.headers = req.headers || {};
-    // We need to fix up the hostname
     newReq.headers.host = newReq.hostname;
     return newReq;
   };
-
-  var proxy = function(req, res, next) {
+  proxy = function(req, res, next) {
+    var dbReq, options;
     try {
-      var options = mapRequest(req);
-      // Create the request to the db
-      var dbReq = https.request(options, function(dbRes) {
-        var data = "";
-        res.headers = dbRes.headers;
-        dbRes.setEncoding('utf8');
-        dbRes.on('data', function(chunk) {
-          // Pass back any data from the response.
-          data = data + chunk;
-        });
-        dbRes.on('end', function() {
-          res.statusCode = dbRes.statusCode;
-          res.httpVersion = dbRes.httpVersion;
-          res.trailers = dbRes.trailers;
-          res.send(data);
-          res.end();
+      options = mapRequest(req);
+      dbReq = request(options).pipe(res);
+      return dbReq.on("response", function(r) {
+        r.pipe(res);
+        return r.on("end", function() {
+          return res.end();
         });
       });
-      // Send any data the is passed from the original request
-      dbReq.end(JSON.stringify(req.body));
     } catch (error) {
-      console.log('ERROR: ', error.stack);
+      console.log("ERROR: ", error.stack);
       res.json(error);
-      res.end();
+      return res.end();
     }
   };
-
-  // Attach the mapurl fn (mostly for testing)
   proxy.mapUrl = mapUrl;
   proxy.mapRequest = mapRequest;
   return proxy;
