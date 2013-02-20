@@ -12,9 +12,9 @@ We've learned a lot while using and supporting AngularJS on the [mailing list](h
 
 ## Stack
 
-* Persistence store: [MongDB](www.mongodb.org/) hosted on [MongoLab](https://mongolab.com/)
-* Backend: [Node.js](nodejs.org/)
-* Awesome [AngularJS](www..angularjs.org/) on the client
+* Persistence store: [MongDB](http://www.mongodb.org/) hosted on [MongoLab](https://mongolab.com/)
+* Backend: [Node.js](http://nodejs.org/)
+* Awesome [AngularJS](http://www.angularjs.org/) on the client
 * CSS based on [Twitter's bootstrap](http://twitter.github.com/bootstrap/)
 
 ### Build
