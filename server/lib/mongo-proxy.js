@@ -31,24 +31,23 @@ module.exports = function(basePath, apiKey) {
   mapRequest = module.exports.mapRequest = function(req) {
     var newReq;
     newReq = mapUrl(req.url);
-    if (req.method !== "GET" && req.body) {
-      if (req.body instanceof Object) {
+    if (req.method !== "GET" && req.body instanceof Object) {
+      if (Object.keys.call(req.body, req.body).length !== 0) {
         newReq.body = JSON.stringify(req.body);
       }
     }
     newReq.method = req.method;
     newReq.headers = req.headers || {};
-    newReq.headers.host = newReq.hostname;
+    newReq.headers.host = "api.mongolab.com";
+    delete newReq.headers.origin;
+    newReq.headers["content-type"] = "application/json";
     return newReq;
   };
   proxy = function(req, res, next) {
     var dbReq, options;
     try {
       options = mapRequest(req);
-      dbReq = request(options).pipe(res);
-      return dbReq.on("response", function(r) {
-        return r.pipe(res);
-      });
+      return dbReq = request(options).pipe(res);
     } catch (error) {
       console.log("ERROR: ", error.stack);
       res.json(error);
