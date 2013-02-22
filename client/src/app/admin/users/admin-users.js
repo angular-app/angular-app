@@ -2,8 +2,8 @@ angular.module('admin-users', ['admin-users-edit', 'services.crud'])
 
 .config(['crudRouteProvider', function (crudRouteProvider) {
 
-  var adminUser =  ['AuthenticationService', function(AuthenticationService) {
-    return AuthenticationService.requireAdminUser();
+  var adminUser =  ['authentication', function(authentication) {
+    return authentication.requireAdminUser();
   }];
 
   crudRouteProvider.routesFor('Users', 'admin')

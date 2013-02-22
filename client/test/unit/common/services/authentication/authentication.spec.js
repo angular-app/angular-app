@@ -23,12 +23,12 @@ describe('services.authentication', function() {
     $http.get('/').then(success, error);
   };
 
-  describe('AuthenticationService', function() {
+  describe('authentication', function() {
     var service, currentUser, queue;
     beforeEach(inject(function($injector) {
-      service = $injector.get('AuthenticationService');
+      service = $injector.get('authentication');
       currentUser = $injector.get('currentUser');
-      queue = $injector.get('AuthenticationRetryQueue');
+      queue = $injector.get('authenticationRetryQueue');
     }));
 
     describe('isLoginRequired', function() {

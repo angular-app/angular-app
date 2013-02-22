@@ -1,8 +1,8 @@
 // Based loosely around work by Witold Szczerba - https://github.com/witoldsz/angular-http-auth
-angular.module('services.authentication', ['services.authentication.current-user', 'services.authentication.interceptor', 'services.authentication.retry-queue']);
+angular.module('services.authentication', ['services.authentication.currentUser', 'services.authentication.interceptor', 'services.authentication.retryQueue'])
 
-// The AuthenticationService is the public API for this module.  Application developers should only need to use this service and not any of the others here.
-angular.module('services.authentication').factory('AuthenticationService', ['$http', '$location', '$q', 'AuthenticationRetryQueue', 'currentUser', function($http, $location, $q, queue, currentUser) {
+// The authentication is the public API for this module.  Application developers should only need to use this service and not any of the others here.
+.factory('authentication', ['$http', '$location', '$q', 'authenticationRetryQueue', 'currentUser', function($http, $location, $q, queue, currentUser) {
 
   // TODO: We need a way to refresh the page to clear any data that has been loaded when the user logs out
   //  a simple way would be to redirect to the root of the application but this feels a bit inflexible.

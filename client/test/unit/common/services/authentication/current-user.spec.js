@@ -1,5 +1,5 @@
 describe("currentUser", function() {
-  beforeEach(module('services.authentication.current-user'));
+  beforeEach(module('services.authentication.currentUser'));
 
   it("should be unauthenticated to begin with", function() {
     inject(function(currentUser) {

@@ -1,11 +1,11 @@
-describe('AuthenticationInterceptor', function() {
+describe('authenticationInterceptor', function() {
   var queue, interceptor, promise, wrappedPromise;
 
   beforeEach(module('services.authentication.interceptor'));
 
   beforeEach(inject(function($injector) {
-    queue = $injector.get('AuthenticationRetryQueue');
-    interceptor = $injector.get('AuthenticationInterceptor');
+    queue = $injector.get('authenticationRetryQueue');
+    interceptor = $injector.get('authenticationInterceptor');
     wrappedPromise = {};
     promise = {
       then: jasmine.createSpy('then').andReturn(wrappedPromise)
