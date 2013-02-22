@@ -85,14 +85,20 @@ describe('crud-edit directive', function () {
       element = $compile('<form name="form" crud-edit="resource"><input name="someField" ng-model="resource.someVal"></form>')($rootScope);
       scope = element.scope();
       someField = scope.form.someField;
+      resourceMock.$saveOrUpdate.andCallFake(function(onSave1, onSave2, onError1, onError2) {
+        onSave1();
+        onSave2();
+        onError1();
+        onError2();
+      });
     }));
 
     describe('save', function() {
-      it('scope.save should call resource.$saveOrUpdate with noop callbacks by default', function() {
+      it('should call resource.$saveOrUpdate', function() {
         scope.save();
-        expect(resourceMock.$saveOrUpdate).toHaveBeenCalledWith(angular.noop, angular.noop, angular.noop, angular.noop);
+        expect(resourceMock.$saveOrUpdate).toHaveBeenCalled();
       });
-      it('scope.save should call resource.$saveOrUpdate with scope callbacks if specified', function() {
+      it('should call resource.$saveOrUpdate with scope callbacks if specified', function() {
         // We must recompile/link the directive to get it to pick up the new callbacks
         inject(function($compile) {
           $rootScope.onSave = jasmine.createSpy('onSave');
@@ -103,10 +109,10 @@ describe('crud-edit directive', function () {
         });
 
         scope.save();
-        expect(resourceMock.$saveOrUpdate).toHaveBeenCalledWith(scope.onSave, scope.onSave, scope.onError, scope.onError);
+        expect(resourceMock.$saveOrUpdate).toHaveBeenCalled();
       });
 
-      it('scope.save should call resource.$saveOrUpdate with attribute callbacks if specified', function() {
+      it('should call resource.$saveOrUpdate with attribute callbacks if specified', function() {
         // We must recompile/link the directive to get it to pick up the new callbacks
         inject(function($compile) {
           $rootScope.onSaveAttr = jasmine.createSpy('onSaveAttr');
@@ -118,16 +124,20 @@ describe('crud-edit directive', function () {
           scope = element.scope();
         });
 
-        resourceMock.$saveOrUpdate.andCallFake(function(onSave1, onSave2, onError1, onError2) {
-          onSave1();
-          onSave2();
-          onError1();
-          onError2();
-        });
         scope.save();
         expect(resourceMock.$saveOrUpdate).toHaveBeenCalled();
         expect($rootScope.onSaveAttr).toHaveBeenCalled();
         expect($rootScope.onErrorAttr).toHaveBeenCalled();
+      });
+
+      it('should update the "original" object', function() {
+        resourceMock.$saveOrUpdate.andCallFake(function(onSave) {
+          onSave({ someVal: 'newValue' });
+        });
+        someField.$setViewValue('newValue');
+        expect(scope.canSave()).toBeTruthy();
+        scope.save();
+        expect(scope.canSave()).toBeFalsy();
       });
     });
 
@@ -176,7 +186,7 @@ describe('crud-edit directive', function () {
       it('scope.remove should call resource.$remove if resource.$id returns true', function() {
         resourceMock.$id = jasmine.createSpy('$id').andReturn(true);
         scope.remove();
-        expect(resourceMock.$remove).toHaveBeenCalledWith(angular.noop, angular.noop);
+        expect(resourceMock.$remove).toHaveBeenCalledWith(jasmine.any(Function), jasmine.any(Function));
       });
 
       it('scope.remove should call resource.$remove with scope callbacks if specified', function() {
@@ -190,8 +200,14 @@ describe('crud-edit directive', function () {
         });
 
         resourceMock.$id = jasmine.createSpy('$id').andReturn(true);
+        resourceMock.$remove.andCallFake(function(onSave, onError) {
+          onSave();
+          onError();
+        });
         scope.remove();
-        expect(resourceMock.$remove).toHaveBeenCalledWith(scope.onSave, scope.onError);
+        expect(resourceMock.$remove).toHaveBeenCalledWith(jasmine.any(Function), jasmine.any(Function));
+        expect(scope.onSave).toHaveBeenCalled();
+        expect(scope.onError).toHaveBeenCalled();
       });
 
       it('scope.remove should call resource.$remove if resource.$id returns false', function() {
