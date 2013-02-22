@@ -11,6 +11,7 @@ angular.module('services.authentication', ['services.authentication.currentUser'
     $location.path(url);
   }
 
+  // Helper to update the currentUser service with a new user
   function updateCurrentUser(user) {
     currentUser.update(user);
     if ( !!user ) {
@@ -19,19 +20,24 @@ angular.module('services.authentication', ['services.authentication.currentUser'
   }
 
   var service = {
+    // Returns true if a login is required, perhaps because of a failed database request
+    // You can bind templates to the value returned to show a login form
     isLoginRequired: function() {
       return queue.hasMore();
     },
 
+    // Get the first reason for needing a login
     getLoginReason: function() {
       return queue.getReason();
     },
 
+    // Create a authentication queue item to trigger the login form to be shown
     showLogin: function() {
       // Push a no-op onto the queue to create a manual login
       queue.push({ retry: function() {}, cancel: function() {}, reason: 'user-request' });
     },
 
+    // Attempt to authenticate a user by the given email and password
     login: function(email, password) {
       var request = $http.post('/login', {email: email, password: password});
       return request.then(function(response) {
@@ -40,11 +46,13 @@ angular.module('services.authentication', ['services.authentication.currentUser'
       });
     },
 
+    // Clear the queue of authentication requests to cancel login and hide the login form
     cancelLogin: function(redirectTo) {
       queue.cancel();
       redirect(redirectTo);
     },
 
+    // Logout the current user
     logout: function(redirectTo) {
       $http.post('/logout').then(function() {
         currentUser.clear();
@@ -52,8 +60,7 @@ angular.module('services.authentication', ['services.authentication.currentUser'
       });
     },
 
-    // Ask the backend to see if a users is already authenticated - this may be from a previous session.
-    // The app should probably do this at start up
+    // Ask the backend to see if a user is already authenticated - this may be from a previous session.
     requestCurrentUser: function() {
       if ( currentUser.isAuthenticated() ) {
         return $q.when(currentUser);
@@ -65,6 +72,8 @@ angular.module('services.authentication', ['services.authentication.currentUser'
       }
     },
 
+    // Require that there is an authenticated user
+    // (use this in a route resolve to prevent non-authenticated users from entering that route)
     requireAuthenticatedUser: function() {
       var promise = service.requestCurrentUser().then(function(currentUser) {
         if ( !currentUser.isAuthenticated() ) {
@@ -74,6 +83,8 @@ angular.module('services.authentication', ['services.authentication.currentUser'
       return promise;
     },
 
+    // Require that there is an administrator logged in
+    // (use this in a route resolve to prevent non-administrators from entering that route)
     requireAdminUser: function() {
       var promise = service.requestCurrentUser().then(function(currentUser) {
         if ( !currentUser.isAdmin() ) {
@@ -85,8 +96,8 @@ angular.module('services.authentication', ['services.authentication.currentUser'
   };
 
   // Get the current user when the service is instantiated
+  // (in case they are still logged in from a previous session)
   service.requestCurrentUser();
 
   return service;
 }]);
-
