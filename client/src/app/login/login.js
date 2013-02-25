@@ -12,23 +12,10 @@ angular.module('login', ['services.authentication', 'services.localizedMessages'
       $scope.user = {};
       $scope.authError = null;
       $scope.authService = authentication;
-      $scope.showLoginForm = false;
-
-      // Clear the user login input fields
-      $scope.clearForm = function() {
-        $scope.user = {};
-      };
-
-      // Cancel the current login
-      $scope.cancelLogin = function() {
-        authentication.cancelLogin();
-      };
 
       // Compute a localised message string to explain why a login is required
-      $scope.getLoginReason = function() {
-        var reason = authentication.getLoginReason();
+      $scope.$watch(function() { return authentication.getLoginReason(); }, function(reason) {
         var isAuthenticated = currentUser.isAuthenticated();
-
         var message = "";
         switch(reason) {
           case 'user-request':
@@ -37,33 +24,17 @@ angular.module('login', ['services.authentication', 'services.localizedMessages'
           case 'unauthenticated-client':
           case 'unauthorized-client':
           case 'unauthorized-server':
-            if ( isAuthenticated ) {
-                message = localizedMessages.get('login.error.notAuthorized');
-            } else {
-                message = localizedMessages.get('login.error.notAuthenticated');
-            }
+            message = ( isAuthenticated ) ?
+              localizedMessages.get('login.error.notAuthorized') :
+              localizedMessages.get('login.error.notAuthenticated');
             break;
-          default:
-            message = "";
-            break;
-          }
-        return message;
-      };
-
-      // Watch the authentication to see if a login is required
-      $scope.$watch(authentication.isLoginRequired, function(value) {
-        if ( value ) {
-          // A login is required: show the modal form
-          $scope.showLogin($scope.getLoginReason());
-        } else {
-          // A login is no longer required: hide the modal form
-          // (maybe because the user logged in or cancelled)
-          $scope.hideLogin();
         }
+        $scope.authError = message;
       });
 
       // Attempt to authenticate (i.e. login) the user specified in the form input fields.
       $scope.login = function() {
+        // Clear any previous authentication errors
         $scope.authError = null;
         authentication.login($scope.user.email, $scope.user.password).then(function(loggedIn) {
           if ( !loggedIn ) {
