@@ -11,6 +11,7 @@
         <td>{{user.email}}</td>
         <td>{{user.lastName}}</td>
         <td>{{user.firstName}}</td>
+        <td><button class="btn btn-danger remove" ng-click="remove(user, $index, $event)">Remove</button></td>
     </tr>
     </tbody>
 </table>
