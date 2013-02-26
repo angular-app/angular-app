@@ -5,6 +5,7 @@ basePath = '../..';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
+  'vendor/jquery/jquery.js',
   'vendor/angular/angular.js',
   'vendor/mongolab/mongolab-resource.js',
   'test/vendor/angular/angular-mocks.js',
