@@ -26,6 +26,7 @@ module.exports = function (grunt) {
     };
     if ( process.env.TRAVIS ) {
       options.browsers = ['Firefox'];
+      options.reporters = 'dots';
     }
     return options;
   };

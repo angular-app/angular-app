@@ -46,8 +46,10 @@ describe('authentication', function() {
     it('calls queue.retry on a successful login', function() {
       $httpBackend.when('POST', '/login').respond(200, {user: userInfo});
       spyOn(queue, 'retryAll');
+      service.showLogin();
       service.login('email', 'password');
       $httpBackend.flush();
+      $rootScope.$digest();
       expect(queue.retryAll).toHaveBeenCalled();
       expect(currentUser.info()).toBe(userInfo);
     });
