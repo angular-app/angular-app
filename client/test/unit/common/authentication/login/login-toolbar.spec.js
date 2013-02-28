@@ -29,6 +29,10 @@ describe('login-toolbar', function() {
   });
 
   it('should not display a link with the current user name, when not authenticated', function () {
+    inject(function(currentUser) {
+      currentUser.update(null);
+      scope.$digest();
+    });
     expect(toolbar.find('a').is(':visible')).toBe(false);
   });
 
