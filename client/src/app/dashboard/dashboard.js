@@ -1,4 +1,4 @@
-angular.module('dashboard', ['resources.projects', 'resources.tasks', 'services.authentication'])
+angular.module('dashboard', ['resources.projects', 'resources.tasks'])
 
 .config(['$routeProvider', function ($routeProvider) {
   $routeProvider.when('/dashboard', {
