@@ -5,12 +5,14 @@ basePath = '../..';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
+  'vendor/jquery/jquery.js',
   'vendor/angular/angular.js',
   'vendor/mongolab/mongolab-resource.js',
   'test/vendor/angular/angular-mocks.js',
+  'vendor/angular-ui/**/*.js',
   'src/**/*.js',
   'test/unit/**/*.spec.js',
-  'dist/tmp/**/*.js'
+  'dist/templates/**/*.js'
 ];
 
 // use dots reporter, as travis terminal does not support escaping sequences
@@ -20,10 +22,10 @@ reporters = 'progress';
 // these are default values, just to show available options
 
 // web server port
-port = 8080;
+port = 8089;
 
 // cli runner port
-runnerPort = 9100;
+runnerPort = 9109;
 
 urlRoot = '/__testacular/';
 
@@ -48,3 +50,7 @@ autoWatchInterval = 0;
 // - Safari
 // - PhantomJS
 browsers = ['Chrome'];
+
+// Continuous Integration mode
+// if true, it capture browsers, run tests and exit
+singleRun = true;

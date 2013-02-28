@@ -1,6 +1,7 @@
-angular.module('services.authentication.currentUser', []);
+angular.module('authentication.currentUser', [])
+
 // The current user.  You can watch this for changes due to logging in and out
-angular.module('services.authentication.currentUser').factory('currentUser', function() {
+.factory('currentUser', function() {
   var userInfo = null;
   var currentUser = {
     update: function(info) { userInfo = info; },

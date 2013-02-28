@@ -1,4 +1,4 @@
-angular.module('services.authentication.interceptor', ['services.authentication.retryQueue'])
+angular.module('authentication.interceptor', ['authentication.retryQueue'])
 
 // This http interceptor listens for authentication failures
 .factory('authenticationInterceptor', ['$rootScope', '$injector', '$q', 'authenticationRetryQueue', function($rootScope, $injector, $q, queue) {

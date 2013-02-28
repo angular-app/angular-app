@@ -3,12 +3,12 @@
   <li ng-show="currentUser">
       <a href="#">{{userInfo().firstName}} {{userInfo().lastName}}</a>
   </li>
-  <li ng-show="isAuthenticated()">
+  <li ng-show="isAuthenticated()" class="logout">
       <form class="navbar-form">
           <button class="btn" ng-click="logout()">Log out</button>
       </form>
   </li>
-  <li ng-hide="isAuthenticated()">
+  <li ng-hide="isAuthenticated()" class="login">
       <form class="navbar-form">
           <button class="btn" ng-click="login()">Log in</button>
       </form>
