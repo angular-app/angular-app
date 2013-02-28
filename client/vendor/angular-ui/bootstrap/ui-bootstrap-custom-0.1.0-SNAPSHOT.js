@@ -151,7 +151,6 @@ dialogModule.provider("$dialog", function(){
         }
         return;
       }
-
       this._onCloseComplete(result);
 
       function removeTriggerClass(el){
@@ -190,7 +189,6 @@ dialogModule.provider("$dialog", function(){
     Dialog.prototype._onCloseComplete = function(result) {
       this._removeElementsFromDom();
       this._unbindEvents();
-
       this.deferred.resolve(result);
     };
 

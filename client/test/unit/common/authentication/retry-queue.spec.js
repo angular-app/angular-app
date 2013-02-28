@@ -26,41 +26,40 @@ describe('authenticationRetryQueue', function() {
   describe('pushPromiseFn', function() {
     it('adds a new item to the queue', function() {
       queue.pushPromiseFn(function() {});
-      var retryItem = queue.getNext();
-      expect(retryItem.retry).toBeDefined();
-      expect(retryItem.cancel).toBeDefined();
+      expect(queue.hasMore()).toBe(true);
     });
     it('adds a reason to the retry if specified', function() {
       var reason = 'SOME_REASON';
       queue.pushPromiseFn(function() {}, reason);
-      expect(queue.getReason()).toBe(reason);
-      expect(queue.getNext().reason).toBe(reason);
+      expect(queue.retryReason()).toBe(reason);
     });
     it('does not add a reason to the retry if not specified', function() {
       queue.pushPromiseFn(function() {});
-      expect(queue.getReason()).not.toBeDefined();
-      expect(queue.getNext().reason).not.toBeDefined();
+      expect(queue.retryReason()).not.toBeDefined();
     });
   });
 
-  describe('getNext', function() {
-    it('has no more items once all items have been got', function() {
-      queue.push(mockRetryItem());
-      var next = queue.getNext();
-      expect(queue.hasMore()).toBe(false);
-    });
-  });
-
-  describe('retry', function() {
+  describe('retryAll', function() {
     it('should not fail if the queue is empty', function(){
-      queue.retry(function(item) {});
+      queue.retryAll(function(item) {});
     });
     it('should empty the queue', function() {
       queue.push(mockRetryItem());
       queue.push(mockRetryItem());
       queue.push(mockRetryItem());
       expect(queue.hasMore()).toBe(true);
-      queue.retry(function(item) {});
+      queue.retryAll(function(item) {});
+      expect(queue.hasMore()).toBe(false);
+    });
+  });
+
+  describe('cancelAll', function() {
+    it('should empty the queue', function() {
+      queue.push(mockRetryItem());
+      queue.push(mockRetryItem());
+      queue.push(mockRetryItem());
+      expect(queue.hasMore()).toBe(true);
+      queue.cancelAll(function(item) {});
       expect(queue.hasMore()).toBe(false);
     });
   });

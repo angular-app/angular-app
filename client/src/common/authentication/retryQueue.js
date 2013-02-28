@@ -4,8 +4,15 @@ angular.module('authentication.retryQueue', [])
 .factory('authenticationRetryQueue', ['$q', function($q) {
   var retryQueue = [];
   var service = {
+    // The authentication service puts its own handler in here!
+    onItemAdded: angular.noop,
+    
+    hasMore: function() {
+      return retryQueue.length > 0;
+    },
     push: function(retryItem) {
       retryQueue.push(retryItem);
+      service.onItemAdded();
     },
     pushPromiseFn: function(promiseFn, reason) {
       var deferred = $q.defer();
@@ -23,25 +30,17 @@ angular.module('authentication.retryQueue', [])
       service.push(retryItem);
       return deferred.promise;
     },
-    hasMore: function() {
-      return retryQueue.length > 0;
+    retryReason: function() {
+      return service.hasMore() && retryQueue[0].reason;
     },
-    getReason: function() {
-      if ( service.hasMore() ) {
-        return retryQueue[0].reason;
+    cancelAll: function() {
+      while(service.hasMore()) {
+        retryQueue.shift().cancel();
       }
     },
-    getNext: function() {
-      return retryQueue.shift();
-    },
-    cancel: function() {
+    retryAll: function() {
       while(service.hasMore()) {
-        service.getNext().cancel();
-      }
-    },
-    retry: function() {
-      while(service.hasMore()) {
-        service.getNext().retry();
+        retryQueue.shift().retry();
       }
     }
   };
