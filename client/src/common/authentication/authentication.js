@@ -1,5 +1,5 @@
 // Based loosely around work by Witold Szczerba - https://github.com/witoldsz/angular-http-auth
-angular.module('services.authentication', ['services.authentication.currentUser', 'services.authentication.interceptor', 'services.authentication.retryQueue'])
+angular.module('authentication', ['authentication.currentUser', 'authentication.interceptor', 'authentication.retryQueue', 'authentication.login'])
 
 // The authentication is the public API for this module.  Application developers should only need to use this service and not any of the others here.
 .factory('authentication', ['$http', '$location', '$q', 'authenticationRetryQueue', 'currentUser', function($http, $location, $q, queue, currentUser) {

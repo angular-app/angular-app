@@ -5,7 +5,7 @@ describe('authenticationRetryQueue', function() {
     return jasmine.createSpyObj('retryItem', ['retry', 'cancel']);
   }
 
-  beforeEach(module('services.authentication.retryQueue'));
+  beforeEach(module('authentication.retryQueue'));
 
   beforeEach(inject(function($injector) {
     queue = $injector.get('authenticationRetryQueue');

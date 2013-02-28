@@ -1,7 +1,7 @@
 describe('authenticationInterceptor', function() {
   var queue, interceptor, promise, wrappedPromise;
 
-  beforeEach(module('services.authentication.interceptor'));
+  beforeEach(module('authentication.interceptor'));
 
   beforeEach(inject(function($injector) {
     queue = $injector.get('authenticationRetryQueue');

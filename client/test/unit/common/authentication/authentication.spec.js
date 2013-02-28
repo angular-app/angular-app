@@ -1,9 +1,9 @@
-describe('services.authentication', function() {
+describe('authentication', function() {
 
   var $rootScope, $http, $httpBackend, success, error, status;
   var userInfo = { id: '1234567890', email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'};
 
-  beforeEach(module('services.authentication', 'ng'));
+  beforeEach(module('authentication'));
   beforeEach(inject(function($injector) {
     $rootScope = $injector.get('$rootScope');
     $httpBackend = $injector.get('$httpBackend');

@@ -1,5 +1,4 @@
 angular.module('app', [
-  'login',
   'projectsinfo',
   'dashboard',
   'projects',
@@ -7,6 +6,7 @@ angular.module('app', [
   'services.breadcrumbs',
   'services.i18nNotifications',
   'services.httpRequestTracker',
+  'authentication',
   'directives.crud',
   'templates.app',
   'templates.common']);

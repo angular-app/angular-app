@@ -1,4 +1,4 @@
-angular.module('services.authentication.retryQueue', [])
+angular.module('authentication.retryQueue', [])
 
 // This is a generic retry queue for authentication failures.  Each item is expected to expose two functions: retry and cancel.
 .factory('authenticationRetryQueue', ['$q', function($q) {

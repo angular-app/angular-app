@@ -1,11 +1,11 @@
-angular.module('login', ['services.authentication', 'services.localizedMessages', 'directives.modal'])
+angular.module('authentication.login', ['services.localizedMessages'])
 
 // The loginForm directive provides a reusable modal form to allow users to authenticate.
 // Normally this directive will be added to the main HTML document and then shown whenever a log in is required.
 // The form watches authentication.isLoginRequired to decide whether it should be shown or hidden.
 .directive('loginForm', ['authentication', 'localizedMessages', 'currentUser', function(authentication, localizedMessages, currentUser) {
   var directive = {
-    templateUrl: 'login/form.tpl.html',
+    templateUrl: 'authentication/login/form.tpl.html',
     restrict: 'E',
     scope: true,
     link: function($scope, $element, $attrs, $controller) {
@@ -52,7 +52,7 @@ angular.module('login', ['services.authentication', 'services.localizedMessages'
 // and information the current authenticated user
 .directive('loginToolbar', ['currentUser', 'authentication', function(currentUser, authentication) {
   var directive = {
-    templateUrl: 'login/toolbar.tpl.html',
+    templateUrl: 'authentication/login/toolbar.tpl.html',
     restrict: 'E',
     replace: true,
     scope: true,
