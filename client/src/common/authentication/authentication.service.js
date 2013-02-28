@@ -12,18 +12,22 @@ angular.module('authentication.service', [
   function openLoginDialog() {
     if ( !loginDialog ) {
       loginDialog = $dialog.dialog();
-      loginDialog.open('authentication/login/form.tpl.html', 'LoginFormController').then(function(success) {
-        if ( !success ) {
-          queue.cancelAll();
-          redirect(redirectTo);
-        }
-      });
+      loginDialog.open('authentication/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
     }
   }
-  function closeLoginDialog() {
+  function closeLoginDialog(success) {
     if (loginDialog) {
-      loginDialog.close(true);
+      loginDialog.close(success);
       loginDialog = null;
+    }
+  }
+
+  function onLoginDialogClose(success) {
+    if ( success ) {
+      queue.retryAll();
+    } else {
+      queue.cancelAll();
+      redirect(redirectTo);
     }
   }
 
@@ -65,14 +69,13 @@ angular.module('authentication.service', [
       return request.then(function(response) {
         currentUser.update(response.data.user);
         if ( currentUser.isAuthenticated() ) {
-          closeLoginDialog();
-          queue.retryAll();
+          closeLoginDialog(true);
         }
       });
     },
 
     cancelLogin: function(redirectTo) {
-      closeLoginDialog();
+      closeLoginDialog(false);
       redirect(redirectTo);
     },
 
