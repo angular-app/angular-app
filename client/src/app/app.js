@@ -8,7 +8,8 @@ angular.module('app', [
   'services.i18nNotifications',
   'services.httpRequestTracker',
   'directives.crud',
-  'templates']);
+  'templates.app',
+  'templates.common']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
   baseUrl: 'http://localhost:3000/databases/',

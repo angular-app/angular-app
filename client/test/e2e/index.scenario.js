@@ -4,7 +4,7 @@ describe('my app', function() {
     browser().navigateTo('/');
   });
 
-  it('publicly accessible and default route to be /projectsinfo', function() {
+  it('should be publicly accessible and default route to be /projectsinfo', function() {
     expect(browser().location().path()).toBe("/projectsinfo");
   });
 });
