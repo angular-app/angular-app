@@ -8,6 +8,13 @@ angular.module('authentication.service', [
           ['$rootScope', '$http', '$location', '$q', 'authenticationRetryQueue', 'currentUser', '$dialog',
   function( $rootScope,   $http,   $location,   $q,   queue,                      currentUser,   $dialog) {
 
+  // We need a way to refresh the page to clear any data that has been loaded when the user logs out
+  //  a simple way is to redirect to the root of the application but this could be made more sophisticated
+  function redirect(url) {
+    url = url || '/';
+    $location.path(url);
+  }
+
   var loginDialog = null;
   function openLoginDialog() {
     if ( !loginDialog ) {
@@ -27,15 +34,8 @@ angular.module('authentication.service', [
       queue.retryAll();
     } else {
       queue.cancelAll();
-      redirect(redirectTo);
+      redirect();
     }
-  }
-
-  // We need a way to refresh the page to clear any data that has been loaded when the user logs out
-  //  a simple way is to redirect to the root of the application but this could be made more sophisticated
-  function redirect(url) {
-    url = url || '/';
-    $location.path(url);
   }
 
   queue.onItemAdded = function() {
@@ -59,7 +59,7 @@ angular.module('authentication.service', [
     // The following methods provide handlers for actions that could be triggered in the UI
 
     // Show the modal login dialog
-    showLogin: function(redirectTo) {
+    showLogin: function() {
       openLoginDialog();
     },
 
@@ -74,9 +74,9 @@ angular.module('authentication.service', [
       });
     },
 
-    cancelLogin: function(redirectTo) {
+    cancelLogin: function() {
       closeLoginDialog(false);
-      redirect(redirectTo);
+      redirect();
     },
 
     // Logout the current user
