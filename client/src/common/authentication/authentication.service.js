@@ -98,7 +98,7 @@ angular.module('authentication.service', [
     requireAuthenticatedUser: function() {
       var promise = service.requestCurrentUser().then(function(currentUser) {
         if ( !currentUser.isAuthenticated() ) {
-          return queue.pushPromiseFn(service.requireAuthenticatedUser, 'unauthenticated-client');
+          return queue.pushPromiseFn('unauthenticated-client', service.requireAuthenticatedUser);
         }
       });
       return promise;
@@ -109,7 +109,7 @@ angular.module('authentication.service', [
     requireAdminUser: function() {
       var promise = service.requestCurrentUser().then(function(currentUser) {
         if ( !currentUser.isAdmin() ) {
-          return queue.pushPromiseFn(service.requireAdminUser, 'unauthorized-client');
+          return queue.pushPromiseFn('unauthorized-client', service.requireAdminUser);
         }
       });
       return promise;

@@ -28,9 +28,9 @@ describe('authenticationRetryQueue', function() {
       queue.pushPromiseFn(function() {});
       expect(queue.hasMore()).toBe(true);
     });
-    it('adds a reason to the retry if specified', function() {
+    it('adds a reason to the retry', function() {
       var reason = 'SOME_REASON';
-      queue.pushPromiseFn(function() {}, reason);
+      queue.pushPromiseFn(reason, function() {});
       expect(queue.retryReason()).toBe(reason);
     });
     it('does not add a reason to the retry if not specified', function() {

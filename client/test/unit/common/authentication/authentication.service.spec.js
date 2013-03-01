@@ -1,17 +1,20 @@
 describe('authentication', function() {
 
-  var $rootScope, $http, $httpBackend, success, error, status;
-  var userInfo = { id: '1234567890', email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'};
-
+  var $rootScope, $http, $httpBackend, success, error, status, userResponse;
+  
   angular.module('test',[]).constant('I18N.MESSAGES', messages = {});
   beforeEach(module('authentication', 'test', 'authentication/login/form.tpl.html'));
-  beforeEach(inject(function($injector) {
-    $rootScope = $injector.get('$rootScope');
-    $httpBackend = $injector.get('$httpBackend');
-    $http = $injector.get('$http');
+  beforeEach(inject(function(_$rootScope_, _$httpBackend_, _$http_) {
+    $rootScope = _$rootScope_;
+    $httpBackend = _$httpBackend_;
+    $http = _$http_;
+
     success = jasmine.createSpy('success');
     error = jasmine.createSpy('error');
-    $httpBackend.when('GET', '/current-user').respond(200, { user: userInfo });
+
+    userResponse = { user: { id: '1234567890', email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'} };
+
+    $httpBackend.when('GET', '/current-user').respond(200, userResponse);
   }));
 
   afterEach(function() {
@@ -37,21 +40,21 @@ describe('authentication', function() {
 
   describe('login', function() {
     it('sends a http request to login the specified user', function() {
-      $httpBackend.when('POST', '/login').respond(200, {user: userInfo});
+      $httpBackend.when('POST', '/login').respond(200, userResponse);
       $httpBackend.expect('POST', '/login');
       service.login('email', 'password');
       $httpBackend.flush();
-      expect(currentUser.info()).toBe(userInfo);
+      expect(currentUser.info()).toBe(userResponse.user);
     });
     it('calls queue.retry on a successful login', function() {
-      $httpBackend.when('POST', '/login').respond(200, {user: userInfo});
+      $httpBackend.when('POST', '/login').respond(200, userResponse);
       spyOn(queue, 'retryAll');
       service.showLogin();
       service.login('email', 'password');
       $httpBackend.flush();
       $rootScope.$digest();
       expect(queue.retryAll).toHaveBeenCalled();
-      expect(currentUser.info()).toBe(userInfo);
+      expect(currentUser.info()).toBe(userResponse.user);
     });
     it('does not call queue.retryAll after a login failure', function() {
       $httpBackend.when('POST', '/login').respond(200, { user: null });
@@ -94,47 +97,89 @@ describe('authentication', function() {
     });
   });
 
-  describe('requestCurrentUser', function() {
-    it('makes a GET request to current-user url', function() {
-      expect(currentUser.isAuthenticated()).toBe(false);
-      $httpBackend.expect('GET', '/current-user');
-      service.requestCurrentUser().then(function(data) {
+  describe('authorization guards', function() {
+    var resolved;
+    beforeEach(function() {
+      resolved = false;
+    });
+    describe('requestCurrentUser', function() {
+      it('makes a GET request to current-user url', function() {
+        expect(currentUser.isAuthenticated()).toBe(false);
+        $httpBackend.expect('GET', '/current-user');
+        service.requestCurrentUser().then(function(data) {
+          resolved = true;
+          expect(currentUser.isAuthenticated()).toBe(true);
+          expect(currentUser.info()).toBe(userResponse.user);
+        });
+        $httpBackend.flush();
+        expect(resolved).toBe(true);
+      });
+      it('returns the current user immediately if they are already authenticated', function() {
+        var userInfo = {};
+        currentUser.update(userInfo);
         expect(currentUser.isAuthenticated()).toBe(true);
-        expect(currentUser.info()).toBe(userInfo);
+        service.requestCurrentUser().then(function(data) {
+          resolved = true;
+          expect(currentUser.info()).toBe(userInfo);
+        });
+        $httpBackend.flush();
+        expect(resolved).toBe(true);
       });
-      $httpBackend.flush();
     });
-    it('returns the current user immediately if they are already authenticated', function() {
-      var userInfo = {};
-      currentUser.update(userInfo);
-      expect(currentUser.isAuthenticated()).toBe(true);
-      service.requestCurrentUser().then(function(data) {
-        expect(currentUser.info()).toBe(userInfo);
-      });
-      $httpBackend.flush();
-    });
-  });
 
-  describe('requireAuthenticatedUser', function() {
-    it('makes a GET request to authenticated-user url', function() {
-      expect(currentUser.isAuthenticated()).toBe(false);
-      service.requireAuthenticatedUser().then(function(data) {
-        expect(currentUser.isAuthenticated()).toBe(true);
-        expect(currentUser.info()).toBe(userInfo);
+    describe('requireAuthenticatedUser', function() {
+      it('makes a GET request to current-user url', function() {
+        expect(currentUser.isAuthenticated()).toBe(false);
+        $httpBackend.expect('GET', '/current-user');
+        service.requireAuthenticatedUser().then(function(data) {
+          resolved = true;
+          expect(currentUser.isAuthenticated()).toBe(true);
+          expect(currentUser.info()).toBe(userResponse.user);
+        });
+        $httpBackend.flush();
+        expect(resolved).toBe(true);
       });
-      $httpBackend.flush();
+      it('adds a new item to the retry queue if not authenticated', function () {
+        var resolved = false;
+        userResponse.user = null;
+        $httpBackend.expect('GET', '/current-user');
+        expect(queue.hasMore()).toBe(false);
+        service.requireAuthenticatedUser().then(function() {
+          resolved = true;
+        });
+        $httpBackend.flush();
+        expect(currentUser.isAuthenticated()).toBe(false);
+        expect(queue.hasMore()).toBe(true);
+        expect(queue.retryReason()).toBe('unauthenticated-client');
+        expect(resolved).toBe(false);
+      });
     });
-  });
 
-  describe('requireAdminUser', function() {
-    it('makes a returns a resolved promise if we are already an admin', function() {
-      var userInfo = {admin: true};
-      currentUser.update(userInfo);
-      service.requireAdminUser().then(function() {
-        // Currently this is not being called within the test!
+    describe('requireAdminUser', function() {
+      it('makes a returns a resolved promise if we are already an admin', function() {
+        $httpBackend.flush();
+        var userInfo = {admin: true};
+        currentUser.update(userInfo);
+        expect(currentUser.isAdmin()).toBe(true);
+        service.requireAdminUser().then(function() {
+          resolved = true;
+        });
+        $rootScope.$digest();
         expect(currentUser.info()).toBe(userInfo);
+        expect(resolved).toBe(true);
       });
-      $httpBackend.flush();
+      it('adds a new item to the retry queue if not admin', function() {
+        $httpBackend.expect('GET', '/current-user');
+        expect(queue.hasMore()).toBe(false);
+        service.requireAdminUser().then(function() {
+          resolved = true;
+        });
+        $httpBackend.flush();
+        expect(currentUser.isAdmin()).toBe(false);
+        expect(queue.hasMore()).toBe(true);
+        expect(queue.retryReason()).toBe('unauthorized-client');
+        expect(resolved).toBe(false);
+      });
     });
   });
 });

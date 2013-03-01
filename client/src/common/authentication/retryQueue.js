@@ -14,7 +14,11 @@ angular.module('authentication.retryQueue', [])
       retryQueue.push(retryItem);
       service.onItemAdded();
     },
-    pushPromiseFn: function(promiseFn, reason) {
+    pushPromiseFn: function(reason, promiseFn) {
+      if ( arguments.length == 1) {
+        promiseFn = reason;
+        reason = undefined;
+      }
       var deferred = $q.defer();
       var retryItem = {
         reason: reason,
