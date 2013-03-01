@@ -1,8 +1,12 @@
 // Based loosely around work by Witold Szczerba - https://github.com/witoldsz/angular-http-auth
-angular.module('services.authentication', ['services.authentication.currentUser', 'services.authentication.interceptor', 'services.authentication.retryQueue'])
+angular.module('authentication.service', [
+  'authentication.currentUser', 'authentication.retryQueue', 'authentication.login', 'ui.bootstrap.dialog'
+])
 
 // The authentication is the public API for this module.  Application developers should only need to use this service and not any of the others here.
-.factory('authentication', ['$http', '$location', '$q', 'authenticationRetryQueue', 'currentUser', function($http, $location, $q, queue, currentUser) {
+.factory('authentication',
+          ['$rootScope', '$http', '$location', '$q', 'authenticationRetryQueue', 'currentUser', '$dialog',
+  function( $rootScope,   $http,   $location,   $q,   queue,                      currentUser,   $dialog) {
 
   // We need a way to refresh the page to clear any data that has been loaded when the user logs out
   //  a simple way is to redirect to the root of the application but this could be made more sophisticated
@@ -11,52 +15,68 @@ angular.module('services.authentication', ['services.authentication.currentUser'
     $location.path(url);
   }
 
-  // Helper to update the currentUser service with a new user
-  function updateCurrentUser(user) {
-    currentUser.update(user);
-    if ( !!user ) {
-      queue.retry();
+  var loginDialog = null;
+  function openLoginDialog() {
+    if ( !loginDialog ) {
+      loginDialog = $dialog.dialog();
+      loginDialog.open('authentication/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
     }
   }
+  function closeLoginDialog(success) {
+    if (loginDialog) {
+      loginDialog.close(success);
+      loginDialog = null;
+    }
+  }
+
+  function onLoginDialogClose(success) {
+    if ( success ) {
+      queue.retryAll();
+    } else {
+      queue.cancelAll();
+      redirect();
+    }
+  }
+
+  queue.onItemAdded = function() {
+    if ( queue.hasMore() ) {
+      service.showLogin();
+    }
+  };
 
   var service = {
 
     //////////////////////////////////////////////////////////////////////////////////////////
     // The following methods provide information you can bind to in the UI
 
-    // Returns true if a login is required, perhaps because of a failed database request
-    isLoginRequired: function() {
-      return queue.hasMore();
-    },
-
     // Get the first reason for needing a login
     getLoginReason: function() {
-      return queue.getReason();
+      return queue.retryReason();
     },
 
 
     //////////////////////////////////////////////////////////////////////////////////////////
     // The following methods provide handlers for actions that could be triggered in the UI
 
-    // Create a authentication queue item to trigger the login form to be shown
+    // Show the modal login dialog
     showLogin: function() {
-      // Push a dummy item onto the queue to create a manual login
-      queue.push({ retry: angular.noop, cancel: angular.noop, reason: 'user-request' });
+      openLoginDialog();
     },
 
     // Attempt to authenticate a user by the given email and password
     login: function(email, password) {
       var request = $http.post('/login', {email: email, password: password});
       return request.then(function(response) {
-        updateCurrentUser(response.data.user);
-        return currentUser.isAuthenticated();
+        currentUser.update(response.data.user);
+        if ( currentUser.isAuthenticated() ) {
+          closeLoginDialog(true);
+        }
       });
     },
 
-    // Clear the queue of authentication requests to cancel login and hide the login form
-    cancelLogin: function(redirectTo) {
-      queue.cancel();
-      redirect(redirectTo);
+    cancelLogin: function() {
+      closeLoginDialog(false);
+      redirect();
     },
 
     // Logout the current user
@@ -78,7 +98,7 @@ angular.module('services.authentication', ['services.authentication.currentUser'
     requireAuthenticatedUser: function() {
       var promise = service.requestCurrentUser().then(function(currentUser) {
         if ( !currentUser.isAuthenticated() ) {
-          return queue.pushPromiseFn(service.requireAuthenticatedUser, 'unauthenticated-client');
+          return queue.pushRetryFn('unauthenticated-client', service.requireAuthenticatedUser);
         }
       });
       return promise;
@@ -89,7 +109,7 @@ angular.module('services.authentication', ['services.authentication.currentUser'
     requireAdminUser: function() {
       var promise = service.requestCurrentUser().then(function(currentUser) {
         if ( !currentUser.isAdmin() ) {
-          return queue.pushPromiseFn(service.requireAdminUser, 'unauthorized-client');
+          return queue.pushRetryFn('unauthorized-client', service.requireAdminUser);
         }
       });
       return promise;
@@ -101,13 +121,13 @@ angular.module('services.authentication', ['services.authentication.currentUser'
         return $q.when(currentUser);
       } else {
         return $http.get('/current-user').then(function(response) {
-          updateCurrentUser(response.data.user);
+          currentUser.update(response.data.user);
           return currentUser;
         });
       }
     }
   };
-  
+
   // Get the current user when the service is instantiated
   // (in case they are still logged in from a previous session)
   service.requestCurrentUser();

@@ -1,7 +1,7 @@
 describe('authenticationInterceptor', function() {
   var queue, interceptor, promise, wrappedPromise;
 
-  beforeEach(module('services.authentication.interceptor'));
+  beforeEach(module('authentication.interceptor'));
 
   beforeEach(inject(function($injector) {
     queue = $injector.get('authenticationRetryQueue');
@@ -36,6 +36,6 @@ describe('authenticationInterceptor', function() {
     var errorHandler = promise.then.mostRecentCall.args[1];
     var newPromise = errorHandler(notAuthResponse);
     expect(queue.hasMore()).toBe(true);
-    expect(queue.getReason()).toBe('unauthorized-server');
+    expect(queue.retryReason()).toBe('unauthorized-server');
   });
 });
