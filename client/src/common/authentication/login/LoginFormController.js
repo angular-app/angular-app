@@ -30,9 +30,8 @@ angular.module('authentication.login.form', ['services.localizedMessages'])
         $scope.authError = localizedMessages.get('login.error.invalidCredentials');
       }
     }, function(x) {
-      console.log(x);
       // If we get here then there was a problem with the login request to the server
-      $scope.authError = localizedMessages.get('login.error.serverError');
+      $scope.authError = localizedMessages.get('login.error.serverError', { exception: x });
     });
   };
 
