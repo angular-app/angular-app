@@ -23,18 +23,18 @@ describe('authenticationRetryQueue', function() {
     });
   });
 
-  describe('pushPromiseFn', function() {
+  describe('pushRetryFn', function() {
     it('adds a new item to the queue', function() {
-      queue.pushPromiseFn(function() {});
+      queue.pushRetryFn(function() {});
       expect(queue.hasMore()).toBe(true);
     });
     it('adds a reason to the retry', function() {
       var reason = 'SOME_REASON';
-      queue.pushPromiseFn(reason, function() {});
+      queue.pushRetryFn(reason, function() {});
       expect(queue.retryReason()).toBe(reason);
     });
     it('does not add a reason to the retry if not specified', function() {
-      queue.pushPromiseFn(function() {});
+      queue.pushRetryFn(function() {});
       expect(queue.retryReason()).not.toBeDefined();
     });
   });

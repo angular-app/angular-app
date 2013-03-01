@@ -14,20 +14,29 @@ angular.module('authentication.retryQueue', [])
       retryQueue.push(retryItem);
       service.onItemAdded();
     },
-    pushPromiseFn: function(reason, promiseFn) {
-      if ( arguments.length == 1) {
-        promiseFn = reason;
+    pushRetryFn: function(reason, retryFn) {
+      // The reason parameter is optional
+      if ( arguments.length === 1) {
+        retryFn = reason;
         reason = undefined;
       }
+
+      // The deferred object that will be resolved or rejected by calling retry or cancel
       var deferred = $q.defer();
       var retryItem = {
         reason: reason,
         retry: function() {
-          promiseFn().then(function(value) {
+          // Wrap the result of the retryFn into a promise if it is not already
+          $q.when(retryFn()).then(function(value) {
+            // If it was successful then resolve our deferred
             deferred.resolve(value);
+          }, function(value) {
+            // Othewise reject it
+            deferred.reject(value);
           });
         },
         cancel: function() {
+          // Give up on retrying and reject our deferred
           deferred.reject();
         }
       };
