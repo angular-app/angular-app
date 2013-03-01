@@ -13,22 +13,17 @@ module.exports = function (grunt) {
   grunt.registerTask('default', ['jshint','build','testacular:unit']);
   grunt.registerTask('build', ['clean','html2js','concat','recess:build','copy:assets']);
   grunt.registerTask('release', ['clean','html2js','uglify','jshint','testacular:unit','concat:index', 'recess:min','copy:assets','testacular:e2e']);
+  grunt.registerTask('test-watch', ['testacular:watch']);
 
   // Print a timestamp (useful for when watching)
   grunt.registerTask('timestamp', function() {
     grunt.log.subhead(Date());
   });
 
-  var testacularConfig = function(configFile) {
-    var options = {
-      configFile: configFile,
-      keepalive: true
-    };
-    if ( process.env.TRAVIS ) {
-      options.browsers = ['Firefox'];
-      options.reporters = 'dots';
-    }
-    return options;
+  var testacularConfig = function(configFile, customOptions) {
+    var options = { configFile: configFile, keepalive: true };
+    var travisOptions = process.env.TRAVIS && { browsers: ['Firefox'], reporters: 'dots' };
+    return grunt.util._.extend(options, customOptions, travisOptions);
   };
 
   // Project configuration.
@@ -59,7 +54,8 @@ module.exports = function (grunt) {
     },
     testacular: {
       unit: { options: testacularConfig('test/config/unit.js') },
-      e2e: { options: testacularConfig('test/config/e2e.js') }
+      e2e: { options: testacularConfig('test/config/e2e.js') },
+      watch: { options: testacularConfig('test/config/unit.js', { singleRun:false, autoWatch: true}) }
     },
     html2js: {
       app: {
