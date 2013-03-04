@@ -1,4 +1,4 @@
-angular.module('authentication.currentUser', [])
+angular.module('security.currentUser', [])
 
 // The current user.  You can watch this for changes due to logging in and out
 .factory('currentUser', function() {

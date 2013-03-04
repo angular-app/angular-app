@@ -1,1 +1,0 @@
-angular.module('authentication.login', ['authentication.login.form', 'authentication.login.toolbar']);

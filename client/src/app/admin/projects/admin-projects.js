@@ -2,8 +2,8 @@ angular.module('admin-projects', ['resources.projects', 'resources.users', 'serv
 
 .config(['crudRouteProvider', function (crudRouteProvider) {
 
-  var adminUser =  ['authentication', function(authentication) {
-    return authentication.requireAdminUser();
+  var adminUser =  ['security', function(security) {
+    return security.requireAdminUser();
   }];
 
   var getAllUsers = ['Projects', 'Users', '$route', function(Projects, Users, $route){
