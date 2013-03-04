@@ -7,6 +7,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-testacular');
+  grunt.loadNpmTasks('grunt-html2js');
   grunt.loadTasks('build');
 
   // Default task.
