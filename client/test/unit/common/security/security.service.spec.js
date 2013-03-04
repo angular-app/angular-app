@@ -1,9 +1,9 @@
-describe('authentication', function() {
+describe('security', function() {
 
   var $rootScope, $http, $httpBackend, success, error, status, userResponse;
   
   angular.module('test',[]).constant('I18N.MESSAGES', messages = {});
-  beforeEach(module('authentication', 'test', 'authentication/login/form.tpl.html'));
+  beforeEach(module('security', 'test', 'security/login/form.tpl.html'));
   beforeEach(inject(function(_$rootScope_, _$httpBackend_, _$http_) {
     $rootScope = _$rootScope_;
     $httpBackend = _$httpBackend_;
@@ -24,9 +24,9 @@ describe('authentication', function() {
 
   var service, currentUser, queue;
   beforeEach(inject(function($injector) {
-    service = $injector.get('authentication');
+    service = $injector.get('security');
     currentUser = $injector.get('currentUser');
-    queue = $injector.get('authenticationRetryQueue');
+    queue = $injector.get('securityRetryQueue');
   }));
 
   describe('showLogin', function() {

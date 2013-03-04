@@ -1,11 +1,11 @@
 // Based loosely around work by Witold Szczerba - https://github.com/witoldsz/angular-http-auth
-angular.module('authentication.service', [
-  'authentication.currentUser', 'authentication.retryQueue', 'authentication.login', 'ui.bootstrap.dialog'
+angular.module('security.service', [
+  'security.currentUser', 'security.retryQueue', 'security.login', 'ui.bootstrap.dialog'
 ])
 
-// The authentication is the public API for this module.  Application developers should only need to use this service and not any of the others here.
-.factory('authentication',
-          ['$rootScope', '$http', '$location', '$q', 'authenticationRetryQueue', 'currentUser', '$dialog',
+// The security is the public API for this module.  Application developers should only need to use this service and not any of the others here.
+.factory('security',
+          ['$rootScope', '$http', '$location', '$q', 'securityRetryQueue', 'currentUser', '$dialog',
   function( $rootScope,   $http,   $location,   $q,   queue,                      currentUser,   $dialog) {
 
   // We need a way to refresh the page to clear any data that has been loaded when the user logs out
@@ -19,7 +19,7 @@ angular.module('authentication.service', [
   function openLoginDialog() {
     if ( !loginDialog ) {
       loginDialog = $dialog.dialog();
-      loginDialog.open('authentication/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
+      loginDialog.open('security/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
     }
   }
   function closeLoginDialog(success) {
