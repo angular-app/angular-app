@@ -36,6 +36,12 @@ module.exports = function(basePath, apiKey) {
     return newReq;
   };
 
+  // JSON vulnerability protection
+  // we prepend the data with ")]},\n", which will be stripped by $http in AngularJS
+  var protectJSON = function(data) {
+    return ")]}',\n" + data;
+  };
+
   var proxy = function(req, res, next) {
     try {
       var options = mapRequest(req);
@@ -52,7 +58,7 @@ module.exports = function(basePath, apiKey) {
           res.statusCode = dbRes.statusCode;
           res.httpVersion = dbRes.httpVersion;
           res.trailers = dbRes.trailers;
-          res.send(data);
+          res.send(protectJSON(data));
           res.end();
         });
       });
