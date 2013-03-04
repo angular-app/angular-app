@@ -2,7 +2,7 @@ describe('login-toolbar', function() {
   var userInfo = { id: '1234567890', email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'};
   var scope, toolbar;
 
-  beforeEach(module('authentication/login/toolbar.tpl.html', 'authentication'));
+  beforeEach(module('security/login/toolbar.tpl.html', 'security'));
 
   beforeEach(inject(function($httpBackend, $rootScope, $compile) {
     $httpBackend.when('GET', '/current-user').respond(200, { user: userInfo });
