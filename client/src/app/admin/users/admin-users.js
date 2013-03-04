@@ -1,4 +1,4 @@
-angular.module('admin-users', ['admin-users-edit', 'services.crud', 'services.i18nNotifications'])
+angular.module('admin-users', ['admin-users-edit', 'services.crud', 'services.i18nNotifications', 'directives.gravatar'])
 
 .config(['crudRouteProvider', function (crudRouteProvider) {
 
