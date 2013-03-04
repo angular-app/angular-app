@@ -1,4 +1,4 @@
-ddescribe('directives.gravatar', function () {
+describe('directives.gravatar', function () {
   var element, scope;
   beforeEach(module('directives.gravatar'));
   beforeEach(inject(function($compile, $rootScope) {
