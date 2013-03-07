@@ -9,10 +9,8 @@ angular.module('security.login.toolbar', [])
     replace: true,
     scope: true,
     link: function($scope, $element, $attrs, $controller) {
-      $scope.userInfo = currentUser.info;
-      $scope.isAuthenticated = currentUser.isAuthenticated;
-      $scope.logout = function() { security.logout(); };
-      $scope.login = function() { security.showLogin(); };
+      $scope.currentUser = currentUser;
+      $scope.security = security;
     }
   };
   return directive;
