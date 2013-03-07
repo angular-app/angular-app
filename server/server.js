@@ -3,6 +3,7 @@ var mongoProxy = require('./lib/mongo-proxy');
 var config = require('./config.js');
 var passport = require('passport');
 var security = require('./lib/security');
+var xsrf = require('./lib/xsrf');
 require('express-namespace');
 
 var app = express();
@@ -23,7 +24,7 @@ app.use(express.cookieParser(config.server.cookieSecret));  // Hash cookies with
 app.use(express.cookieSession());                           // Store the session in the (secret) cookie
 app.use(passport.initialize());                             // Initialize PassportJS
 app.use(passport.session());                                // Use Passport's session authentication strategy - this stores the logged in user in the session and will now run on any request
-
+app.use(xsrf);                                            // Add XSRF checks to the request
 security.initialize(config.mongo.dbUrl, config.mongo.apiKey, config.security.dbName, config.security.usersCollection); // Add a Mongo strategy for handling the authentication
 
 app.use(function(req, res, next) {
