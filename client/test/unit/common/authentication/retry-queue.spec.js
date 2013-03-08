@@ -1,14 +1,14 @@
-describe('securityRetryQueue', function() {
+describe('authenticationRetryQueue', function() {
   var queue;
 
   function mockRetryItem() {
     return jasmine.createSpyObj('retryItem', ['retry', 'cancel']);
   }
 
-  beforeEach(module('security.retryQueue'));
+  beforeEach(module('authentication.retryQueue'));
 
   beforeEach(inject(function($injector) {
-    queue = $injector.get('securityRetryQueue');
+    queue = $injector.get('authenticationRetryQueue');
   }));
 
   describe('hasMore', function() {

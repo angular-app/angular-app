@@ -1,8 +1,8 @@
-angular.module('security.login.form', ['services.localizedMessages'])
+angular.module('authentication.login.form', ['services.localizedMessages'])
 
 // The LoginFormController provides the behaviour behind a reusable form to allow users to authenticate.
-// This controller and its template (login/form.tpl.html) are used in a modal dialog box by the security service.
-.controller('LoginFormController', ['$scope', 'security', 'localizedMessages', 'currentUser', function($scope, security, localizedMessages, currentUser) {
+// This controller and its template (login/form.tpl.html) are used in a modal dialog box by the authentication service.
+.controller('LoginFormController', ['$scope', 'authentication', 'localizedMessages', 'currentUser', function($scope, authentication, localizedMessages, currentUser) {
   // The model for this form 
   $scope.user = {};
 
@@ -12,7 +12,7 @@ angular.module('security.login.form', ['services.localizedMessages'])
   // The reason that we are being asked to login - for instance because we tried to access something to which we are not authorized
   // We could do something diffent for each reason here but to keep it simple...
   $scope.authReason = null;
-  if ( security.getLoginReason() ) {
+  if ( authentication.getLoginReason() ) {
     $scope.authReason = ( currentUser.isAuthenticated() ) ?
       localizedMessages.get('login.reason.notAuthorized') :
       localizedMessages.get('login.reason.notAuthenticated');
@@ -20,11 +20,11 @@ angular.module('security.login.form', ['services.localizedMessages'])
 
   // Attempt to authenticate the user specified in the form's model
   $scope.login = function() {
-    // Clear any previous security errors
+    // Clear any previous authentication errors
     $scope.authError = null;
 
     // Try to login
-    security.login($scope.user.email, $scope.user.password).then(function(loggedIn) {
+    authentication.login($scope.user.email, $scope.user.password).then(function(loggedIn) {
       if ( !loggedIn ) {
         // If we get here then the login failed due to bad credentials
         $scope.authError = localizedMessages.get('login.error.invalidCredentials');
@@ -40,6 +40,6 @@ angular.module('security.login.form', ['services.localizedMessages'])
   };
 
   $scope.cancelLogin = function() {
-    security.cancelLogin();
+    authentication.cancelLogin();
   };
 }]);
