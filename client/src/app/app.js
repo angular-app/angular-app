@@ -6,7 +6,7 @@ angular.module('app', [
   'services.breadcrumbs',
   'services.i18nNotifications',
   'services.httpRequestTracker',
-  'authentication',
+  'security',
   'directives.crud',
   'templates.app',
   'templates.common']);
