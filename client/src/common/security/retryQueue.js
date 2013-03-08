@@ -1,18 +1,25 @@
-angular.module('authentication.retryQueue', [])
+angular.module('security.retryQueue', [])
 
-// This is a generic retry queue for authentication failures.  Each item is expected to expose two functions: retry and cancel.
-.factory('authenticationRetryQueue', ['$q', function($q) {
+// This is a generic retry queue for security failures.  Each item is expected to expose two functions: retry and cancel.
+.factory('securityRetryQueue', ['$q', '$log', function($q, $log) {
   var retryQueue = [];
   var service = {
-    // The authentication service puts its own handler in here!
-    onItemAdded: angular.noop,
+    // The security service puts its own handler in here!
+    onItemAddedCallbacks: [],
     
     hasMore: function() {
       return retryQueue.length > 0;
     },
     push: function(retryItem) {
       retryQueue.push(retryItem);
-      service.onItemAdded();
+      // Call all the onItemAdded callbacks
+      angular.forEach(service.onItemAddedCallbacks, function(cb) {
+        try {
+          cb(retryItem);
+        } catch(e) {
+          $log.error('securityRetryQueue.push(retryItem): callback threw an error' + e);
+        }
+      });
     },
     pushRetryFn: function(reason, retryFn) {
       // The reason parameter is optional

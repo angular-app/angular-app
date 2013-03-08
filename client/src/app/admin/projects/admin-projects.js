@@ -1,10 +1,11 @@
-angular.module('admin-projects', ['resources.projects', 'resources.users', 'services.crud'])
+angular.module('admin-projects', [
+  'resources.projects',
+  'resources.users',
+  'services.crud',
+  'security.authorization'
+])
 
-.config(['crudRouteProvider', function (crudRouteProvider) {
-
-  var adminUser =  ['authentication', function(authentication) {
-    return authentication.requireAdminUser();
-  }];
+.config(['crudRouteProvider', 'securityAuthorizationProvider', function (crudRouteProvider, securityAuthorizationProvider) {
 
   var getAllUsers = ['Projects', 'Users', '$route', function(Projects, Users, $route){
     return Users.all();
@@ -13,17 +14,17 @@ angular.module('admin-projects', ['resources.projects', 'resources.users', 'serv
   crudRouteProvider.routesFor('Projects', 'admin')
     .whenList({
       projects: ['Projects', function(Projects) { return Projects.all(); }],
-      adminUser: adminUser
+      adminUser: securityAuthorizationProvider.requireAdminUser
     })
     .whenNew({
       project: ['Projects', function(Projects) { return new Projects(); }],
       users: getAllUsers,
-      adminUser: adminUser
+      adminUser: securityAuthorizationProvider.requireAdminUser
     })
     .whenEdit({
       project: ['Projects', 'Users', '$route', function(Projects, Users, $route) { return Projects.getById($route.current.params.itemId); }],
       users: getAllUsers,
-      adminUser: adminUser
+      adminUser: securityAuthorizationProvider.requireAdminUser
     });
 }])
 

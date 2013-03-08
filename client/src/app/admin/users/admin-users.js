@@ -1,25 +1,21 @@
 angular.module('admin-users', ['admin-users-edit', 'services.crud', 'services.i18nNotifications', 'directives.gravatar'])
 
-.config(['crudRouteProvider', function (crudRouteProvider) {
-
-  var adminUser =  ['authentication', function(authentication) {
-    return authentication.requireAdminUser();
-  }];
+.config(['crudRouteProvider', 'securityAuthorizationProvider', function (crudRouteProvider, securityAuthorizationProvider) {
 
   crudRouteProvider.routesFor('Users', 'admin')
     .whenList({
       users: ['Users', function(Users) { return Users.all(); }],
-      currentUser: adminUser
+      currentUser: securityAuthorizationProvider.requireAdminUser
     })
     .whenNew({
       user: ['Users', function(Users) { return new Users(); }],
-      currentUser: adminUser
+      currentUser: securityAuthorizationProvider.requireAdminUser
     })
     .whenEdit({
       user:['$route', 'Users', function ($route, Users) {
         return Users.getById($route.current.params.itemId);
       }],
-      currentUser: adminUser
+      currentUser: securityAuthorizationProvider.requireAdminUser
     });
 }])
 
