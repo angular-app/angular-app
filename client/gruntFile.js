@@ -3,12 +3,12 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-testacular');
   grunt.loadNpmTasks('grunt-html2js');
-  grunt.loadTasks('build');
 
   // Default task.
   grunt.registerTask('default', ['jshint','build','testacular:unit']);
@@ -152,8 +152,14 @@ module.exports = function (grunt) {
       }
     },
     watch:{
-      files:['<%= src.js %>', '<%= test.unit %>', '<%= src.less =>', '<%= src.tpl %>', '<%= src.html %>'],
-      tasks:'default timestamp'
+      all: {
+        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.less =>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
+        tasks:['default','timestamp']
+      },
+      build: {
+        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.less =>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
+        tasks:['build','timestamp']
+      }
     },
     jshint:{
       files:['grunt.js', '<%= src.js %>', '<%= src.specs %>', '<%= src.scenarios %>'],

@@ -37,6 +37,12 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
   $routeProvider.otherwise({redirectTo:'/projectsinfo'});
 }]);
 
+angular.module('app').run(['security', function(security) {
+  // Get the current user when the application starts
+  // (in case they are still logged in from a previous session)
+  security.requestCurrentUser();
+}]);
+
 angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages', function($scope, i18nNotifications) {
 
   $scope.notifications = i18nNotifications;
@@ -50,13 +56,16 @@ angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'loc
   });
 }]);
 
-angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'currentUser', 'breadcrumbs', 'notifications', 'httpRequestTracker', function ($scope, $location, $route, currentUser, breadcrumbs, notifications, httpRequestTracker) {
+angular.module('app').controller('HeaderCtrl', ['$scope', '$location', '$route', 'security', 'breadcrumbs', 'notifications', 'httpRequestTracker',
+  function ($scope, $location, $route, security, breadcrumbs, notifications, httpRequestTracker) {
   $scope.location = $location;
-  $scope.currentUser = currentUser;
   $scope.breadcrumbs = breadcrumbs;
 
+  $scope.isAuthenticated = security.isAuthenticated;
+  $scope.isAdmin = security.isAdmin;
+
   $scope.home = function () {
-    if ($scope.currentUser.isAuthenticated()) {
+    if (security.isAuthenticated()) {
       $location.path('/dashboard');
     } else {
       $location.path('/projectsinfo');
