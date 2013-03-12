@@ -11,6 +11,7 @@ var config = require('./config.js');
 var passport = require('passport');
 var security = require('./lib/security');
 var xsrf = require('./lib/xsrf');
+var protectJSON = require('./lib/protectJSON');
 require('express-namespace');
 
 var app = express();
@@ -27,29 +28,7 @@ app.use(config.server.staticUrl, function(req, res, next) {
   res.send(404); // If we get here then the request for a static file is invalid
 });
 
-// JSON vulnerability protection
-// we prepend the data with ")]},\n", which will be stripped by $http in AngularJS
-app.use(function(req, res, next) {
-  var _send = res.send;
-  res.send = function(body) {
-    var contentType = res.getHeader('Content-Type');
-    if ( contentType && contentType.indexOf('application/json') !== -1 ) {
-      if (2 == arguments.length) {
-        // res.send(body, status) backwards compat
-        if ('number' != typeof body && 'number' == typeof arguments[1]) {
-          this.statusCode = arguments[1];
-        } else {
-          this.statusCode = body;
-          body = arguments[1];
-        }
-      }
-      body = ")]}',\n" + body;
-      return _send.call(res, body);
-    }
-    _send.apply(res, arguments);
-  };
-  next();
-});
+app.use(protectJSON);
 
 app.use(express.logger());                                  // Log requests to the console
 app.use(express.bodyParser());                              // Extract the data from the body of the request - this is needed by the LocalStrategy authenticate method
