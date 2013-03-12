@@ -12,7 +12,7 @@ angular.module('app', [
   'templates.common']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
-  baseUrl: 'http://localhost:3000/databases/',
+  baseUrl: '/databases/',
   dbName: 'ascrum'
 });
 

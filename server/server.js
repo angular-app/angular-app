@@ -1,3 +1,10 @@
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('cert/privatekey.pem').toString();
+var certificate = fs.readFileSync('cert/certificate.pem').toString();
+var credentials = {key: privateKey, cert: certificate};
+
 var express = require('express');
 var mongoProxy = require('./lib/mongo-proxy');
 var config = require('./config.js');
@@ -7,6 +14,8 @@ var xsrf = require('./lib/xsrf');
 require('express-namespace');
 
 var app = express();
+var secureServer = https.createServer(credentials, app);
+var server = http.createServer(app);
 
 // Serve up the favicon
 app.use(express.favicon(config.server.distFolder + '/favicon.ico'));
@@ -78,9 +87,11 @@ app.all('/*', function(req, res) {
   res.sendfile('index.html', { root: config.server.distFolder });
 });
 
-// A standard error handler - it picks up any left over errors and returns a nicely formatted http 500 error
+// A standard error handler - it picks up any left over errors and returns a nicely formatted server 500 error
 app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
 // Start up the server on the port specified in the config
-app.listen(config.server.listenPort);
+server.listen(config.server.listenPort);
 console.log('Angular App Server - listening on port: ' + config.server.listenPort);
+secureServer.listen(config.server.securePort);
+console.log('Angular App Server - listening on secure port: ' + config.server.securePort);
