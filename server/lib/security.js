@@ -28,7 +28,7 @@ var security = {
     if (req.isAuthenticated()) {
       next();
     } else {
-      res.send(401, filterUser(req.user));
+      res.json(401, filterUser(req.user));
     }
   },
   adminRequired: function(req, res, next) {
@@ -36,7 +36,7 @@ var security = {
     if (req.user && req.user.admin ) {
       next();
     } else {
-      res.send(401, filterUser(req.user));
+      res.json(401, filterUser(req.user));
     }
   },
   sendCurrentUser: function(req, res, next) {
