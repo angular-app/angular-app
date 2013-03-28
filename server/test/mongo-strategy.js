@@ -21,16 +21,10 @@ var config = {
 // so that we don't have to actually call out to the server - Yay!!
 function mockupRestInterface(test, expectedUrl, expectedOptions, expectedEvent, expectedResult) {
   MongoDBStrategy.__set__('rest', {
-    get: function(url, options) {
+    get: function(url, options, callback) {
       test.equal(url, expectedUrl, 'rest.get fn received invalid parameter');
       test.deepEqual(options, expectedOptions, 'rest.get fn received invalid parameter');
-      return {
-        on: function(eventString, callback) {
-          if ( eventString === expectedEvent ) {
-            callback(expectedResult);
-          }
-        }
-      };
+      callback(null, null, expectedResult);
     }
   });
 }
@@ -39,7 +33,7 @@ var baseUrl = config.dbUrl + '/databases/' + config.dbName + '/collections/' + c
   
 module.exports = {
   testGet: function(test) {
-    mockupRestInterface(test, baseUrl + config.testId, { query: { apiKey: config.apiKey }}, 'success', config.testUser);
+    mockupRestInterface(test, baseUrl + config.testId, { json: {}, qs: { apiKey: config.apiKey }}, 'success', config.testUser);
 
     var db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
     db.get(config.testId, function(err, result) {
@@ -52,7 +46,7 @@ module.exports = {
 
   testFindByEmail_found: function(test) {
     var db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
-    mockupRestInterface(test, baseUrl, { query: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', [config.testUser]);
+    mockupRestInterface(test, baseUrl, { json: {}, qs: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', [config.testUser]);
     db.findByEmail('jo@bloggs.com', function(err, result) {
       test.ok(!err);
       test.ok(result !== null);
@@ -64,7 +58,7 @@ module.exports = {
 
   testFindByEmail_notfound: function(test) {
     var db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
-    mockupRestInterface(test, baseUrl, { query: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', []);
+    mockupRestInterface(test, baseUrl, { json: {}, qs: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', []);
     db.findByEmail('jo@bloggs.com', function(err, result) {
       test.ok(!err);
       test.ok(result === null);
@@ -73,7 +67,7 @@ module.exports = {
   },
   
   testVerifyUser: function(test) {
-    mockupRestInterface(test, baseUrl, { query: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', [config.testUser]);
+    mockupRestInterface(test, baseUrl, { json: {}, qs: { apiKey: config.apiKey, q: JSON.stringify({email:"jo@bloggs.com"}) }}, 'success', [config.testUser]);
     var db = new MongoDBStrategy(config.dbUrl, config.apiKey, 'ascrum', 'users');
     db.verifyUser('jo@bloggs.com', 'XX', function(err, user) {
       test.ok(!err);

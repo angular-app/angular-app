@@ -1,7 +1,7 @@
 var util = require('util');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var rest = require('restler');
+var rest = require('request');
 
 function MongoDBStrategy(dbUrl, apiKey, dbName, collection) {
   this.dbUrl = dbUrl;
@@ -34,22 +34,17 @@ MongoDBStrategy.name = "mongo";
 // Query the users collection
 MongoDBStrategy.prototype.query = function(query, done) {
   query.apiKey = this.apiKey;     // Add the apiKey to the passed in query
-  var request = rest.get(this.baseUrl, { query: query });
-  request.on('error', function(err, response) { done(err, null); });
-  request.on('fail', function(err, response) { done(err, null); });
-  request.on('success', function(data) { done(null, data); });
+  var request = rest.get(this.baseUrl, { qs: query, json: {} }, function(err, response, body) {
+    done(err, body);
+  });
 };
 
 // Get a user by id
 MongoDBStrategy.prototype.get = function(id, done) {
-  var request = rest.get(this.baseUrl + id, {
-    query: {
-      apiKey: this.apiKey
-    }
+  var query = { apiKey: this.apiKey };
+  var request = rest.get(this.baseUrl + id, { qs: query, json: {} }, function(err, response, body) {
+    done(err, body);
   });
-  request.on('error', function(err, response) { done(err, null); });
-  request.on('fail', function(err, response) { done(err, null); });
-  request.on('success', function(data) { done(null, data); });
 };
 
 // Find a user by their email

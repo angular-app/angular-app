@@ -57,16 +57,16 @@ module.exports = {
     // Setup mocks
     var req = {};
     var res = {
-      send: function() { sendCalled = true; }
+      json: function() { jsonCalled = true; }
     };
     var nextCalled = false;
-    var sendCalled = false;
+    var jsonCalled = false;
     var next = function() { nextCalled = true; };
 
     // Test when user is unauthenticated
     req.isAuthenticated = function() { return false; };
     security.authenticationRequired(req, res, next);
-    test.ok(sendCalled);
+    test.ok(jsonCalled);
 
     // Test when user is authenticated
     req.isAuthenticated = function() { return true; };
@@ -79,12 +79,12 @@ module.exports = {
   adminRequired: function(test) {
     // Setup mocks
     var nextCalled = false;
-    var sendCalled = false;
+    var jsonCalled = false;
     var req = {};
     var res = {
-      send: function(status) {
+      json: function(status) {
         test.equal(status, 401);
-        sendCalled = true;
+        jsonCalled = true;
       }
     };
     var next = function() {
@@ -94,12 +94,12 @@ module.exports = {
     // Test when user is unauthenticated
     req.user = null;
     security.adminRequired(req, res, next);
-    test.ok(sendCalled);
+    test.ok(jsonCalled);
 
     // Test when user is authenticated but not admin
     req.user = mockUpUser(false);
     security.adminRequired(req, res, next);
-    test.ok(sendCalled);
+    test.ok(jsonCalled);
 
     // Test when user is admin
     req.user = mockUpUser(true);
@@ -110,18 +110,18 @@ module.exports = {
   },
 
   sendCurrentUser: function(test) {
-    var sendCalled = false;
+    var jsonCalled = false;
     var req = { user : mockUpUser(false) };
     var res = {
       json: function(status, userInfo) {
         test.equal(status, 200);
         test.equal(userInfo.user.id, req.user._id.$oid);
-        sendCalled = true;
+        jsonCalled = true;
       },
       end: function() {}
     };
     security.sendCurrentUser(req, res, null);
-    test.ok(sendCalled);
+    test.ok(jsonCalled);
     test.done();
   },
 

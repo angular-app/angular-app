@@ -1,5 +1,5 @@
 var config = require('./config.js');
-var rest = require('restler');
+var rest = require('request');
 var apiKey = config.mongo.apiKey;
 var baseUrl = config.mongo.dbUrl + '/databases/' + config.security.dbName + '/collections/';
 
@@ -9,19 +9,20 @@ var checkDocument = function(collection, query, done) {
   var url = baseUrl + collection + '/';
   console.log(url);
   var params = { apiKey:apiKey, q: JSON.stringify(query) };
-  var request = rest.get(url, { query: params });
-  request.on('error', function(err, response) { console.log('error', err, response); done(err, null); });
-  request.on('fail', function(err, response) {  console.log('fail', err, response); done(err, null); });
-  request.on('success', function(data) {  console.log('success', data); done(null, data); });
+  var request = rest.get(url, { qs: params, json: {} }, function(err, response, data) {
+    done(null, data);
+  });
 };
 
-var createDocument = function(collection, document, done) {
-  var url = baseUrl + collection + '/?apiKey=' + apiKey;
+var createDocument = function(collection, doc, done) {
+  var url = baseUrl + collection + '/';
   console.log(url);
-  var request = rest.postJson(url, document);
-  request.on('error', function(err, response) { console.log('error', err, response); done(err, null); });
-  request.on('fail', function(err, response) {  console.log('fail', err, response); done(err, null); });
-  request.on('success', function(data) {  console.log('success', data); done(null, data); });
+  var request = rest.post(url, { qs: { apiKey:apiKey }, json: doc }, function(err, response, data) {
+    if ( !err ) {
+      console.log('Document created', data);
+    }
+    done(err, data);
+  });
 };
 
 var adminUser = { email: 'admin@abc.com', password: 'changeme', admin: true};
