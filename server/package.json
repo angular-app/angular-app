@@ -8,7 +8,8 @@
     "passport": "~0.1.12",
     "passport-local": "~0.1.6",
     "restler": "~2.0.1",
-    "express-namespace": "~0.1.1"
+    "express-namespace": "~0.1.1",
+    "open": "0.0.3"
   },
   "devDependencies": {
     "rewire": "~1.0.3",
