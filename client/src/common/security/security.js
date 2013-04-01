@@ -18,8 +18,8 @@ angular.module('security.service', [
   function openLoginDialog() {
     if ( !loginDialog ) {
       loginDialog = $dialog.dialog();
-      loginDialog.open('security/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
     }
+    loginDialog.open('security/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
   }
   function closeLoginDialog(success) {
     if (loginDialog) {
