@@ -162,7 +162,7 @@ module.exports = function (grunt) {
       }
     },
     jshint:{
-      files:['grunt.js', '<%= src.js %>', '<%= src.specs %>', '<%= src.scenarios %>'],
+      files:['gruntFile.js', '<%= src.js %>', '<%= src.specs %>', '<%= src.scenarios %>'],
       options:{
         curly:true,
         eqeqeq:true,
