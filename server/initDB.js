@@ -25,7 +25,7 @@ var createDocument = function(collection, doc, done) {
   });
 };
 
-var adminUser = { email: 'admin@abc.com', password: 'changeme', admin: true};
+var adminUser = { email: 'admin@abc.com', password: 'changeme', admin: true, firstName: 'Admin', lastName: 'User' };
 console.log('Generating admin user...', adminUser);
 
 console.log('Checking it is not already created...');
