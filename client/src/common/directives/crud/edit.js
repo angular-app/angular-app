@@ -59,6 +59,7 @@ angular.module('directives.crud.edit', [])
       scope.revertChanges = function() {
         resource = angular.copy(original);
         resourceSetter(scope, resource);
+        form.$setPristine();
       };
       scope.remove = function() {
         if(resource.$id()) {
