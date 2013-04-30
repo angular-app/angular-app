@@ -13,7 +13,7 @@ module.exports = function(grunt) {
       tasks: 'default timestamp'
     },
     jshint: {
-      files: ['grunt.js', 'server.js', 'lib/*.js', 'test/**/*.js'],
+      files: ['gruntFile.js', 'server.js', 'lib/*.js', 'test/**/*.js'],
       options: {
         curly: true,
         eqeqeq: true,
