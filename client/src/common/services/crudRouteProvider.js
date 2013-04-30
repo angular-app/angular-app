@@ -30,9 +30,21 @@
     // We use it to create routes for CRUD operations.  We give it some basic information about
     // the resource and the urls then it it returns our own special routeProvider.
     this.routesFor = function(resourceName, urlPrefix, routePrefix) {
-      var baseUrl = urlPrefix + '/' + resourceName.toLowerCase();
+      var baseUrl = resourceName.toLowerCase();
+      var baseRoute = '/' + resourceName.toLowerCase();
+
+      // Prepend the urlPrefix if available.
+      if (urlPrefix !== null && urlPrefix !== undefined  && urlPrefix !== '' ) {
+          baseUrl = urlPrefix + '/' + baseUrl;
+      }
+
+       // default routePrefix to urlPrefix
       routePrefix = routePrefix || urlPrefix;
-      var baseRoute = '/' + routePrefix + '/' + resourceName.toLowerCase();
+
+      // Prepend the routePrefix if it was provided;
+      if (routePrefix !== null && routePrefix !== undefined && routePrefix !== '') {
+        baseRoute = '/' + routePrefix + baseRoute;
+      }
 
       // Create the templateUrl for a route to our resource that does the specified operation.
       var templateUrl = function(operation) {
