@@ -2,7 +2,8 @@ describe('securityAuthorization', function() {
   var $rootScope, security, securityAuthorization, queue;
   var userResponse, resolved;
 
-  beforeEach(module('security.authorization'));
+  angular.module('test', []).value('I18N.MESSAGES', {});
+  beforeEach(module('test', 'security.authorization', 'security/login/form.tpl.html'));
   beforeEach(inject(function($injector) {
     $rootScope = $injector.get('$rootScope');
     securityAuthorization = $injector.get('securityAuthorization');
