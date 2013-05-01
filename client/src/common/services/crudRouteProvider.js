@@ -35,7 +35,7 @@
       routePrefix = routePrefix || urlPrefix;
 
       // Prepend the urlPrefix if available.
-      if ( isString(urlPrefix) && urlPrefix !== '' ) {
+      if ( angular.isString(urlPrefix) && urlPrefix !== '' ) {
         baseUrl = urlPrefix + '/' + baseUrl;
       }
 
