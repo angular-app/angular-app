@@ -14,6 +14,10 @@ describe('admin edit user', function() {
     input('user.firstName').enter('App');
     input('user.password').enter('t');
     input('password').enter('t');
+    element('#password').query(function(elements, done) {
+      expect(element('#passwordRepeat').text()).toContain(elements.text());
+      done();
+    });
     expect(element('button.save:disabled').count()).toBe(0);
   });
 });
