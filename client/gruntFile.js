@@ -7,21 +7,21 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-recess');
-  grunt.loadNpmTasks('grunt-testacular');
+  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-html2js');
 
   // Default task.
-  grunt.registerTask('default', ['jshint','build','testacular:unit']);
+  grunt.registerTask('default', ['jshint','build','karma:unit']);
   grunt.registerTask('build', ['clean','html2js','concat','recess:build','copy:assets']);
-  grunt.registerTask('release', ['clean','html2js','uglify','jshint','testacular:unit','concat:index', 'recess:min','copy:assets','testacular:e2e']);
-  grunt.registerTask('test-watch', ['testacular:watch']);
+  grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','concat:index', 'recess:min','copy:assets','karma:e2e']);
+  grunt.registerTask('test-watch', ['karma:watch']);
 
   // Print a timestamp (useful for when watching)
   grunt.registerTask('timestamp', function() {
     grunt.log.subhead(Date());
   });
 
-  var testacularConfig = function(configFile, customOptions) {
+  var karmaConfig = function(configFile, customOptions) {
     var options = { configFile: configFile, keepalive: true };
     var travisOptions = process.env.TRAVIS && { browsers: ['Firefox'], reporters: 'dots' };
     return grunt.util._.extend(options, customOptions, travisOptions);
@@ -53,10 +53,10 @@ module.exports = function (grunt) {
         files: [{ dest: '<%= distdir %>', src : '**', expand: true, cwd: 'src/assets/' }]
       }
     },
-    testacular: {
-      unit: { options: testacularConfig('test/config/unit.js') },
-      e2e: { options: testacularConfig('test/config/e2e.js') },
-      watch: { options: testacularConfig('test/config/unit.js', { singleRun:false, autoWatch: true}) }
+    karma: {
+      unit: { options: karmaConfig('test/config/unit.js') },
+      e2e: { options: karmaConfig('test/config/e2e.js') },
+      watch: { options: karmaConfig('test/config/unit.js', { singleRun:false, autoWatch: true}) }
     },
     html2js: {
       app: {
