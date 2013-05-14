@@ -27,7 +27,7 @@ port = 8089;
 // cli runner port
 runnerPort = 9109;
 
-urlRoot = '/__testacular/';
+urlRoot = '/__test/';
 
 // enable / disable colors in the output (reporters and logs)
 colors = true;

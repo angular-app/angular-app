@@ -33,10 +33,10 @@ It is a complete project with a build system focused on AngularJS apps and tight
 
 You need to install Node.js and then the development tools. Node.js comes with a package manager called [npm](http://npmjs.org) for installing NodeJS applications and libraries.
 * [Install node.js](http://nodejs.org/download/) (requires node.js version >= 0.8.4)
-* Install Grunt-CLI and Testacular as global npm modules:
+* Install Grunt-CLI and Karma as global npm modules:
 
     ```
-    npm install -g grunt-cli testacular@0.4.x
+    npm install -g grunt-cli karma
     ```
 
 (Note that you may need to uninstall grunt 0.3 globally before installing grunt-cli)
@@ -128,9 +128,9 @@ Within the client folder you have the following structure:
 * `vendor` contains external dependencies for the application
 
 ### Default Build
-The default grunt task will build (checks the javascript (lint), runs the unit tests (test:unit) and builds distributable files) and run all unit tests: `grunt` (or `grunt.cmd` on Windows).  The tests are run by testacular and need one or more browsers open to actually run the tests.
+The default grunt task will build (checks the javascript (lint), runs the unit tests (test:unit) and builds distributable files) and run all unit tests: `grunt` (or `grunt.cmd` on Windows).  The tests are run by karma and need one or more browsers open to actually run the tests.
 * `grunt` or `grunt.cmd` (on Windows)
-* Open one or more browsers and point them to [http://localhost:8080/__testacular/].  Once the browsers connect the tests will run and the build will complete.
+* Open one or more browsers and point them to [http://localhost:8080/__test/].  Once the browsers connect the tests will run and the build will complete.
 * If you leave the browsers open at this url then future runs of `grunt` will automatically run the tests against these browsers.
 
 ### Continuous Building
@@ -143,12 +143,12 @@ If for some reason you don't want to run the test but just generate the files - 
 You can build a release version of the app, with minified files.  This task will also run the "end to end" (e2e) tests.
 The e2e tests require the server to be started and also one or more browsers open to run the tests.  (You can use the same browsers as for the unit tests.)
 * Run `grunt release`
-* Open one or more browsers and point them to [http://localhost:8080/__testacular/].  Once the browsers connect the tests will run and the build will complete.
+* Open one or more browsers and point them to [http://localhost:8080/__test/].  Once the browsers connect the tests will run and the build will complete.
 * If you leave the browsers open at this url then future runs of `grunt` will automatically run the tests against these browsers.
 
 ### Continuous testing
-You can have grunt (testacular) continuously watch for file changes and automatically run all the tests on every change, without rebuilding the distribution files.  This can make the test run faster when you are doing test driven development and don't need to actually run the application itself.
+You can have grunt (karma) continuously watch for file changes and automatically run all the tests on every change, without rebuilding the distribution files.  This can make the test run faster when you are doing test driven development and don't need to actually run the application itself.
 
 * Run `grunt test-watch`.
-* Open one or more browsers and point them to [http://localhost:8080/__testacular/].
+* Open one or more browsers and point them to [http://localhost:8080/__test/].
 * Each time a file changes the tests will be run against each browser.

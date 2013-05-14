@@ -20,7 +20,7 @@ port = 8080;
 // cli runner port
 runnerPort = 9100;
 
-urlRoot = '/__testacular/';
+urlRoot = '/__test/';
 
 proxies = {
   '/': 'http://localhost:3000/'
