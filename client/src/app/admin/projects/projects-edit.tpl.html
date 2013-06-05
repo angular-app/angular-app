@@ -36,11 +36,11 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><select class="span6" ng-model="selTeamMember"
+                        <td><select class="span6" ng-model="sel.teamMember"
                                     ng-options="user.$id() as user.getFullName() for user in teamMemberCandidates()"></select>
                         </td>
                         <td>
-                            <button class="btn btn-small" ng-click="addTeamMember()" ng-disabled="!selTeamMember">Add
+                            <button class="btn btn-small" ng-click="addTeamMember()" ng-disabled="!sel.teamMember">Add
                             </button>
                         </td>
                     </tr>
