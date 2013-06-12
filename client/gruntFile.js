@@ -45,7 +45,8 @@ module.exports = function (grunt) {
         app: ['src/app/**/*.tpl.html'],
         common: ['src/common/**/*.tpl.html']
       },
-      less: ['src/less/stylesheet.less'] // recess:build doesn't accept ** in its file patterns
+      less: ['src/less/stylesheet.less'], // recess:build doesn't accept ** in its file patterns
+      lessWatch: ['src/less/**/*.less']
     },
     clean: ['<%= distdir %>/*'],
     copy: {
@@ -152,11 +153,11 @@ module.exports = function (grunt) {
     },
     watch:{
       all: {
-        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.less =>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
+        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
         tasks:['default','timestamp']
       },
       build: {
-        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.less =>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
+        files:['<%= src.js %>', '<%= src.specs %>', '<%= src.lessWatch %>', '<%= src.tpl.app %>', '<%= src.tpl.common %>', '<%= src.html %>'],
         tasks:['build','timestamp']
       }
     },
