@@ -36,7 +36,7 @@ angular.module('security.login.form', ['services.localizedMessages'])
   };
 
   $scope.clearForm = function() {
-    user = {};
+    $scope.user = {};
   };
 
   $scope.cancelLogin = function() {
