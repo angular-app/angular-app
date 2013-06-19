@@ -13,12 +13,12 @@
                 <label>Product Owner</label>
                 <select class="span12" ng-model="project.productOwner"
                         ng-options="user.$id() as user.getFullName() for user in productOwnerCandidates()" required>
-                    <option value="">-- chose --</option>
+                    <option value="">-- choose --</option>
                 </select>
                 <label>Scrum Master</label>
                 <select class="span12" ng-model="project.scrumMaster"
                         ng-options="user.$id() as user.getFullName() for user in scrumMasterCandidates()" required>
-                    <option value="">-- chose --</option>
+                    <option value="">-- choose --</option>
                 </select>
                 <label>Development Team</label>
                 <table class="table table-bordered table-condensed table-striped table-hover">
