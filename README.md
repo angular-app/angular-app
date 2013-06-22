@@ -68,8 +68,6 @@ Our client application is a straight HTML/Javascript application but our develop
 
 ## Building
 
-_*If you are using Windows then you must run `grunt` as `grunt.cmd`.  Throughout the rest of this README we will just write `grunt`.*_
-
 ### Build the client app
 The app made up of a number of javascript, css and html files that need to be merged into a final distribution for running.  We use the Grunt build tool to do this.
 * Build client application: `grunt build`
