@@ -37,7 +37,7 @@ angular.module('admin-projects', [
 .controller('ProjectsEditCtrl', ['$scope', '$location', 'i18nNotifications', 'users', 'project', function($scope, $location, i18nNotifications, users, project) {
 
   $scope.project = project;
-  $scope.selTeamMember = undefined;
+  $scope.sel = {teamMember: undefined};
 
   $scope.users = users;
   //prepare users lookup, just keep references for easier lookup
@@ -76,9 +76,9 @@ angular.module('admin-projects', [
   };
 
   $scope.addTeamMember = function() {
-    if($scope.selTeamMember) {
-      $scope.project.teamMembers.push($scope.selTeamMember);
-      $scope.selTeamMember = undefined;
+    if($scope.sel.teamMember) {
+      $scope.project.teamMembers.push($scope.sel.teamMember);
+      $scope.sel.teamMember = undefined;
     }
   };
 
