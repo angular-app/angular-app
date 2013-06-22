@@ -37,14 +37,7 @@ angular.module('admin-projects', [
 .controller('ProjectsEditCtrl', ['$scope', '$location', 'i18nNotifications', 'users', 'project', function($scope, $location, i18nNotifications, users, project) {
 
   $scope.project = project;
-  $scope.selTeamMember = undefined;
-
   $scope.users = users;
-  //prepare users lookup, just keep references for easier lookup
-  $scope.usersLookup = {};
-  angular.forEach(users, function(value, key) {
-    $scope.usersLookup[value.$id()] = value;
-  });
 
   $scope.onSave = function(project) {
     i18nNotifications.pushForNextRoute('crud.project.save.success', 'success', {id : project.$id()});
@@ -55,7 +48,16 @@ angular.module('admin-projects', [
     i18nNotifications.pushForCurrentRoute('crud.project.save.error', 'error');
   };
 
+}])
+
+.controller('TeamMembersController', ['$scope', function($scope) {
   $scope.project.teamMembers = $scope.project.teamMembers || [];
+
+  //prepare users lookup, just keep references for easier lookup
+  $scope.usersLookup = {};
+  angular.forEach($scope.users, function(value, key) {
+    $scope.usersLookup[value.$id()] = value;
+  });
 
   $scope.productOwnerCandidates = function() {
     return $scope.users.filter(function(user) {
@@ -75,6 +77,8 @@ angular.module('admin-projects', [
     });
   };
 
+  $scope.selTeamMember = undefined;
+
   $scope.addTeamMember = function() {
     if($scope.selTeamMember) {
       $scope.project.teamMembers.push($scope.selTeamMember);
@@ -86,6 +90,10 @@ angular.module('admin-projects', [
     var idx = $scope.project.teamMembers.indexOf(teamMember);
     if(idx >= 0) {
       $scope.project.teamMembers.splice(idx, 1);
+    }
+    // If we have removed the team member that is currently selected then clear this object
+    if($scope.selTeamMember === teamMember) {
+      $scope.selTeamMember = undefined;
     }
   };
 }]);

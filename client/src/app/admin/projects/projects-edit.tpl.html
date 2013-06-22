@@ -9,7 +9,7 @@
                 <textarea rows="10" cols="10" ng-model="project.desc" class="span10">
                 </textarea>
             </div>
-            <div class="span6">
+            <div class="span6" ng-controller="TeamMembersController">
                 <label>Product Owner</label>
                 <select class="span12" ng-model="project.productOwner"
                         ng-options="user.$id() as user.getFullName() for user in productOwnerCandidates()" required>
@@ -40,7 +40,7 @@
                                     ng-options="user.$id() as user.getFullName() for user in teamMemberCandidates()"></select>
                         </td>
                         <td>
-                            <button class="btn btn-small" ng-click="addTeamMember()" ng-disabled="!selTeamMember">Add
+                            <button class="btn btn-small" ng-click="addTeamMember(selTeamMember)" ng-disabled="!selTeamMember">Add
                             </button>
                         </td>
                     </tr>
