@@ -68,10 +68,6 @@ Our client application is a straight HTML/Javascript application but our develop
 
 ## Building
 
-### Build the client app
-The app made up of a number of javascript, css and html files that need to be merged into a final distribution for running.  We use the Grunt build tool to do this.
-* Build client application: `grunt build`
-
 ### Configure Server
 The server stores its data in a MongoLab database.
 * Create an account at MongoLab - it's free: [https://mongolab.com/signup/].
@@ -105,6 +101,12 @@ angular.module('app').constant('MONGOLAB_CONFIG', {
   dbName: 'ascrum'
 });
 ```
+
+### Build the client app
+The app made up of a number of javascript, css and html files that need to be merged into a final distribution for running.  We use the Grunt build tool to do this.
+* Build client application: `grunt build`
+
+*It is important to build again if you have changed the client configuration as above.*
 
 ## Running
 ### Start the Server
