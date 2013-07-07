@@ -10,7 +10,10 @@ var checkDocument = function(collection, query, done) {
   console.log(url);
   var params = { apiKey:apiKey, q: JSON.stringify(query) };
   var request = rest.get(url, { qs: params, json: {} }, function(err, response, data) {
-    done(null, data);
+    if ( err ) {
+      console.log('There was an error checking the documents', err);
+    }
+    done(err, data);
   });
 };
 
