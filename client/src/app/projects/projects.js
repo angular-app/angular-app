@@ -1,6 +1,6 @@
-angular.module('projects', ['resources.projects', 'productbacklog', 'sprints'])
+angular.module('projects', ['resources.projects', 'productbacklog', 'sprints', 'security.authorization'])
 
-.config(['$routeProvider', function ($routeProvider) {
+.config(['$routeProvider', 'securityAuthorizationProvider', function ($routeProvider, securityAuthorizationProvider) {
   $routeProvider.when('/projects', {
     templateUrl:'projects/projects-list.tpl.html',
     controller:'ProjectsViewCtrl',
@@ -8,7 +8,8 @@ angular.module('projects', ['resources.projects', 'productbacklog', 'sprints'])
       projects:['Projects', function (Projects) {
         //TODO: fetch only for the current user
         return Projects.all();
-      }]
+      }],
+      authenticatedUser: securityAuthorizationProvider.requireAuthenticatedUser
     }
   });
 }])
