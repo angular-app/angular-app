@@ -86,10 +86,10 @@ angular.module('directives.crud.edit', [])
        * @return {object} A hash where each key is a CSS class and the corresponding value is true if the class is to be applied.
        */
       scope.getCssClasses = function(fieldName) {
-        var ngModelContoller = form[fieldName];
+        var ngModelController = form[fieldName];
         return {
-          error: ngModelContoller.$invalid && !angular.equals(resource, original),
-          success: ngModelContoller.$valid && !angular.equals(resource, original)
+          error: ngModelController.$invalid && !angular.equals(resource, original),
+          success: ngModelController.$valid && !angular.equals(resource, original)
         };
       };
       /**

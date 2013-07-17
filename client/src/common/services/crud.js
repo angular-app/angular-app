@@ -42,10 +42,10 @@ angular.module('services.crud').factory('crudEditMethods', function () {
      * @return {object} A hash where each key is a CSS class and the corresponding value is true if the class is to be applied.
      */
     mixin.getCssClasses = function(fieldName) {
-      var ngModelContoller = this[formName][fieldName];
+      var ngModelController = this[formName][fieldName];
       return {
-        error: ngModelContoller.$invalid && ngModelContoller.$dirty,
-        success: ngModelContoller.$valid && ngModelContoller.$dirty
+        error: ngModelController.$invalid && ngModelController.$dirty,
+        success: ngModelController.$valid && ngModelController.$dirty
       };
     };
 
