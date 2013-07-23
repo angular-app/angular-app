@@ -105,16 +105,18 @@ angular.module('app').constant('MONGOLAB_CONFIG', {
 ### Build the client app
 The app made up of a number of javascript, css and html files that need to be merged into a final distribution for running.  We use the Grunt build tool to do this.
 * Build client application: 
-```
-cd client
-grunt build
-```
+    
+    ```
+    cd client
+    grunt build
+    ```
 
 *It is important to build again if you have changed the client configuration as above.*
 
 ## Running
 ### Start the Server
 * Run the server
+
     ```
     cd server
     node server.js
