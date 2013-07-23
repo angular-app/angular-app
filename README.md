@@ -104,7 +104,11 @@ angular.module('app').constant('MONGOLAB_CONFIG', {
 
 ### Build the client app
 The app made up of a number of javascript, css and html files that need to be merged into a final distribution for running.  We use the Grunt build tool to do this.
-* Build client application: `grunt build`
+* Build client application: 
+```
+cd client
+grunt build
+```
 
 *It is important to build again if you have changed the client configuration as above.*
 
@@ -112,7 +116,8 @@ The app made up of a number of javascript, css and html files that need to be me
 ### Start the Server
 * Run the server
     ```
-    node server/server.js
+    cd server
+    node server.js
     ```
 * Browse to the application at [http://localhost:3000]
 
@@ -129,7 +134,8 @@ Within the client folder you have the following structure:
 
 ### Default Build
 The default grunt task will build (checks the javascript (lint), runs the unit tests (test:unit) and builds distributable files) and run all unit tests: `grunt` (or `grunt.cmd` on Windows).  The tests are run by karma and need one or more browsers open to actually run the tests.
-* `grunt` or `grunt.cmd` (on Windows)
+* `cd client`
+* `grunt`
 * Open one or more browsers and point them to [http://localhost:8080/__test/].  Once the browsers connect the tests will run and the build will complete.
 * If you leave the browsers open at this url then future runs of `grunt` will automatically run the tests against these browsers.
 
@@ -142,6 +148,7 @@ If for some reason you don't want to run the test but just generate the files - 
 ### Building release code
 You can build a release version of the app, with minified files.  This task will also run the "end to end" (e2e) tests.
 The e2e tests require the server to be started and also one or more browsers open to run the tests.  (You can use the same browsers as for the unit tests.)
+* `cd client`
 * Run `grunt release`
 * Open one or more browsers and point them to [http://localhost:8080/__test/].  Once the browsers connect the tests will run and the build will complete.
 * If you leave the browsers open at this url then future runs of `grunt` will automatically run the tests against these browsers.
@@ -149,6 +156,7 @@ The e2e tests require the server to be started and also one or more browsers ope
 ### Continuous testing
 You can have grunt (karma) continuously watch for file changes and automatically run all the tests on every change, without rebuilding the distribution files.  This can make the test run faster when you are doing test driven development and don't need to actually run the application itself.
 
+* `cd client`
 * Run `grunt test-watch`.
 * Open one or more browsers and point them to [http://localhost:8080/__test/].
 * Each time a file changes the tests will be run against each browser.
