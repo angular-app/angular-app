@@ -52,7 +52,7 @@ var security = {
         return res.json(filterUser(user));
       });
     }
-    return passport.authenticate(MongoStrategy.name, authenticationFailed)(req, res, next);
+    return passport.authenticate('mongo', authenticationFailed)(req, res, next);
   },
   logout: function(req, res, next) {
     req.logout();
