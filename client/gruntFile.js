@@ -92,7 +92,7 @@ module.exports = function (grunt) {
         }
       },
       angular: {
-        src:['vendor/angular/angular.js'],
+        src:['vendor/angular/angular.js', 'vendor/angular/angular-route.js'],
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
