@@ -18,15 +18,7 @@ var app = express();
 var secureServer = https.createServer(credentials, app);
 var server = http.createServer(app);
 
-// Serve up the favicon
-app.use(express.favicon(config.server.distFolder + '/favicon.ico'));
-
-// First looks for a static file: index.html, css, images, etc.
-app.use(config.server.staticUrl, express.compress());
-app.use(config.server.staticUrl, express['static'](config.server.distFolder));
-app.use(config.server.staticUrl, function(req, res, next) {
-  res.send(404); // If we get here then the request for a static file is invalid
-});
+require('./lib/routes/static').addRoutes(app, config);
 
 app.use(protectJSON);
 
@@ -68,27 +60,8 @@ app.namespace('/databases/:db/collections/:collection*', function() {
   app.all('/', mongoProxy(config.mongo.dbUrl, config.mongo.apiKey));
 });
 
-app.post('/login', security.login);
-app.post('/logout', security.logout);
-
-// Retrieve the current user
-app.get('/current-user', security.sendCurrentUser);
-
-// Retrieve the current user only if they are authenticated
-app.get('/authenticated-user', function(req, res) {
-  security.authenticationRequired(req, res, function() { security.sendCurrentUser(req, res); });
-});
-
-// Retrieve the current user only if they are admin
-app.get('/admin-user', function(req, res) {
-  security.adminRequired(req, res, function() { security.sendCurrentUser(req, res); });
-});
-
-// This route deals enables HTML5Mode by forwarding missing files to the index.html
-app.all('/*', function(req, res) {
-  // Just send the index.html for other files to support HTML5Mode
-  res.sendfile('index.html', { root: config.server.distFolder });
-});
+require('./lib/routes/security').addRoutes(app, security);
+require('./lib/routes/appFile').addRoutes(app, config);
 
 // A standard error handler - it picks up any left over errors and returns a nicely formatted server 500 error
 app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
