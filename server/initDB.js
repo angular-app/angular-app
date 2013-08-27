@@ -41,7 +41,10 @@ checkDocument(config.security.usersCollection, adminUser, function(err, data) {
       console.log(data);
     });
   } else {
-    console.log('User already created.');
+    if (data.message) {
+      console.log('Error: ' + data.message);
+    } else {
+      console.log('User already created.');
+    }
   }
 });
-
