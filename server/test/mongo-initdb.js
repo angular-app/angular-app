@@ -1,8 +1,8 @@
 // NodeUnit tests for the initDB.js module that initializes the DB
 
 var rewire = require('rewire');
-var initDB = require('../initDB.js');
-var config = require('../config.js');
+var initDB = require('../lib/initDB');
+var config = require('../config');
 
 module.exports = {
   setUp: function (callback) {
