@@ -67,7 +67,7 @@ require('./lib/routes/appFile').addRoutes(app, config);
 app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 
 // Start up the server on the port specified in the config
-server.listen(config.server.listenPort, 'localhost', 511, function() {
+server.listen(config.server.listenPort, '0.0.0.0', 511, function() {
   // // Once the server is listening we automatically open up a browser
   var open = require('open');
   open('http://localhost:' + config.server.listenPort + '/');
