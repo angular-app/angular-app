@@ -123,6 +123,12 @@ The app made up of a number of javascript, css and html files that need to be me
     ```
 * Browse to the application at [http://localhost:3000]
 
+## Browser Support
+We only regularly test against Chrome 29 and occasionally against Firefox and Internet Explorer.
+The application should run on most modern browsers that are supported by the AngularJS framework.
+Obviously, if you chose to base your application on this one, then you should ensure you do your own
+testing against browsers that you need to support.
+
 ## Development
 
 ### Folders structure
