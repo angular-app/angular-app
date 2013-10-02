@@ -27,8 +27,9 @@ describe('admin projects', function () {
       params = {
         $scope: $scope,
         $location: jasmine.createSpyObj('$location', ['path']),
+        i18nNotifications: jasmine.createSpyObj('i18nNotifications', ['pushForCurrentRoute', 'pushForNextRoute']),
         users: [ { $id: function() { return 'X'; }} ],
-        project: {}
+        project: { $id: function() { return 'Y'; }}
       };
       params.users.filter = jasmine.createSpy('filter');
       ctrl = $controller('ProjectsEditCtrl', params);
@@ -36,24 +37,41 @@ describe('admin projects', function () {
     it('should call setup a scope objects correctly', function () {
       expect($scope.project).toBe(params.project);
       expect($scope.users).toBe(params.users);
-      expect($scope.usersLookup).toEqual({ 'X': params.users[0] });
-      expect($scope.project.teamMembers).toEqual([]);
     });
-    it('should call $location in onSave', function() {
-      $scope.onSave();
+    it('should call $location and display a success message in onSave', function() {
+      $scope.onSave(params.project);
+      expect(params.i18nNotifications.pushForNextRoute).toHaveBeenCalled();
+      expect(params.i18nNotifications.pushForNextRoute.mostRecentCall.args[1]).toBe('success');
       expect(params.$location.path).toHaveBeenCalled();
     });
-    it('should set updateError in onError', function() {
+    it('should display an error message in onError', function() {
       $scope.onError();
-      expect($scope.updateError).toBe(true);
+      expect(params.i18nNotifications.pushForCurrentRoute).toHaveBeenCalled();
+      expect(params.i18nNotifications.pushForCurrentRoute.mostRecentCall.args[1]).toBe('error');
     });
-    it('should call filter when getting candidates', function() {
+  });
+
+  describe('TeamMembersController', function () {
+    var params, ctrl, users;
+    beforeEach(function () {
+      params = { $scope: $scope };
+      users = [ { $id: function () { return 'X'; }}];
+      users.filter = jasmine.createSpy('filter');
+      $scope.users = users;
+      $scope.project = { $id: function () { return 'Y'; }};
+      ctrl = $controller('TeamMembersController', params);
+    });
+    it('should call setup a scope objects correctly', function () {
+      expect($scope.usersLookup).toEqual({ 'X': users[0] });
+      expect($scope.project.teamMembers).toEqual([]);
+    });
+    it('should call filter when getting candidates', function () {
       $scope.productOwnerCandidates();
-      expect(params.users.filter).toHaveBeenCalled();
+      expect(users.filter).toHaveBeenCalled();
       $scope.scrumMasterCandidates();
-      expect(params.users.filter).toHaveBeenCalled();
+      expect(users.filter).toHaveBeenCalled();
       $scope.teamMemberCandidates();
-      expect(params.users.filter).toHaveBeenCalled();
+      expect(users.filter).toHaveBeenCalled();
     });
     it('should push items into team members array in addTeamMember only if a team member is selected', function() {
       expect($scope.project.teamMembers.length).toBe(0);
@@ -73,7 +91,7 @@ describe('admin projects', function () {
       $scope.project.teamMembers.push(someTeamMember);
       $scope.removeTeamMember(someTeamMember);
       expect($scope.project.teamMembers.length).toBe(0);
-      
+
       $scope.project.teamMembers.push(someTeamMember);
       $scope.removeTeamMember(otherTeamMember);
       expect($scope.project.teamMembers.length).toBe(1);
