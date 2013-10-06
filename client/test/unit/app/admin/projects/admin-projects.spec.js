@@ -1,100 +1,188 @@
 describe('admin projects', function () {
 
-  var $scope;
-  var $controller;
   beforeEach(module('admin-projects'));
-  beforeEach(inject(function ($injector) {
-    $scope = $injector.get('$rootScope');
-    $controller = $injector.get('$controller');
-  }));
 
   describe('ProjectsListCtrl', function () {
-    it('should call crudListMethods', function () {
-      var params = {
-        $scope: $scope,
-        crudListMethods: jasmine.createSpy('crudListMethods'),
-        projects: {}
-      };
-      var ctrl = $controller('ProjectsListCtrl', params);
-      expect($scope.projects).toBe(params.projects);
-      expect(params.crudListMethods).toHaveBeenCalled();
-    });
+    it('should call crudListMethods', inject(function($controller, $rootScope) {
+      var locals = {
+            $scope: $rootScope,
+            crudListMethods: jasmine.createSpy('crudListMethods'),
+            projects: {}
+          };
+      var ctrl = $controller('ProjectsListCtrl', locals);
+      expect($rootScope.projects).toBe(locals.projects);
+      expect(locals.crudListMethods).toHaveBeenCalled();
+    }));
   });
 
   describe('ProjectsEditCtrl', function () {
-    var params, ctrl;
-    beforeEach(function() {
-      params = {
-        $scope: $scope,
+
+    function createLocals() {
+      return {
+        $scope: {},
         $location: jasmine.createSpyObj('$location', ['path']),
         i18nNotifications: jasmine.createSpyObj('i18nNotifications', ['pushForCurrentRoute', 'pushForNextRoute']),
-        users: [ { $id: function() { return 'X'; }} ],
-        project: { $id: function() { return 'Y'; }}
+        users: [ { $id: function() { return 'X'; }, filter: jasmine.createSpy('filter') } ],
+        project: { $id: function() { return 'Y'; } }
       };
-      params.users.filter = jasmine.createSpy('filter');
-      ctrl = $controller('ProjectsEditCtrl', params);
+    }
+
+    function runController(locals) {
+      inject(function($controller) {
+        $controller('ProjectsEditCtrl', locals);
+      });
+    }
+
+
+    it('should call setup a scope objects correctly', function() {
+      var locals = createLocals();
+      runController(locals);
+      expect(locals.$scope.project).toBe(locals.project);
+      expect(locals.$scope.users).toBe(locals.users);
     });
-    it('should call setup a scope objects correctly', function () {
-      expect($scope.project).toBe(params.project);
-      expect($scope.users).toBe(params.users);
-    });
+
+
     it('should call $location and display a success message in onSave', function() {
-      $scope.onSave(params.project);
-      expect(params.i18nNotifications.pushForNextRoute).toHaveBeenCalled();
-      expect(params.i18nNotifications.pushForNextRoute.mostRecentCall.args[1]).toBe('success');
-      expect(params.$location.path).toHaveBeenCalled();
+      var locals = createLocals();
+      runController(locals);
+
+      locals.$scope.onSave(locals.project);
+
+      expect(locals.i18nNotifications.pushForNextRoute).toHaveBeenCalled();
+      expect(locals.i18nNotifications.pushForNextRoute.mostRecentCall.args[1]).toBe('success');
+      expect(locals.$location.path).toHaveBeenCalled();
     });
+
+
     it('should display an error message in onError', function() {
-      $scope.onError();
-      expect(params.i18nNotifications.pushForCurrentRoute).toHaveBeenCalled();
-      expect(params.i18nNotifications.pushForCurrentRoute.mostRecentCall.args[1]).toBe('error');
+      var locals = createLocals();
+      runController(locals);
+
+      locals.$scope.onError();
+
+      expect(locals.i18nNotifications.pushForCurrentRoute).toHaveBeenCalled();
+      expect(locals.i18nNotifications.pushForCurrentRoute.mostRecentCall.args[1]).toBe('error');
     });
   });
 
   describe('TeamMembersController', function () {
-    var params, ctrl, users;
-    beforeEach(function () {
-      params = { $scope: $scope };
-      users = [ { $id: function () { return 'X'; }}];
+    function createProject() {
+      return {
+        $id: function () { return 'Y'; }
+      };
+    }
+    function createUsers() {
+      var users = [ {
+        $id: function() { return 'X'; }
+      } ];
       users.filter = jasmine.createSpy('filter');
-      $scope.users = users;
-      $scope.project = { $id: function () { return 'Y'; }};
-      ctrl = $controller('TeamMembersController', params);
-    });
-    it('should call setup a scope objects correctly', function () {
-      expect($scope.usersLookup).toEqual({ 'X': users[0] });
-      expect($scope.project.teamMembers).toEqual([]);
-    });
-    it('should call filter when getting candidates', function () {
-      $scope.productOwnerCandidates();
-      expect(users.filter).toHaveBeenCalled();
-      $scope.scrumMasterCandidates();
-      expect(users.filter).toHaveBeenCalled();
-      $scope.teamMemberCandidates();
-      expect(users.filter).toHaveBeenCalled();
-    });
-    it('should push items into team members array in addTeamMember only if a team member is selected', function() {
-      expect($scope.project.teamMembers.length).toBe(0);
-      $scope.addTeamMember();
-      expect($scope.project.teamMembers.length).toBe(0);
+      return users;
+    }
+    function createLocals() {
+      return {
+        $scope: {
+          project: createProject(),
+          users: createUsers()
+        }
+      };
+    }
+    function runController(locals) {
+      inject(function($controller) {
+        $controller('TeamMembersController', locals);
+      });
+    }
 
-      var someTeamMember = {};
-      $scope.selTeamMember = someTeamMember;
-      $scope.addTeamMember();
-      expect($scope.project.teamMembers.length).toBe(1);
-      expect($scope.project.teamMembers[0]).toBe(someTeamMember);
-      expect($scope.selTeamMember).toBeUndefined();
-    });
-    it('should remove the specified team member only if it is in the team members array', function() {
-      var someTeamMember = {};
-      var otherTeamMember = {};
-      $scope.project.teamMembers.push(someTeamMember);
-      $scope.removeTeamMember(someTeamMember);
-      expect($scope.project.teamMembers.length).toBe(0);
+    describe('scope setup', function() {
+      it('should attach a users lookup', function () {
+        var locals = createLocals();
+        runController(locals);
 
-      $scope.project.teamMembers.push(someTeamMember);
-      $scope.removeTeamMember(otherTeamMember);
-      expect($scope.project.teamMembers.length).toBe(1);
+        expect(locals.$scope.usersLookup).toEqual({ 'X': locals.$scope.users[0] });
+      });
+
+      
+      it('should attach an empty team members array', function() {
+        var locals = createLocals();
+        runController(locals);
+       
+        expect(locals.$scope.project.teamMembers).toEqual([]);
+
+      });
+    });
+
+    describe('candidates', function() {
+
+      it('should call filter when getting candidates', function () {
+        var locals = createLocals();
+        runController(locals);
+
+        var $scope = locals.$scope,
+            filterSpy = locals.$scope.users.filter;
+
+        $scope.productOwnerCandidates();
+        expect(filterSpy).toHaveBeenCalled();
+        $scope.scrumMasterCandidates();
+        expect(filterSpy).toHaveBeenCalled();
+        $scope.teamMemberCandidates();
+        expect(filterSpy).toHaveBeenCalled();
+      });
+    });
+
+    describe('addTeamMember()', function() {
+
+      it('should not push an item into team members array if no team member is selected', function() {
+        var locals = createLocals();
+        runController(locals);
+
+        var $scope = locals.$scope;
+
+        expect($scope.project.teamMembers.length).toBe(0);
+        $scope.addTeamMember();
+        expect($scope.project.teamMembers.length).toBe(0);
+      });
+
+      it('should push the selected item into team members array', function() {
+
+        var locals = createLocals();
+        runController(locals);
+
+        var $scope = locals.$scope;
+
+        var someTeamMember = {};
+        $scope.selTeamMember = someTeamMember;
+        $scope.addTeamMember();
+
+        expect($scope.project.teamMembers.length).toBe(1);
+        expect($scope.project.teamMembers[0]).toBe(someTeamMember);
+        expect($scope.selTeamMember).toBeUndefined();
+      });
+    });
+
+    describe('removeTeamMember', function(){
+
+      it('should remove the specified team member if it is in the team members array', function() {
+        var locals = createLocals();
+        runController(locals);
+
+        var $scope = locals.$scope;
+
+        var someTeamMember = {};
+        $scope.project.teamMembers.push(someTeamMember);
+        $scope.removeTeamMember(someTeamMember);
+        expect($scope.project.teamMembers.length).toBe(0);
+      });
+
+      it('should not affect the array if the specified member is not already in the array', function() {
+        var locals = createLocals();
+        runController(locals);
+
+        var $scope = locals.$scope;
+        var someTeamMember = {};
+        var otherTeamMember = {};
+        $scope.project.teamMembers.push(someTeamMember);
+        $scope.removeTeamMember(otherTeamMember);
+        expect($scope.project.teamMembers.length).toBe(1);
+      });
     });
   });
 });
