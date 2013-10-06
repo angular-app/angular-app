@@ -1,5 +1,5 @@
 angular.module('admin-users-list', [
-  'servics.crud',
+  'services.crud',
   'services.i18nNotifications'
 ])
 
