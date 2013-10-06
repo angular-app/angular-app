@@ -1,7 +1,9 @@
-describe('admin-users-edit', function() 
-{
-  angular.module('mocks', []).value('I18N.MESSAGES', {});
-  beforeEach(module('admin-users-edit', 'mocks'));
+describe('admin-users-edit', function() {
+
+  beforeEach(function() {
+    angular.module('I18N-mock', []).value('I18N.MESSAGES', {});
+  });
+  beforeEach(module('admin-users-edit', 'I18N-mock'));
 
   describe('UsersEditCtrl', function () {
     function createLocals() {

@@ -6,13 +6,15 @@ describe('uniqueEmail directive', function() {
     $scope.$digest();
   }
 
-  // Mockup Users resource
-  angular.module('mocks', []).factory('Users', function() {
-    Users = jasmine.createSpyObj('Users', ['query']);
-    return Users;
+  beforeEach(function() {
+    // Mockup Users resource
+    angular.module('mock-Users', []).factory('Users', function() {
+      Users = jasmine.createSpyObj('Users', ['query']);
+      return Users;
+    });
   });
-
-  beforeEach(module('admin-users-edit-uniqueEmail', 'mocks'));
+  
+  beforeEach(module('admin-users-edit-uniqueEmail', 'mock-Users'));
 
   beforeEach(inject(function($compile, $rootScope){
     $scope = $rootScope;

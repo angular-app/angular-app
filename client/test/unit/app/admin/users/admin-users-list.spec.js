@@ -1,13 +1,13 @@
-describe('admin-users-list', function () {
+describe('admin-users-list', function() {
 
-  angular.module('mocks', []).value('I18N.MESSAGES', {});
-  beforeEach(module('admin-users-edit', 'mocks'));
-
-  beforeEach(module('admin-users-list', 'mocks'));
+  beforeEach(function() {
+    angular.module('I18N-mock', []).value('I18N.MESSAGES', {});
+  });
+  beforeEach(module('admin-users-list', 'I18N-mock'));
 
   describe('UsersListCtrl', function () {
 
-    it('should set up the scope correctly', inject(function ($controller) {
+    it('should set up the scope correctly', inject(function($controller) {
       var locals = {
         $scope: {},
         crudListMethods: jasmine.createSpy('crudListMethods'),
