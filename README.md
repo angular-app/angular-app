@@ -113,6 +113,7 @@ The app made up of a number of javascript, css and html files that need to be me
     ```
     cd client
     grunt build
+    cd ..
     ```
 
 *It is important to build again if you have changed the client configuration as above.*
