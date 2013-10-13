@@ -52,9 +52,7 @@ Our backend application server is a NodeJS application that relies upon some 3rd
 * Install local dependencies:
 
     ```
-    cd server
-    npm install
-    cd ..
+    npm install server
     ```
 
 ### Client App
@@ -65,9 +63,7 @@ Our client application is a straight HTML/Javascript application but our develop
 * Install local dependencies:
 
     ```
-    cd client
-    npm install
-    cd ..
+    npm install client
     ```
 
 ## Building
