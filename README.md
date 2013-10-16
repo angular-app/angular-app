@@ -49,23 +49,27 @@ You need to install Node.js and then the development tools. Node.js comes with a
 
 Our backend application server is a NodeJS application that relies upon some 3rd Party npm packages.  You need to install these:
 
-* Install local dependencies:
+* Install local dependencies (from the project root folder):
 
     ```
     npm install server
     ```
+
+  (This will install the dependencies declared in the server/package.json file)
 
 ### Client App
 
 Our client application is a straight HTML/Javascript application but our development process uses a Node.js build tool
 [Grunt.js](gruntjs.com). Grunt relies upon some 3rd party libraries that we need to install as local dependencies using npm.
 
-* Install local dependencies:
+* Install local dependencies (from the project root folder):
 
     ```
     npm install client
     ```
 
+  (This will install the dependencies declared in the client/package.json file)
+  
 ## Building
 
 ### Configure Server
