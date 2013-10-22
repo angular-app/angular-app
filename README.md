@@ -45,6 +45,15 @@ You need to install Node.js and then the development tools. Node.js comes with a
 
 (Note that you may need to uninstall grunt 0.3 globally before installing grunt-cli)
 
+### Get the Code
+
+Either clone this repository or fork it on GitHub and clone your fork:
+
+```
+git clone https://github.com/angular-app/angular-app.git
+cd angular-app
+```
+
 ### App Server
 
 Our backend application server is a NodeJS application that relies upon some 3rd Party npm packages.  You need to install these:
@@ -52,7 +61,9 @@ Our backend application server is a NodeJS application that relies upon some 3rd
 * Install local dependencies (from the project root folder):
 
     ```
-    npm install server
+    cd server
+    npm install
+    cd ..
     ```
 
   (This will install the dependencies declared in the server/package.json file)
@@ -65,7 +76,9 @@ Our client application is a straight HTML/Javascript application but our develop
 * Install local dependencies (from the project root folder):
 
     ```
+    cd client
     npm install client
+    cd ..
     ```
 
   (This will install the dependencies declared in the client/package.json file)
@@ -113,6 +126,7 @@ The app made up of a number of javascript, css and html files that need to be me
     ```
     cd client
     grunt build
+    cd ..
     ```
 
 *It is important to build again if you have changed the client configuration as above.*
@@ -124,6 +138,7 @@ The app made up of a number of javascript, css and html files that need to be me
     ```
     cd server
     node server.js
+    cd ..
     ```
 * Browse to the application at [http://localhost:3000]
 
