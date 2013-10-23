@@ -65,6 +65,7 @@ angular.module('security.service', [
         if ( service.isAuthenticated() ) {
           closeLoginDialog(true);
         }
+        return service.isAuthenticated();
       });
     },
 

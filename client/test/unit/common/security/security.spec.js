@@ -58,6 +58,20 @@ describe('security', function() {
       $httpBackend.flush();
       expect(queue.retryAll).not.toHaveBeenCalled();
     });
+    it('returns true to success handlers if the user authenticated', function() {
+      $httpBackend.when('POST', '/login').respond(200, { user: userInfo });
+      service.login('email', 'password').then(function(loggedIn) {
+        expect(loggedIn).toBe(true);
+      });
+      $httpBackend.flush();
+    });
+    it('returns true to success handlers if the user was not authenticated', function() {
+      $httpBackend.when('POST', '/login').respond(200, { user: undefined });
+      service.login('email', 'password').then(function(loggedIn) {
+        expect(loggedIn).toBe(false);
+      });
+      $httpBackend.flush();
+    });
   });
 
   describe('logout', function() {
