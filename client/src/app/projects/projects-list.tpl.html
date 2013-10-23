@@ -9,14 +9,12 @@
     </thead>
     <tbody>
     <tr ng-repeat="project in projects">
-        <td ng-click="manageBacklog(project.$id())">{{project.name}}</td>
-        <td ng-click="manageBacklog(project.$id())">{{project.desc}}</td>
+        <td ng-click="manageBacklog(project)">{{project.name}}</td>
+        <td ng-click="manageBacklog(project)">{{project.desc}}</td>
+        <td>{{ getMyRoles(project) }}</td>
         <td>
-            {{project.getRoles(authService.currentUser.id)}}
-        </td>
-        <td>
-            <a ng-click="manageBacklog(project.$id())">Product backlog</a>
-            <a ng-click="manageSprints(project.$id())">Sprints</a>
+            <a ng-click="manageBacklog(project)">Product backlog</a>
+            <a ng-click="manageSprints(project)">Sprints</a>
         </td>
     </tr>
     </tbody>

@@ -14,18 +14,22 @@ angular.module('projects', ['resources.projects', 'productbacklog', 'sprints', '
   });
 }])
 
-.controller('ProjectsViewCtrl', ['$scope', '$location', 'projects', function ($scope, $location, projects) {
+.controller('ProjectsViewCtrl', ['$scope', '$location', 'projects', 'security', function ($scope, $location, projects, security) {
   $scope.projects = projects;
 
-  $scope.viewProject = function (projectId) {
-    $location.path('/projects/'+projectId);
+  $scope.viewProject = function (project) {
+    $location.path('/projects/'+project.$id());
   };
 
-  $scope.manageBacklog = function (projectId) {
-    $location.path('/projects/'+projectId+'/productbacklog');
+  $scope.manageBacklog = function (project) {
+    $location.path('/projects/'+project.$id()+'/productbacklog');
   };
 
-  $scope.manageSprints = function (projectId) {
-    $location.path('/projects/'+projectId+'/sprints');
+  $scope.manageSprints = function (project) {
+    $location.path('/projects/'+project.$id()+'/sprints');
+  };
+
+  $scope.getMyRoles = function(project) {
+    return project.getRoles(security.currentUser.id);
   };
 }]);
