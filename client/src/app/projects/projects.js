@@ -30,6 +30,8 @@ angular.module('projects', ['resources.projects', 'productbacklog', 'sprints', '
   };
 
   $scope.getMyRoles = function(project) {
-    return project.getRoles(security.currentUser.id);
+    if ( security.currentUser ) {
+      return project.getRoles(security.currentUser.id);
+    }
   };
 }]);
