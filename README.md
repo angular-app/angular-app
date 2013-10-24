@@ -77,7 +77,7 @@ Our client application is a straight HTML/Javascript application but our develop
 
     ```
     cd client
-    npm install client
+    npm install
     cd ..
     ```
 
