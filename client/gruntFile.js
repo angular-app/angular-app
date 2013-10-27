@@ -37,7 +37,8 @@ module.exports = function (grunt) {
     ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>;\n' +
     ' * Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n */\n',
     src: {
-      js: ['src/**/*.js', '<%= distdir %>/templates/**/*.js'],
+      js: ['src/**/*.js'],
+      jsTpl: ['<%= distdir %>/templates/**/*.js'],
       specs: ['test/**/*.spec.js'],
       scenarios: ['test/**/*.scenario.js'],
       html: ['src/index.html'],
@@ -81,7 +82,7 @@ module.exports = function (grunt) {
         options: {
           banner: "<%= banner %>"
         },
-        src:['<%= src.js %>'],
+        src:['<%= src.js %>', '<%= src.jsTpl %>'],
         dest:'<%= distdir %>/<%= pkg.name %>.js'
       },
       index: {
@@ -113,7 +114,7 @@ module.exports = function (grunt) {
         options: {
           banner: "<%= banner %>"
         },
-        src:['<%= src.js %>'],
+        src:['<%= src.js %>' ,'<%= src.jsTpl %>'],
         dest:'<%= distdir %>/<%= pkg.name %>.js'
       },
       angular: {
@@ -162,7 +163,7 @@ module.exports = function (grunt) {
       }
     },
     jshint:{
-      files:['gruntFile.js', '<%= src.js %>', '<%= src.specs %>', '<%= src.scenarios %>'],
+      files:['gruntFile.js', '<%= src.js %>', '<%= src.jsTpl %>', '<%= src.specs %>', '<%= src.scenarios %>'],
       options:{
         curly:true,
         eqeqeq:true,
