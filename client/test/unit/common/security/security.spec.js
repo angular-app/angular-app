@@ -65,7 +65,7 @@ describe('security', function() {
       });
       $httpBackend.flush();
     });
-    it('returns true to success handlers if the user was not authenticated', function() {
+    it('returns false to success handlers if the user was not authenticated', function() {
       $httpBackend.when('POST', '/login').respond(200, { user: undefined });
       service.login('email', 'password').then(function(loggedIn) {
         expect(loggedIn).toBe(false);
