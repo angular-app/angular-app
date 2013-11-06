@@ -88,7 +88,7 @@ Our client application is a straight HTML/Javascript application but our develop
 ### Configure Server
 The server stores its data in a MongoLab database.
 * Create an account at MongoLab - it's free: [https://mongolab.com/signup/].
-* Create a database to use for this application: [https://mongolab.com/newdb]
+* Create a database to use for this application: [https://mongolab.com/create]
 * Grab your API key: [https://mongolab.com/user?username=YOUR_USERNAME_HERE]
 * Edit `server/config.js` to set your MongoLab API Key and the name of the database you created.
 
