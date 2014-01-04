@@ -114,7 +114,7 @@ The client specifies the name of the MongoDB to use in `client/src/app/app.js`. 
 
 ```
 angular.module('app').constant('MONGOLAB_CONFIG', {
-  baseUrl: 'http://localhost:3000/databases/',
+  baseUrl: '/databases/',
   dbName: 'ascrum'
 });
 ```
