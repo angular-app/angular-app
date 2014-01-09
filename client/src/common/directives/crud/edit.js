@@ -40,7 +40,7 @@ angular.module('directives.crud.edit', [])
       };
       // Set up callbacks with fallback
       // onSave attribute -> onSave scope -> noop
-      var userOnSave = attrs.onSave ? makeFn('onSave') : ( scope.onSave || angular.noop );
+      var userOnSave = attrs.onSave ? makeFn('onSave') : ( $parent.scope.onSave || angular.noop );
       var onSave = function(result, status, headers, config) {
         // Reset the original to help with reverting and pristine checks
         original = result;
@@ -53,15 +53,15 @@ angular.module('directives.crud.edit', [])
 
       // The following functions should be triggered by elements on the form
       // - e.g. ng-click="save()"
-      scope.save = function() {
+      $parent.scope.save = function() {
         resource.$saveOrUpdate(onSave, onSave, onError, onError);
       };
-      scope.revertChanges = function() {
+      $parent.scope.revertChanges = function() {
         resource = angular.copy(original);
         resourceSetter(scope, resource);
         form.$setPristine();
       };
-      scope.remove = function() {
+      $parent.scope.remove = function() {
         if(resource.$id()) {
           resource.$remove(onRemove, onError);
         } else {
@@ -71,13 +71,13 @@ angular.module('directives.crud.edit', [])
 
       // The following functions can be called to modify the behaviour of elements in the form
       // - e.g. ng-disable="!canSave()"
-      scope.canSave = function() {
+      $parent.scope.canSave = function() {
         return form.$valid && !angular.equals(resource, original);
       };
-      scope.canRevert = function() {
+      $parent.scope.canRevert = function() {
         return !angular.equals(resource, original);
       };
-      scope.canRemove = function() {
+      $parent.scope.canRemove = function() {
         return resource.$id();
       };
       /**
@@ -85,7 +85,7 @@ angular.module('directives.crud.edit', [])
        * @param {string} fieldName The name of the field on the form, for which we want to get the CSS classes
        * @return {object} A hash where each key is a CSS class and the corresponding value is true if the class is to be applied.
        */
-      scope.getCssClasses = function(fieldName) {
+      $parent.scope.getCssClasses = function(fieldName) {
         var ngModelController = form[fieldName];
         return {
           error: ngModelController.$invalid && !angular.equals(resource, original),
@@ -98,7 +98,7 @@ angular.module('directives.crud.edit', [])
        * @param  {string} error - The name of the error as given by a validation directive
        * @return {Boolean} true if the error should be shown
        */
-      scope.showError = function(fieldName, error) {
+      $parent.scope.showError = function(fieldName, error) {
         return form[fieldName].$error[error];
       };
     }
