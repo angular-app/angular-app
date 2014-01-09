@@ -40,7 +40,7 @@ angular.module('directives.crud.edit', [])
       };
       // Set up callbacks with fallback
       // onSave attribute -> onSave scope -> noop
-      var userOnSave = attrs.onSave ? makeFn('onSave') : ( $parent.scope.onSave || angular.noop );
+      var userOnSave = attrs.onSave ? makeFn('onSave') : ( scope.onSave || angular.noop );
       var onSave = function(result, status, headers, config) {
         // Reset the original to help with reverting and pristine checks
         original = result;
