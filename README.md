@@ -28,7 +28,7 @@ It is a complete project with a build system focused on AngularJS apps and tight
 * test written using [Jasmine](http://pivotal.github.com/jasmine/) syntax
 * test are executed by [Karma Test Runner](http://karma-runner.github.io/0.8/index.html) (integrated with the Grunt.js build)
 * build supporting JS, CSS and AngularJS templates minification
-* [Twitter's bootstrap](http://twitter.github.com/bootstrap/) with LESS templates processing integrated into the build
+* [Twitter's bootstrap](http://getbootstrap.com/) with LESS templates processing integrated into the build
 * [Travis-CI](https://travis-ci.org/) integration
 
 ## Installation
