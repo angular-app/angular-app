@@ -12,7 +12,7 @@ This sample application is featured in our [book](http://goo.gl/gKEsIo) where yo
 
 <a href="http://goo.gl/gKEsIo"><img src="http://www.packtpub.com/sites/default/files/1820OS.jpg"></a>
 
-We've learned a lot while using and supporting AngularJS on the [mailing list](https://groups.google.com/group/angular) and would like to share our experience. 
+We've learned a lot while using and supporting AngularJS on the [mailing list](https://groups.google.com/group/angular) and would like to share our experience.
 
 ## Stack
 
@@ -82,7 +82,7 @@ Our client application is a straight HTML/Javascript application but our develop
     ```
 
   (This will install the dependencies declared in the client/package.json file)
-  
+
 ## Building
 
 ### Configure Server
@@ -121,8 +121,8 @@ angular.module('app').constant('MONGOLAB_CONFIG', {
 
 ### Build the client app
 The app made up of a number of javascript, css and html files that need to be merged into a final distribution for running.  We use the Grunt build tool to do this.
-* Build client application: 
-    
+* Build client application:
+
     ```
     cd client
     grunt build
@@ -153,7 +153,7 @@ testing against browsers that you need to support.
 ### Folders structure
 At the top level, the repository is split into a client folder and a server folder.  The client folder contains all the client-side AngularJS application.  The server folder contains a very basic Express based webserver that delivers and supports the application.
 Within the client folder you have the following structure:
-* `build` contains build tasks for Grunt
+* `node_modules` contains build tasks for Grunt along with other, user-installed, Node packages
 * `dist` contains build results
 * `src` contains application's sources
 * `test` contains test sources, configuration and dependencies
