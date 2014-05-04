@@ -6,14 +6,14 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-recess');
+  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-html2js');
 
   // Default task.
   grunt.registerTask('default', ['jshint','build','karma:unit']);
-  grunt.registerTask('build', ['clean','html2js','concat','recess:build','copy:assets']);
-  grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','concat:index', 'recess:min','copy:assets']);
+  grunt.registerTask('build', ['clean','html2js','concat','less:build','copy:assets']);
+  grunt.registerTask('release', ['clean','html2js','uglify','jshint','karma:unit','concat:index', 'less:min','copy:assets']);
   grunt.registerTask('test-watch', ['karma:watch']);
 
   // Print a timestamp (useful for when watching)
@@ -46,7 +46,6 @@ module.exports = function (grunt) {
         app: ['src/app/**/*.tpl.html'],
         common: ['src/common/**/*.tpl.html']
       },
-      less: ['src/less/stylesheet.less'], // recess:build doesn't accept ** in its file patterns
       lessWatch: ['src/less/**/*.less']
     },
     clean: ['<%= distdir %>/*'],
@@ -134,21 +133,22 @@ module.exports = function (grunt) {
         dest: '<%= distdir %>/jquery.js'
       }
     },
-    recess: {
+    less: {
       build: {
-        files: {
-          '<%= distdir %>/<%= pkg.name %>.css':
-          ['<%= src.less %>'] },
         options: {
-          compile: true
+          paths: ['src/less']
+        },
+        files: {
+          "<%= distdir %>/<%= pkg.name %>.css": ['src/less/stylesheet.less']
         }
       },
       min: {
-        files: {
-          '<%= distdir %>/<%= pkg.name %>.css': ['<%= src.less %>']
-        },
         options: {
+          paths: ['src/less'],
           compress: true
+        },
+        files: {
+          "<%= distdir %>/<%= pkg.name %>.css": ['src/less/stylesheet.less']
         }
       }
     },
