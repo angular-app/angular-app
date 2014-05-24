@@ -103,6 +103,15 @@ The server stores its data in a MongoLab database.
     },
     ```
 
+* Optionally change the name of admin user in `server/lib/initDB.js`.  The default is 'Admin' (admin@abc.com : changeme). 
+
+    ```
+    var initDB = {
+      adminUser: { email: 'admin@abc.com', password: 'changeme', admin: true, firstName: 'Admin', lastName: 'User' },
+    });
+    // Note the user information, including password, are stored as plain text in the MongoLab database.
+    ```
+
 * Run our initialization script to initialize the database with a first admin user (admin@abc.com : changeme).
 
     ```
@@ -141,6 +150,7 @@ The app made up of a number of javascript, css and html files that need to be me
     cd ..
     ```
 * Browse to the application at [http://localhost:3000]
+* Login with the admin user as defined in `server/lib/initDB.js`. 
 
 ## Browser Support
 We only regularly test against Chrome 29 and occasionally against Firefox and Internet Explorer.
