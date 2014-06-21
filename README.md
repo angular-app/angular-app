@@ -115,7 +115,7 @@ The server stores its data in a MongoLab database.
 * Run our initialization script to initialize the database with a first admin user (admin@abc.com : changeme).
 
     ```
-    `node server/initDB.js`
+    node server/initDB.js
     ```
 
 ### Configure Client
