@@ -73,7 +73,7 @@ angular.module('services.crud').factory('crudListMethods', ['$location', functio
       $location.path(pathPrefix+'/new');
     };
 
-    mixin['edit'] = function (itemId) {
+    mixin.edit = function (itemId) {
       $location.path(pathPrefix+'/'+itemId);
     };
 
