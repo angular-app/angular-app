@@ -5,12 +5,12 @@ basePath = '../..';
 files = [
   JASMINE,
   JASMINE_ADAPTER,
-  'vendor/jquery/jquery.js',
-  'vendor/angular/angular.js',
-  'vendor/angular/angular-route.js',
-  'vendor/mongolab/mongolab-resource.js',
-  'test/vendor/angular/angular-mocks.js',
-  'vendor/angular-ui/**/*.js',
+  'bower_components/jquery/jquery.js',
+  'bower_components/angular/angular.js',
+  'bower_components/angular-route/angular-route.js',
+  'bower_components/angularjs-mongolab/src/mongolabResourceHttp.js',
+  'bower_components/angular-mocks/angular-mocks.js',
+  'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
   'src/**/*.js',
   'test/unit/**/*.spec.js',
   'dist/templates/**/*.js'
