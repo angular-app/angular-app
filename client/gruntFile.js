@@ -93,7 +93,7 @@ module.exports = function (grunt) {
         }
       },
       angular: {
-        src:['bower_components/angular/angular.js', 'bower_components/angular/angular-route.js'],
+        src:['bower_components/angular/angular.js', 'bower_components/angular-route/angular-route.js'],
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
