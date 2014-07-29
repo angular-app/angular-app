@@ -93,19 +93,19 @@ module.exports = function (grunt) {
         }
       },
       angular: {
-        src:['vendor/angular/angular.js', 'vendor/angular/angular-route.js'],
+        src:['bower_components/angular/angular.js', 'bower_components/angular/angular-route.js'],
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
-        src:['vendor/mongolab/*.js'],
+        src:['bower_components/angularjs-mongolab/src/mongolabResourceHttp.js'],
         dest: '<%= distdir %>/mongolab.js'
       },
       bootstrap: {
-        src:['vendor/angular-ui/bootstrap/*.js'],
+        src:['bower_components/angular-bootstrap/ui-bootstrap-tpls.js'],
         dest: '<%= distdir %>/bootstrap.js'
       },
       jquery: {
-        src:['vendor/jquery/*.js'],
+        src:['bower_components/jquery/jquery.js'],
         dest: '<%= distdir %>/jquery.js'
       }
     },
@@ -122,15 +122,15 @@ module.exports = function (grunt) {
         dest: '<%= distdir %>/angular.js'
       },
       mongo: {
-        src:['vendor/mongolab/*.js'],
+        src:['bower_components/angularjs-mongolab/src/mongolabResourceHttp.js'],
         dest: '<%= distdir %>/mongolab.js'
       },
       bootstrap: {
-        src:['vendor/angular-ui/bootstrap/*.js'],
+        src:['bower_components/angular-bootstrap/ui-bootstrap-tpls.js'],
         dest: '<%= distdir %>/bootstrap.js'
       },
       jquery: {
-        src:['vendor/jquery/*.js'],
+        src:['bower_components/jquery/jquery.min.js'],
         dest: '<%= distdir %>/jquery.js'
       }
     },
