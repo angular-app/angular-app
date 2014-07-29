@@ -10,11 +10,12 @@ angular.module('app', [
   'security',
   'directives.crud',
   'templates.app',
-  'templates.common']);
+  'templates.common',
+  'ui.bootstrap.tpls']);
 
 angular.module('app').constant('MONGOLAB_CONFIG', {
-  baseUrl: '/databases/',
-  dbName: 'ascrum'
+  BASE_URL: '/databases/',
+  DB_NAME: 'ascrum'
 });
 
 //TODO: move those messages to a separate module
