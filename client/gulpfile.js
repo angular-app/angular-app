@@ -21,12 +21,12 @@ var karmaCommonConf = {
     'src/**/*.tpl.html': ['ng-html2js']
   },
   files: [
-    'vendor/jquery/jquery.js',
-    'vendor/angular/angular.js',
-    'vendor/angular/angular-route.js',
-    'vendor/mongolab/mongolab-resource.js',
-    'test/vendor/angular/angular-mocks.js',
-    'vendor/angular-ui/**/*.js',
+    'bower_components/jquery/jquery.js',
+    'bower_components/angular/angular.js',
+    'bower_components/angular-route/angular-route.js',
+    'bower_components/angularjs-mongolab/src/mongolabResourceHttp.js',
+    'bower_components/angular-mocks/angular-mocks.js',
+    'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
     'src/**/*.tpl.html',
     'src/**/*.js',
     'test/unit/**/*.spec.js'
@@ -78,10 +78,10 @@ gulp.task('build-js', function () {
 gulp.task('copy-static', function () {
   return merge(
     gulp.src('src/assets/**/*.*'),
-    gulp.src(['vendor/angular/angular.js', 'vendor/angular/angular-route.js']).pipe(concat('angular.js')),
-    gulp.src('vendor/angular-ui/bootstrap/*.js'),
-    gulp.src('vendor/jquery/*.js'),
-    gulp.src('vendor/mongolab/*.js')
+    gulp.src(['bower_components/angular/angular.js', 'bower_components/angular-route/angular-route.js']).pipe(concat('angular.js')),
+    gulp.src('bower_components/angular-bootstrap/ui-bootstrap-tpls.js'),
+    gulp.src('bower_components/jquery/jquery.js'),
+    gulp.src('bower_components/angularjs-mongolab/src/mongolabResourceHttp.js')
   ).pipe(gulp.dest('dist'));
 });
 
