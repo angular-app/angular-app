@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "lodash": "~2.4.1",
+    "merge-stream": "~0.1.5",
     "rimraf": "~2.2.8",
     "karma": "~0.12.17",
     "karma-jasmine": "~0.1.5",
@@ -34,6 +35,6 @@
     "gulp-jshint": "~1.7.1",
     "gulp-template": "~0.1.1",
     "gulp-header": "~1.0.5",
-    "merge-stream": "~0.1.5"
+    "gulp-htmlmin": "~0.1.3"
   }
 }
