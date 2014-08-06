@@ -5,6 +5,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var template = require('gulp-template');
 var header = require('gulp-header');
+var htmlmin = require('gulp-htmlmin');
 
 var merge = require('merge-stream');
 var rimraf = require('rimraf');
@@ -56,10 +57,15 @@ gulp.task('build-js', function () {
 
   var now = new Date();
 
+  var htmlMinOpts = {
+    collapseWhitespace: true,
+    conservativeCollapse: true
+  };
+
   return merge(
       gulp.src('src/**/*.js'),
-      gulp.src('src/app/**/*.tpl.html').pipe(templateCache({standalone: true, module: 'templates.app'})),
-      gulp.src('src/common/**/*.tpl.html').pipe(templateCache({standalone: true, module: 'templates.common'}))
+      gulp.src('src/app/**/*.tpl.html').pipe(htmlmin(htmlMinOpts)).pipe(templateCache({standalone: true, module: 'templates.app'})),
+      gulp.src('src/common/**/*.tpl.html').pipe(htmlmin(htmlMinOpts)).pipe(templateCache({standalone: true, module: 'templates.common'}))
     ).pipe(concat(package.name + '.js'))
     .pipe(uglify())
     .pipe(header(
@@ -105,8 +111,8 @@ gulp.task('tdd', function (done) {
 
 gulp.task('watch', ['lint', 'build'], function () {
 
-  gulp.watch('src/**/*.js', ['lint', 'build']);
-  gulp.watch('src/index.html', ['build-index']);
+  gulp.watch('src/**/*.js', ['lint', 'build-js']);
+  gulp.watch('src/**/*.tpl.html', ['build-js']);
   gulp.watch('src/index.html', ['build-index']);
   gulp.watch('src/assets/**/*.*', ['copy-static']);
 
@@ -118,7 +124,6 @@ gulp.task('default', ['lint', 'test', 'build']);
 /*
 TODO:
 - watch shouldn't break on errors
-- minify HTML
-- don't uglify during watch
+- don't uglify / HTML minifiy during watch
 - live-reload
  */
