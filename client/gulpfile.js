@@ -16,19 +16,33 @@ var karma = require('karma').server;
 var package = require('./package.json');
 
 var karmaCommonConf = {
-  browsers: process.env.TRAVIS ? ['SL_Chrome', 'SL_Firefox'] : ['Chrome'],
+  browsers: process.env.TRAVIS ? ['SL_Chrome', 'SL_Firefox', 'SL_Safari', 'SL_IE_11'] : ['Chrome'],
   customLaunchers: {
     'SL_Chrome': {
       base: 'SauceLabs',
       browserName: 'chrome',
       platform: 'Linux',
-      version: '35'
+      version: '36'
     },
     'SL_Firefox': {
       base: 'SauceLabs',
       browserName: 'firefox',
-      platform: 'Linux'
-  }},
+      platform: 'Linux',
+      version: '31'
+    },
+    'SL_Safari': {
+      base: 'SauceLabs',
+      browserName: 'safari',
+      platform: 'OS X 10.9',
+      version: '7'
+    },
+    'SL_IE_11': {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: 'Windows 8.1',
+      version: '11'
+    }
+  },
   frameworks: ['jasmine'],
   preprocessors: {
     'src/**/*.tpl.html': ['ng-html2js']
