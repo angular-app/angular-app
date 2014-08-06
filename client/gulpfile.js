@@ -37,9 +37,10 @@ var karmaCommonConf = {
       //we do this so in directives we can refer to templates in a way
       //that those templates can be served by a web server during dev time
       //without any need to bundle them
-      return filepath.replace('src/common/', "").replace('src/app/', '');
+      return filepath.replace('src/common/', '').replace('src/app/', '');
     }
-  }
+  },
+  reporters: process.env.TRAVIS ? ['dots'] : ['progress']
 };
 
 
