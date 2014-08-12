@@ -1,4 +1,4 @@
-path = require('path');
+var path = require('path');
 
 module.exports = {
   mongo: {
