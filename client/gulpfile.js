@@ -15,7 +15,33 @@ var karma = require('karma').server;
 var package = require('./package.json');
 
 var karmaCommonConf = {
-  browsers: [process.env.TRAVIS ? 'Firefox' : 'Chrome'],
+  browsers: process.env.TRAVIS ? ['SL_Chrome', 'SL_Firefox', 'SL_Safari', 'SL_IE_11'] : ['Chrome'],
+  customLaunchers: {
+    'SL_Chrome': {
+      base: 'SauceLabs',
+      browserName: 'chrome',
+      platform: 'Linux',
+      version: '36'
+    },
+    'SL_Firefox': {
+      base: 'SauceLabs',
+      browserName: 'firefox',
+      platform: 'Linux',
+      version: '31'
+    },
+    'SL_Safari': {
+      base: 'SauceLabs',
+      browserName: 'safari',
+      platform: 'OS X 10.9',
+      version: '7'
+    },
+    'SL_IE_11': {
+      base: 'SauceLabs',
+      browserName: 'internet explorer',
+      platform: 'Windows 8.1',
+      version: '11'
+    }
+  },
   frameworks: ['jasmine'],
   preprocessors: {
     'src/**/*.tpl.html': ['ng-html2js']
@@ -31,6 +57,7 @@ var karmaCommonConf = {
     'src/**/*.js',
     'test/unit/**/*.spec.js'
   ],
+  reporters: process.env.TRAVIS ? ['dots', 'saucelabs'] : ['progress'],
   ngHtml2JsPreprocessor: {
     cacheIdFromPath: function(filepath) {
       //cut off src/common/ and src/app/ prefixes, if present
@@ -40,7 +67,11 @@ var karmaCommonConf = {
       return filepath.replace('src/common/', '').replace('src/app/', '');
     }
   },
-  reporters: process.env.TRAVIS ? ['dots'] : ['progress']
+  sauceLabs: {
+    username: 'pkozlowski',
+    accessKey: '173aa66e-43e6-4e34-b873-9cb037b8ae5c',
+    testName: 'angular-app tests'
+  }
 };
 
 

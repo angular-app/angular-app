@@ -34,6 +34,7 @@
     "gulp-jshint": "~1.7.1",
     "gulp-template": "~0.1.1",
     "gulp-header": "~1.0.5",
-    "merge-stream": "~0.1.5"
+    "merge-stream": "~0.1.5",
+    "karma-sauce-launcher": "~0.2.10"
   }
 }
