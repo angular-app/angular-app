@@ -44,7 +44,7 @@ angular.module('app').run(['security', function(security) {
   security.requestCurrentUser();
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages', function($scope, i18nNotifications) {
+angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages', function($scope, i18nNotifications, localizedMessages) {
 
   $scope.notifications = i18nNotifications;
 
