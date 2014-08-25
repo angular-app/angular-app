@@ -228,17 +228,20 @@ describe('crud-edit directive', function () {
         expect(scope.getCssClasses('someField').success).toBeFalsy();
 
         someField.$setValidity('required', false);
+        scope.$digest();
 
         expect(scope.getCssClasses('someField').error).toBeFalsy();
         expect(scope.getCssClasses('someField').success).toBeFalsy();
 
         someField.$setViewValue('original'); // This makes the form dirty but identical to the original
         someField.$setValidity('required', true);
+        scope.$digest();
 
         expect(scope.getCssClasses('someField').error).toBeFalsy();
         expect(scope.getCssClasses('someField').success).toBeFalsy();
 
         someField.$setValidity('required', false);
+        scope.$digest();
 
         expect(scope.getCssClasses('someField').error).toBeFalsy();
         expect(scope.getCssClasses('someField').success).toBeFalsy();
