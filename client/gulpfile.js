@@ -48,7 +48,7 @@ var karmaCommonConf = {
     'src/**/*.tpl.html': ['ng-html2js']
   },
   files: [
-    'bower_components/jquery/jquery.js',
+    'bower_components/jquery/dist/jquery.js',
     'bower_components/angular/angular.js',
     'bower_components/angular-route/angular-route.js',
     'bower_components/angularjs-mongolab/src/angular-mongolab.js',
