@@ -115,12 +115,16 @@ gulp.task('build-js', function () {
 
 gulp.task('copy-static', function () {
   return merge(
-    gulp.src('src/assets/**/*.*'),
-    gulp.src(['bower_components/angular/angular.js', 'bower_components/angular-route/angular-route.js']).pipe(concat('angular.js')),
-    gulp.src('bower_components/angular-bootstrap/ui-bootstrap-tpls.js'),
-    gulp.src('bower_components/jquery/dist/jquery.js'),
-    gulp.src('bower_components/angularjs-mongolab/src/*.js')
-  ).pipe(gulp.dest('dist'));
+    gulp.src('bower_components/bootstrap-css/css/*.css').pipe(gulp.dest('dist/css')),
+    gulp.src('bower_components/bootstrap-css/fonts/*').pipe(gulp.dest('dist/fonts')),
+    merge(
+      gulp.src('src/assets/**/*.*'),
+      gulp.src(['bower_components/angular/angular.js', 'bower_components/angular-route/angular-route.js']).pipe(concat('angular.js')),
+      gulp.src('bower_components/angular-bootstrap/ui-bootstrap-tpls.js'),
+      gulp.src('bower_components/jquery/dist/jquery.js'),
+      gulp.src('bower_components/angularjs-mongolab/src/*.js')
+    ).pipe(gulp.dest('dist'))
+  );
 });
 
 gulp.task('clean', function (done) {
