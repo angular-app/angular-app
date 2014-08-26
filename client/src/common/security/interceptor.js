@@ -1,7 +1,7 @@
 angular.module('security.interceptor', ['security.retryQueue'])
 
 // This http interceptor listens for authentication failures
-.factory('securityInterceptor', ['$injector', 'securityRetryQueue', function($injector, queue) {
+.factory('securityInterceptor', ['$injector', '$q', 'securityRetryQueue', function($injector, $q, queue) {
   return {
     responseError: function(originalResponse) {
       if(originalResponse.status === 401) {
@@ -11,7 +11,7 @@ angular.module('security.interceptor', ['security.retryQueue'])
           return $injector.get('$http')(originalResponse.config);
         });
       }
-      return originalResponse;
+      return $q.reject(originalResponse);
     }
   };
 }])
