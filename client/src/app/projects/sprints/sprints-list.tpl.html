@@ -15,7 +15,7 @@
         <td ng-click="edit(sprint.$id())">{{sprint.end}}</td>
         <td ng-click="edit(sprint.$id())">ACTIVE</td>
         <td>
-            <button type="button" class="btn btn-mini" ng-click="tasks(sprint)">Tasks</button>
+            <button type="button" class="btn btn-default btn-xs" ng-click="tasks(sprint)">Tasks</button>
         </td>
     </tr>
     <tr ng-show="!sprints.length">
@@ -24,5 +24,5 @@
     </tbody>
 </table>
 <div class="well">
-    <button class="btn" ng-click="new()">New sprint</button>
+    <button class="btn btn-default" ng-click="new()">New sprint</button>
 </div>
