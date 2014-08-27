@@ -2,32 +2,32 @@
     <h4>Sprint</h4>
     <hr>
     <form name="form" crud-edit="sprint">
-        <div class="row-fluid">
-            <div class="span6">
+        <div class="row">
+            <div class="col-md-6">
                 <label>Name</label>
-                <input type="text" name="name" ng-model="sprint.name" class="span10" required autofocus>
+                <input type="text" name="name" ng-model="sprint.name" class="col-md-10" required autofocus>
                 <label>Capacity</label>
-                <input type="number" name="description" ng-model="sprint.capacity" class="span5" required>
+                <input type="number" name="description" ng-model="sprint.capacity" class="col-md-5" required>
             </div>
-            <div class="span6">
+            <div class="col-md-6">
                 <label>Start date</label>
-                <input type="text" name="name" ng-model="sprint.start" class="span5" required>
+                <input type="text" name="name" ng-model="sprint.start" class="col-md-5" required>
                 <label>End date</label>
-                <input type="text" name="name" ng-model="sprint.end" class="span5" required>
+                <input type="text" name="name" ng-model="sprint.end" class="col-md-5" required>
             </div>
         </div>
         <hr>
         <h4>Sprint backlog</h4>
         <hr>
-        <div class="row-fluid">
-            <div class="span6">
+        <div class="row">
+            <div class="col-md-6">
                 <label>Currently in the sprint's backlog</label>
                 <table class="table table-bordered table-condensed table-striped table-hover">
                     <thead>
                     <tr>
-                        <th class="span8">Name</th>
-                        <th class="span2">Estimation</th>
-                        <th class="span2">Tools</th>
+                        <th class="col-md-8">Name</th>
+                        <th class="col-md-2">Estimation</th>
+                        <th class="col-md-2">Tools</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -51,14 +51,14 @@
                     </tfoot>
                 </table>
             </div>
-            <div class="span6">
+            <div class="col-md-6">
                 <label>Product backlog</label>
                 <table class="table table-bordered table-condensed table-striped table-hover">
                     <thead>
                     <tr>
-                        <th class="span8">Name</th>
-                        <th class="span2">Estimation</th>
-                        <th class="span2">Tools</th>
+                        <th class="col-md-8">Name</th>
+                        <th class="col-md-2">Estimation</th>
+                        <th class="col-md-2">Tools</th>
                     </tr>
                     </thead>
                     <tbody>
