@@ -24,13 +24,13 @@ describe('login-toolbar', function() {
   it('should display a link with the current user name, when authenticated', function () {
     security.currentUser = { firstName: 'Jo', lastName: 'Bloggs'};
     $rootScope.$digest();
-    expect(toolbar.find('a').text()).toBe('Jo Bloggs');
+    expect(toolbar.find('p').text()).toBe('Jo Bloggs');
   });
 
   it('should not display a link with the current user name, when not authenticated', function () {
     security.currentUser = null;
     $rootScope.$digest();
-    expect(toolbar.find('a').is(':visible')).toBe(false);
+    expect(toolbar.find('p').is(':visible')).toBe(false);
   });
 
   it('should display login when user is not authenticated', function() {
