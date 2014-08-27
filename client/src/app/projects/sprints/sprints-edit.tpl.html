@@ -4,16 +4,24 @@
     <form name="form" crud-edit="sprint">
         <div class="row">
             <div class="col-md-6">
-                <label>Name</label>
-                <input type="text" name="name" ng-model="sprint.name" class="col-md-10" required autofocus>
-                <label>Capacity</label>
-                <input type="number" name="description" ng-model="sprint.capacity" class="col-md-5" required>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" ng-model="sprint.name" class="form-control" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label>Capacity</label>
+                    <input type="number" name="description" ng-model="sprint.capacity" class="form-control" required>
+                </div>
             </div>
             <div class="col-md-6">
-                <label>Start date</label>
-                <input type="text" name="name" ng-model="sprint.start" class="col-md-5" required>
-                <label>End date</label>
-                <input type="text" name="name" ng-model="sprint.end" class="col-md-5" required>
+                <div class="form-group">
+                    <label>Start date</label>
+                    <input type="text" name="name" ng-model="sprint.start" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>End date</label>
+                    <input type="text" name="name" ng-model="sprint.end" class="form-control" required>
+                </div>
             </div>
         </div>
         <hr>
