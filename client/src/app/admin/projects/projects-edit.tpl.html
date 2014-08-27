@@ -3,23 +3,30 @@
         <legend>Project</legend>
         <div class="row">
             <div class="col-md-6">
-                <label>Name</label>
-                <input type="text" name="name" ng-model="project.name" class="col-md-10" required autofocus>
-                <label>Description</label>
-                <textarea rows="10" cols="10" ng-model="project.desc" class="col-md-10">
-                </textarea>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" ng-model="project.name" class="form-control" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea rows="10" cols="10" ng-model="project.desc" class="form-control"></textarea>
+                </div>
             </div>
             <div class="col-md-6" ng-controller="TeamMembersController">
-                <label>Product Owner</label>
-                <select class="col-md-12" ng-model="project.productOwner"
-                        ng-options="user.$id() as user.getFullName() for user in productOwnerCandidates()" required>
-                    <option value="">-- choose --</option>
-                </select>
-                <label>Scrum Master</label>
-                <select class="col-md-12" ng-model="project.scrumMaster"
-                        ng-options="user.$id() as user.getFullName() for user in scrumMasterCandidates()" required>
-                    <option value="">-- choose --</option>
-                </select>
+                <div class="form-group">
+                    <label>Product Owner</label>
+                    <select class="form-control" ng-model="project.productOwner"
+                            ng-options="user.$id() as user.getFullName() for user in productOwnerCandidates()" required>
+                        <option value="">-- choose --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Scrum Master</label>
+                    <select class="form-control" ng-model="project.scrumMaster"
+                            ng-options="user.$id() as user.getFullName() for user in scrumMasterCandidates()" required>
+                        <option value="">-- choose --</option>
+                    </select>
+                </div>
                 <label>Development Team</label>
                 <table class="table table-bordered table-condensed table-striped table-hover">
                     <thead>
@@ -36,7 +43,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><select class="col-md-6" ng-model="selTeamMember"
+                        <td><select class="form-control" ng-model="selTeamMember"
                                     ng-options="user.$id() as user.getFullName() for user in teamMemberCandidates()"></select>
                         </td>
                         <td>
