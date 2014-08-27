@@ -1,7 +1,7 @@
 <div class="well">
     <form name="form" novalidate crud-edit="user">
         <legend>User</legend>
-        <gravatar email="user.email" size="200" class="img-polaroid pull-right"></gravatar>
+        <gravatar email="user.email" size="200" class="img-thumbnail pull-right"></gravatar>
         <label for="email">E-mail</label>
         <input class="col-md-6" type="email" id="email" name="email" ng-model="user.email" required unique-email>
         <span ng-show="showError('email', 'required')" class="help-inline">This field is required.</span>
