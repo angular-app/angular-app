@@ -45,7 +45,7 @@ angular.module('admin-projects', [
   };
 
   $scope.onError = function() {
-    i18nNotifications.pushForCurrentRoute('crud.project.save.error', 'error');
+    i18nNotifications.pushForCurrentRoute('crud.project.save.error', 'danger');
   };
 
 }])

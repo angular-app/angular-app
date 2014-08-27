@@ -16,7 +16,7 @@ angular.module('admin-users-edit',[
   };
 
   $scope.onError = function() {
-    i18nNotifications.pushForCurrentRoute('crud.user.save.error', 'error');
+    i18nNotifications.pushForCurrentRoute('crud.user.save.error', 'danger');
   };
 
   $scope.onRemove = function(user) {

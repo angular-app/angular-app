@@ -19,7 +19,7 @@ angular.module('admin-users-list', [
       $scope.users.splice($index,1);
       i18nNotifications.pushForCurrentRoute('crud.user.remove.success', 'success', {id : user.$id()});
     }, function() {
-      i18nNotifications.pushForCurrentRoute('crud.user.remove.error', 'error', {id : user.$id()});
+      i18nNotifications.pushForCurrentRoute('crud.user.remove.error', 'danger', {id : user.$id()});
     });
   };
 }]);
