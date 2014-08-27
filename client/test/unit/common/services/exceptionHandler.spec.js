@@ -22,7 +22,7 @@ describe('exception handler', function () {
     expect(currentNotifications.length).toEqual(1);
 
     errorNotification = currentNotifications[0];
-    expect(errorNotification.type).toEqual("error");
+    expect(errorNotification.type).toEqual("danger");
     expect(errorNotification.message).toEqual("Oh, snap!");
     expect(errorNotification.exception).toEqual(error);
     expect(errorNotification.cause).toEqual(cause);

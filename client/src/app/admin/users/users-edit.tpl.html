@@ -1,24 +1,24 @@
 <div class="well">
     <form name="form" novalidate crud-edit="user">
         <legend>User</legend>
-        <gravatar email="user.email" size="200" class="img-polaroid pull-right"></gravatar>
+        <gravatar email="user.email" size="200" class="img-thumbnail pull-right"></gravatar>
         <label for="email">E-mail</label>
-        <input class="span6" type="email" id="email" name="email" ng-model="user.email" required unique-email>
+        <input class="col-md-6" type="email" id="email" name="email" ng-model="user.email" required unique-email>
         <span ng-show="showError('email', 'required')" class="help-inline">This field is required.</span>
         <span ng-show="showError('email', 'email')" class="help-inline">Please enter a valid email address.</span>
         <span ng-show="showError('email', 'uniqueEmail')" class="help-inline">This email address is not available - please enter another.</span>
         <label for="lastName">Last name</label>
-        <input class="span6" type="text" id="lastName" name="lastName" ng-model="user.lastName" required>
+        <input class="col-md-6" type="text" id="lastName" name="lastName" ng-model="user.lastName" required>
         <span ng-show="showError('lastName', 'required')" class="help-inline">This field is required.</span>
         <label for="firstName">First name</label>
-        <input class="span6" type="text" id="firstName" name="firstName" ng-model="user.firstName" required>
+        <input class="col-md-6" type="text" id="firstName" name="firstName" ng-model="user.firstName" required>
         <span ng-show="showError('firstName', 'required')" class="help-inline">This field is required.</span>
         <label for="password">Password</label>
-        <input class="span6" type="password" id="password" name="password" ng-model="user.password" required>
+        <input class="col-md-6" type="password" id="password" name="password" ng-model="user.password" required>
         <span ng-show="showError('password', 'required')" class="help-inline">This field is required.</span>
         <span ng-show="showError('passwordRepeat', 'equal')" class="help-inline">Passwords do not match.</span>
         <label for="passwordRepeat">Password (repeat)</label>
-        <input class="span6" type="password" id="passwordRepeat" name="passwordRepeat" ng-model="password" required validate-equals="user.password">
+        <input class="col-md-6" type="password" id="passwordRepeat" name="passwordRepeat" ng-model="password" required validate-equals="user.password">
         <span ng-show="showError('passwordRepeat', 'required')" class="help-inline">This field is required.</span>
         <span ng-show="showError('passwordRepeat', 'equal')" class="help-inline">Passwords do not match.</span>
         <label>Admin</label>

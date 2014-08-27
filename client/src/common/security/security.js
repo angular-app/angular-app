@@ -2,10 +2,10 @@
 angular.module('security.service', [
   'security.retryQueue',    // Keeps track of failed requests that need to be retried once the user logs in
   'security.login',         // Contains the login form template and controller
-  'ui.bootstrap.dialog'     // Used to display the login form as a modal dialog.
+  'ui.bootstrap.modal'     // Used to display the login form as a modal dialog.
 ])
 
-.factory('security', ['$http', '$q', '$location', 'securityRetryQueue', '$dialog', function($http, $q, $location, queue, $dialog) {
+.factory('security', ['$http', '$q', '$location', 'securityRetryQueue', '$modal', function($http, $q, $location, queue, $modal) {
 
   // Redirect to the given url (defaults to '/')
   function redirect(url) {
@@ -19,8 +19,8 @@ angular.module('security.service', [
     if ( loginDialog ) {
       throw new Error('Trying to open a dialog that is already open!');
     }
-    loginDialog = $dialog.dialog();
-    loginDialog.open('security/login/form.tpl.html', 'LoginFormController').then(onLoginDialogClose);
+    loginDialog = $modal.open({ templateUrl:'security/login/form.tpl.html', controller: 'LoginFormController'});
+    loginDialog.result.then(onLoginDialogClose);
   }
   function closeLoginDialog(success) {
     if (loginDialog) {
@@ -102,7 +102,7 @@ angular.module('security.service', [
     isAuthenticated: function(){
       return !!service.currentUser;
     },
-    
+
     // Is the current user an adminstrator?
     isAdmin: function() {
       return !!(service.currentUser && service.currentUser.admin);

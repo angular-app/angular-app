@@ -1,0 +1,27 @@
+{
+  "name": "angular-app",
+  "version": "0.0.0",
+  "homepage": "https://github.com/angular-app/angular-app",
+  "authors": [
+    "Pawel Kozlowski & Peter Bacon Darwin"
+  ],
+  "description": "a simplified project management tool supporting teams using the SCRUM methodology - demonstrating AngularJS",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularjs": "~1.3.0",
+    "angular-route": "~1.3.0",
+    "angular-mocks": "~1.3.0",
+    "jquery": "~2.1.1",
+    "angularjs-mongolab": "*",
+    "angular-bootstrap": "~0.11.0",
+    "bootstrap-css": "~3.2.0"
+  }
+}

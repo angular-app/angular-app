@@ -5,14 +5,14 @@ angular.module('tasks', ['resources.tasks', 'services.crud'])
   var sprintBacklogItems = ['Sprints', 'ProductBacklog', '$route', function (Sprints, ProductBacklog, $route) {
     var sprintPromise = Sprints.getById($route.current.params.sprintId);
     return sprintPromise.then(function (sprint) {
-      return ProductBacklog.getByIds(sprint.sprintBacklog);
+      return ProductBacklog.getByObjectIds(sprint.sprintBacklog);
     });
   }];
 
   var teamMembers = ['Projects', 'Users', '$route', function (Projects, Users, $route) {
     var projectPromise = Projects.getById($route.current.params.projectId);
     return projectPromise.then(function(project){
-      return Users.getByIds(project.teamMembers);
+      return Users.getByObjectIds(project.teamMembers);
     });
   }];
 

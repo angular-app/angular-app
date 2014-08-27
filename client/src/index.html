@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
 <head>
-  <link rel="stylesheet" type="text/css" href="/static/<%= grunt.config.get('pkg.name') %>.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css"/>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-theme.css"/>
   <script type="text/javascript" src="/static/jquery.js"></script>
   <script type="text/javascript" src="/static/angular.js"></script>
-  <script type="text/javascript" src="/static/mongolab.js"></script>
-  <script type="text/javascript" src="/static/bootstrap.js"></script>
-  <script type="text/javascript" src="/static/<%= grunt.config.get('pkg.name') %>.js"></script>
+  <script type="text/javascript" src="/static/angular-mongolab.js"></script>
+  <script type="text/javascript" src="/static/ui-bootstrap-tpls.js"></script>
+  <script type="text/javascript" src="/static/<%= pkg.name %>.js"></script>
 </head>
 
 <body ng-controller="AppCtrl">

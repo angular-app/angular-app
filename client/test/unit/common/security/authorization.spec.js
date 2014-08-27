@@ -4,12 +4,13 @@ describe('securityAuthorization', function() {
 
   angular.module('test', []).value('I18N.MESSAGES', {});
   beforeEach(module('test', 'security.authorization', 'security/login/form.tpl.html'));
+  beforeEach(module('template/modal/backdrop.html', 'template/modal/window.html'));
   beforeEach(inject(function($injector) {
     $rootScope = $injector.get('$rootScope');
     securityAuthorization = $injector.get('securityAuthorization');
     security = $injector.get('security');
     queue = $injector.get('securityRetryQueue');
-    
+
     userResponse = { user: { id: '1234567890', email: 'jo@bloggs.com', firstName: 'Jo', lastName: 'Bloggs'} };
     resolved = false;
 
@@ -72,4 +73,3 @@ describe('securityAuthorization', function() {
     });
   });
 });
-  

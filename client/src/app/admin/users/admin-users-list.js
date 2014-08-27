@@ -14,12 +14,12 @@ angular.module('admin-users-list', [
     $event.stopPropagation();
 
     // Remove this user
-    user.$remove(function() {
+    user.$remove().then(function() {
       // It is gone from the DB so we can remove it from the local list too
       $scope.users.splice($index,1);
       i18nNotifications.pushForCurrentRoute('crud.user.remove.success', 'success', {id : user.$id()});
     }, function() {
-      i18nNotifications.pushForCurrentRoute('crud.user.remove.error', 'error', {id : user.$id()});
+      i18nNotifications.pushForCurrentRoute('crud.user.remove.error', 'danger', {id : user.$id()});
     });
   };
 }]);

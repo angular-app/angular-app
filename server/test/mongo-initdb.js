@@ -31,10 +31,10 @@ module.exports = {
       test.equals(err, null);
       // validate fields, but ignore password in case users changed it
       if (data.length > 0) {
-        test.equals(data[0].email, initDB.adminUser['email']);
-        test.equals(data[0].admin, initDB.adminUser['admin']);
-        test.equals(data[0].firstName, initDB.adminUser['firstName']);
-        test.equals(data[0].lastName, initDB.adminUser['lastName']);
+        test.equals(data[0].email, initDB.adminUser.email);
+        test.equals(data[0].admin, initDB.adminUser.admin);
+        test.equals(data[0].firstName, initDB.adminUser.firstName);
+        test.equals(data[0].lastName, initDB.adminUser.lastName);
         test.done();
       } else {
         // create user
@@ -51,9 +51,9 @@ module.exports = {
   testCreateDeleteUser: function(test) {
     // deletes users, creates user, and then deletes it again
     var someuser = JSON.parse(JSON.stringify(initDB.adminUser));
-    someuser['email'] = "unittest@test.com";
-    someuser['firstName'] = "unit";
-    someuser['lastName'] = "test";
+    someuser.email = "unittest@test.com";
+    someuser.firstName = "unit";
+    someuser.lastName = "test";
     initDB.initialize(config);
     initDB.checkDocument(initDB.usersCollection, someuser, function(err, data) {
       // first, delete any existing test user docs
@@ -75,11 +75,11 @@ module.exports = {
           // add a new test user doc
           test.equals(err, null);
           // validate fields of newly created user
-          test.equals(data.email, someuser['email']);
-          test.equals(data.password, someuser['password']);
-          test.equals(data.admin, someuser['admin']);
-          test.equals(data.firstName, someuser['firstName']);
-          test.equals(data.lastName, someuser['lastName']);
+          test.equals(data.email, someuser.email);
+          test.equals(data.password, someuser.password);
+          test.equals(data.admin, someuser.admin);
+          test.equals(data.firstName, someuser.firstName);
+          test.equals(data.lastName, someuser.lastName);
           var docId = data._id.$oid;
           initDB.deleteDocument(initDB.usersCollection, docId, function(err, data) {
             // and delete the document we created
