@@ -6,7 +6,7 @@
         <div class="alert alert-warning" ng-show="authReason">
             {{authReason}}
         </div>
-        <div class="alert alert-error" ng-show="authError">
+        <div class="alert alert-danger" ng-show="authError">
             {{authError}}
         </div>
         <div class="alert alert-info">Please enter your login details</div>
@@ -17,7 +17,7 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary login" ng-click="login()" ng-disabled='form.$invalid'>Sign in</button>
-        <button class="btn clear" ng-click="clearForm()">Clear</button>
+        <button class="btn btn-default clear" ng-click="clearForm()">Clear</button>
         <button class="btn btn-warning cancel" ng-click="cancelLogin()">Cancel</button>
     </div>
 </form>

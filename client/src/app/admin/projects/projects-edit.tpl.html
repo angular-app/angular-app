@@ -1,25 +1,32 @@
 <div class="well">
     <form name="form" crud-edit="project">
         <legend>Project</legend>
-        <div class="row-fluid">
-            <div class="span6">
-                <label>Name</label>
-                <input type="text" name="name" ng-model="project.name" class="span10" required autofocus>
-                <label>Description</label>
-                <textarea rows="10" cols="10" ng-model="project.desc" class="span10">
-                </textarea>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" ng-model="project.name" class="form-control" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea rows="10" cols="10" ng-model="project.desc" class="form-control"></textarea>
+                </div>
             </div>
-            <div class="span6" ng-controller="TeamMembersController">
-                <label>Product Owner</label>
-                <select class="span12" ng-model="project.productOwner"
-                        ng-options="user.$id() as user.getFullName() for user in productOwnerCandidates()" required>
-                    <option value="">-- choose --</option>
-                </select>
-                <label>Scrum Master</label>
-                <select class="span12" ng-model="project.scrumMaster"
-                        ng-options="user.$id() as user.getFullName() for user in scrumMasterCandidates()" required>
-                    <option value="">-- choose --</option>
-                </select>
+            <div class="col-md-6" ng-controller="TeamMembersController">
+                <div class="form-group">
+                    <label>Product Owner</label>
+                    <select class="form-control" ng-model="project.productOwner"
+                            ng-options="user.$id() as user.getFullName() for user in productOwnerCandidates()" required>
+                        <option value="">-- choose --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Scrum Master</label>
+                    <select class="form-control" ng-model="project.scrumMaster"
+                            ng-options="user.$id() as user.getFullName() for user in scrumMasterCandidates()" required>
+                        <option value="">-- choose --</option>
+                    </select>
+                </div>
                 <label>Development Team</label>
                 <table class="table table-bordered table-condensed table-striped table-hover">
                     <thead>
@@ -32,15 +39,15 @@
                     <tr ng-repeat="userId in project.teamMembers">
                         <td>{{usersLookup[userId].getFullName()}}</td>
                         <td>
-                            <button class="btn btn-small" ng-click="removeTeamMember(userId)">Remove</button>
+                            <button class="btn btn-default btn-sm" ng-click="removeTeamMember(userId)">Remove</button>
                         </td>
                     </tr>
                     <tr>
-                        <td><select class="span6" ng-model="selTeamMember"
+                        <td><select class="form-control" ng-model="selTeamMember"
                                     ng-options="user.$id() as user.getFullName() for user in teamMemberCandidates()"></select>
                         </td>
                         <td>
-                            <button class="btn btn-small" ng-click="addTeamMember(selTeamMember)" ng-disabled="!selTeamMember">Add
+                            <button class="btn btn-default btn-sm" ng-click="addTeamMember(selTeamMember)" ng-disabled="!selTeamMember">Add
                             </button>
                         </td>
                     </tr>
@@ -48,9 +55,9 @@
                 </table>
             </div>
         </div>
-        <div class="row-fluid">
+        <div class="row">
             <hr>
-            <crud-buttons class="span12"></crud-buttons>
+            <crud-buttons class="col-md-12"></crud-buttons>
         </div>
     </form>
 </div>

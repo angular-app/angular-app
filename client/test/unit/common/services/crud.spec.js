@@ -1,14 +1,15 @@
 describe('CRUD scope mix-ins', function () {
 
-  var $rootScope;
+  var $rootScope, $q;
 
   describe('crud edit methods', function () {
 
     var crudEditMethods;
     beforeEach(module('services.crud'));
-    beforeEach(inject(function (_$rootScope_, _crudEditMethods_) {
+    beforeEach(inject(function (_$rootScope_, _crudEditMethods_, _$q_) {
       $rootScope = _$rootScope_;
       crudEditMethods = _crudEditMethods_;
+      $q = _$q_;
     }));
 
     describe('scope init', function () {
@@ -132,9 +133,10 @@ describe('CRUD scope mix-ins', function () {
           expect(scope.canSave()).toBeTruthy();
         });
         it('should invoke the $saveOrUpdate method on an item with callback arguments on save', function () {
-          item.$saveOrUpdate = jasmine.createSpy();
-          scope.save();
-          expect(item.$saveOrUpdate).toHaveBeenCalledWith(successcb, successcb, errorcb, errorcb);
+          item.$saveOrUpdate = jasmine.createSpy().andReturn($q.when({}));
+          scope.$apply('save()');
+          expect(item.$saveOrUpdate).toHaveBeenCalled();
+          expect(successcb).toHaveBeenCalled();
         });
       });
 
@@ -164,9 +166,10 @@ describe('CRUD scope mix-ins', function () {
           item.$id = function () {
             return 'id';
           };
-          item.$remove = jasmine.createSpy();
-          scope.remove();
-          expect(item.$remove).toHaveBeenCalledWith(successcb, errorcb);
+          item.$remove = jasmine.createSpy().andReturn($q.when({}));
+          scope.$apply('remove()');
+          expect(item.$remove).toHaveBeenCalled();
+          expect(successcb).toHaveBeenCalled();
         });
       });
     });

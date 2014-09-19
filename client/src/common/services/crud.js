@@ -9,7 +9,7 @@ angular.module('services.crud').factory('crudEditMethods', function () {
     mixin[itemName+'Copy'] = angular.copy(item);
 
     mixin.save = function () {
-      this[itemName].$saveOrUpdate(successcb, successcb, errorcb, errorcb);
+      this[itemName].$saveOrUpdate().then(successcb, errorcb);
     };
 
     mixin.canSave = function () {
@@ -26,7 +26,7 @@ angular.module('services.crud').factory('crudEditMethods', function () {
 
     mixin.remove = function () {
       if (this[itemName].$id()) {
-        this[itemName].$remove(successcb, errorcb);
+        this[itemName].$remove().then(successcb, errorcb);
       } else {
         successcb();
       }
@@ -73,7 +73,7 @@ angular.module('services.crud').factory('crudListMethods', ['$location', functio
       $location.path(pathPrefix+'/new');
     };
 
-    mixin['edit'] = function (itemId) {
+    mixin.edit = function (itemId) {
       $location.path(pathPrefix+'/'+itemId);
     };
 

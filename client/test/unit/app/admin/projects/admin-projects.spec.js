@@ -61,7 +61,7 @@ describe('admin projects', function () {
       locals.$scope.onError();
 
       expect(locals.i18nNotifications.pushForCurrentRoute).toHaveBeenCalled();
-      expect(locals.i18nNotifications.pushForCurrentRoute.mostRecentCall.args[1]).toBe('error');
+      expect(locals.i18nNotifications.pushForCurrentRoute.mostRecentCall.args[1]).toBe('danger');
     });
   });
 
@@ -100,11 +100,11 @@ describe('admin projects', function () {
         expect(locals.$scope.usersLookup).toEqual({ 'X': locals.$scope.users[0] });
       });
 
-      
+
       it('should attach an empty team members array', function() {
         var locals = createLocals();
         runController(locals);
-       
+
         expect(locals.$scope.project.teamMembers).toEqual([]);
 
       });
