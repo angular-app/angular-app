@@ -36,6 +36,8 @@
     "gulp-jshint": "~1.7.1",
     "gulp-template": "~0.1.1",
     "gulp-header": "~1.0.5",
-    "gulp-htmlmin": "~0.1.3"
+    "gulp-htmlmin": "~0.1.3",
+    "gulp-protractor": "0.0.12",
+    "protractor": "^1.5.0"
   }
 }

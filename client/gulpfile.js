@@ -6,6 +6,7 @@ var uglify = require('gulp-uglify');
 var template = require('gulp-template');
 var header = require('gulp-header');
 var htmlmin = require('gulp-htmlmin');
+var protractor = require("gulp-protractor").protractor;
 
 var merge = require('merge-stream');
 var rimraf = require('rimraf');
@@ -143,6 +144,11 @@ gulp.task('test', function (done) {
 
 gulp.task('tdd', function (done) {
   karma.start(karmaCommonConf, done);
+});
+
+gulp.task('e2e', function() {
+  return gulp.src(['./test/e2e/**/*.js'], false)
+            .pipe(protractor({ configFile: 'test/protractor.conf.js' }));
 });
 
 gulp.task('watch', ['lint', 'build'], function () {
