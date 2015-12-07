@@ -5,12 +5,13 @@
  before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  - npm install -g grunt-cli@0.1.x karma@0.8.x
+  - npm install -g gulp karma bower
   - cd server
   - npm install --quiet
   - node server.js &
   - sleep 3 # give server some time to start
   - cd ../client
   - npm install --quiet
+  - bower install --quiet
 
- script: grunt release
+ script: gulp
