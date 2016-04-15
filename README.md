@@ -71,7 +71,7 @@ Our backend application server is a NodeJS application that relies upon some 3rd
 ### Client App
 
 Our client application is a straight HTML/Javascript application but our development process uses a Node.js build tool
-[Grunt.js](gruntjs.com). Grunt relies upon some 3rd party libraries that we need to install as local dependencies using npm.
+[Grunt.js](http://gruntjs.com/). Grunt relies upon some 3rd party libraries that we need to install as local dependencies using npm.
 
 * Install local dependencies (from the project root folder):
 
