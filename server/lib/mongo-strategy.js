@@ -23,13 +23,13 @@ function MongoDBStrategy(dbUrl, apiKey, dbName, collection) {
   passport.deserializeUser(this.get.bind(this));
 
   // We want this strategy to have a nice name for use by passport, e.g. app.post('/login', passport.authenticate('mongo'));
-  this.name = MongoDBStrategy.name;
+  this.name = 'mongo';
 }
 
 // MongoDBStrategy inherits from LocalStrategy
 util.inherits(MongoDBStrategy, LocalStrategy);
 
-MongoDBStrategy.name = "mongo";
+
 
 // Query the users collection
 MongoDBStrategy.prototype.query = function(query, done) {
