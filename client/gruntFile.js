@@ -59,10 +59,21 @@ module.exports = function (grunt) {
       unit: { options: karmaConfig('test/config/unit.js') },
       watch: { options: karmaConfig('test/config/unit.js', { singleRun:false, autoWatch: true}) }
     },
+    htmlminOptions: {
+      collapseBooleanAttributes: true,
+      collapseWhitespace: true,
+      removeAttributeQuotes: true,
+      removeComments: true,
+      removeEmptyAttributes: true,
+      removeRedundantAttributes: true,
+      removeScriptTypeAttributes: true,
+      removeStyleLinkTypeAttributes: true
+    },
     html2js: {
       app: {
         options: {
-          base: 'src/app'
+          base: 'src/app',
+          htmlmin: '<%= htmlminOptions %>'
         },
         src: ['<%= src.tpl.app %>'],
         dest: '<%= distdir %>/templates/app.js',
@@ -70,7 +81,8 @@ module.exports = function (grunt) {
       },
       common: {
         options: {
-          base: 'src/common'
+          base: 'src/common',
+          htmlmin: '<%= htmlminOptions %>'
         },
         src: ['<%= src.tpl.common %>'],
         dest: '<%= distdir %>/templates/common.js',
