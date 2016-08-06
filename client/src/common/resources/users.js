@@ -1,7 +1,7 @@
-angular.module('resources.users', ['mongolabResource']);
-angular.module('resources.users').factory('Users', ['mongolabResource', function (mongoResource) {
+angular.module('resources.users', ['mongolabResourceHttp']);
+angular.module('resources.users').factory('Users', ['$mongolabResourceHttp', function ($mongolabResourceHttp) {
 
-  var userResource = mongoResource('users');
+  var userResource = $mongolabResourceHttp('users');
   userResource.prototype.getFullName = function () {
     return this.lastName + " " + this.firstName + " (" + this.email + ")";
   };
