@@ -9,7 +9,7 @@
     "passport-local": "~0.1.6",
     "express-namespace": "~0.1.1",
     "open": ">=6.0.0",
-    "request": "~2.16.6"
+    "request": ">=2.68.0"
   },
   "devDependencies": {
     "grunt": ">=1.3.0",
