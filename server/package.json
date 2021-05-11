@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express": "~3.0",
+    "express": ">=3.11.0",
     "passport": "~0.1.12",
     "passport-local": "~0.1.6",
     "express-namespace": "~0.1.1",
