@@ -1,6 +1,5 @@
 [![Build Status](https://secure.travis-ci.org/angular-app/angular-app.png)](http://travis-ci.org/angular-app/angular-app)
 
-Made a new change to check merge freeze
 
 # [AngularJS](http://www.angularjs.org/) CRUD application demo
 
